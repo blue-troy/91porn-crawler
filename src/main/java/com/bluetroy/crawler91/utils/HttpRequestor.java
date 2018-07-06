@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.http;
+package com.bluetroy.crawler91.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,23 +48,26 @@ public class HttpRequestor {
         return get(new URL(url));
     }
 
-    public static void download(String url, String filename) {
+    public static boolean download(String url, String filename) {
         try (InputStream inputStream = new URL(url).openStream()) {
             Path filePath = Paths.get(filename);
             if (Files.notExists(filePath)) Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    public static void download(String url, String filename, String dir) {
+    public static boolean download(String url, String filename, String dir) {
         Path target = Paths.get(dir, filename);
         try {
             Files.createDirectory(target.getParent());
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-        download(url, target.toString());
+        return download(url, target.toString());
     }
 }
 

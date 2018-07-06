@@ -14,6 +14,7 @@ public class Movie {
     Integer integration;
     String detailURL;
     String downloadURL;
+    String fileName;
 
     private static Integer stringToInteger(String s) {
         int index = s.indexOf("&");
@@ -95,5 +96,11 @@ public class Movie {
     public Movie setDownloadURL(String downloadURL) {
         this.downloadURL = downloadURL;
         return this;
+    }
+
+    public String getFileName() {
+        if (fileName == null || fileName.equals(""))
+            fileName = title + ".mp4";
+        return fileName;
     }
 }

@@ -6,8 +6,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.bluetroy.crawler91.repository.CrawlerList.MOVIE_DATA;
 
+/**
+ * @author heyixin
+ */
 public class CollectFilter implements Filter {
-    private Integer collectNum = 0;
+    private final Integer collectNum;
+
 
     public CollectFilter(Integer collectNum) {
         this.collectNum = collectNum;
@@ -16,7 +20,9 @@ public class CollectFilter implements Filter {
     @Override
     public void doFilter(ConcurrentHashMap<String, Boolean> tobeFilter) {
         tobeFilter.forEach(5, (k, v) -> {
-            if (MOVIE_DATA.get(k).getCollect() >= collectNum) return;
+            if (MOVIE_DATA.get(k).getCollect() >= collectNum) {
+                return;
+            }
             tobeFilter.remove(k);
         });
     }

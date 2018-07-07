@@ -13,7 +13,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * @author heyixin
+ */
 public class HttpRequestor {
+    private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;
+
     static {
         CookieManager manager = new CookieManager();
         CookieHandler.setDefault(manager);
@@ -28,10 +33,9 @@ public class HttpRequestor {
         httpURLConnection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
         httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1");
-        if (httpURLConnection.getResponseCode() >= 300) {
+        if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
             throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
         }
-
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -48,26 +52,19 @@ public class HttpRequestor {
         return get(new URL(url));
     }
 
-    public static boolean download(String url, String filename) {
+    public static void download(String url, String filename) throws IOException {
         try (InputStream inputStream = new URL(url).openStream()) {
             Path filePath = Paths.get(filename);
-            if (Files.notExists(filePath)) Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            if (Files.notExists(filePath)) {
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            }
         }
     }
 
-    public static boolean download(String url, String filename, String dir) {
+    public static void download(String url, String filename, String dir) throws IOException {
         Path target = Paths.get(dir, filename);
-        try {
-            Files.createDirectory(target.getParent());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return download(url, target.toString());
+        Files.createDirectory(target.getParent());
+        download(url, target.toString());
     }
 }
 

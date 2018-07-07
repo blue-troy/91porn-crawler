@@ -1,12 +1,17 @@
 package com.bluetroy.crawler91.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
+/**
+ * @author heyixin
+ */
 public class TimeUtils {
-    private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final String FORMAT = "yyyy年MM月dd日 hh:mm a";
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy年MM月dd日 hh:mm a");
 
     public static String getDate() {
-        return df.format(new Date());
+        return LocalDateTime.now().format(DATE_TIME_FORMATTER);
     }
 }

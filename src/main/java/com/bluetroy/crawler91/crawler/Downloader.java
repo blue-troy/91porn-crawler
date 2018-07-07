@@ -1,22 +1,42 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.utils.HttpRequestor;
 import com.bluetroy.crawler91.repository.Movie;
+import com.bluetroy.crawler91.utils.HttpRequestor;
+
+import java.io.IOException;
 
 import static com.bluetroy.crawler91.repository.CrawlerList.*;
 
+/**
+ * @author heyixin
+ */
 public class Downloader {
-    private boolean downloadMovie(String key) {
+    private void downloadMovieByKey(String key) throws IOException {
         Movie movie = MOVIE_DATA.get(key);
-        if (movie == null) return false;
-        return HttpRequestor.download(movie.getDownloadURL(), movie.getFileName());
+        HttpRequestor.download(movie.getDownloadURL(), movie.getFileName());
     }
 
-    private void down() throws InterruptedException {
+    public void continuousDownload() throws InterruptedException {
         while (true) {
             String key = TO_DOWNLOAD_MOVIES.take();
-            if (!downloadMovie(key)) setDownloadError(key);
-            else setDownloadedMovies(key);
+            downloadProcessByKey(key);
+        }
+    }
+
+    private void downloadProcessByKey(String key) {
+        try {
+            downloadMovieByKey(key);
+            setDownloadError(key);
+        } catch (IOException e) {
+            setDownloadedMovies(key);
+            e.printStackTrace();
+        }
+    }
+
+    public void downloadNow() {
+        String key;
+        while ((key = TO_DOWNLOAD_MOVIES.peek()) != null) {
+            downloadProcessByKey(key);
         }
     }
 }

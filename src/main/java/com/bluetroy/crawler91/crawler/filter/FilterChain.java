@@ -3,8 +3,12 @@ package com.bluetroy.crawler91.crawler.filter;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author heyixin
+ */
 public class FilterChain implements Filter {
-    private final ArrayList<Filter> filterList = new ArrayList<Filter>();
+    private final ArrayList<Filter> filterList = new ArrayList<>();
+
 
     public FilterChain addFilter(Filter filter) {
         filterList.add(filter);

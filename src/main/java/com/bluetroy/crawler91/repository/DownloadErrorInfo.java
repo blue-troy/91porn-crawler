@@ -14,7 +14,7 @@ public class DownloadErrorInfo {
     private final String key;
     private Integer errorTime;
 
-    private List<String> errorTimes = new LinkedList<>();
+    private final List<String> errorTimes = new LinkedList<>();
 
     public DownloadErrorInfo(String key) {
         this.key = key;

@@ -16,7 +16,7 @@ import java.nio.file.StandardCopyOption;
 /**
  * @author heyixin
  */
-public class HttpRequestor {
+public class HttpRequester {
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;
 
     static {

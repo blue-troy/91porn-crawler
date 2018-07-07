@@ -1,7 +1,7 @@
 package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.repository.Movie;
-import com.bluetroy.crawler91.utils.HttpRequestor;
+import com.bluetroy.crawler91.utils.HttpRequester;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import static com.bluetroy.crawler91.repository.CrawlerList.*;
 public class Downloader {
     private void downloadMovieByKey(String key) throws IOException {
         Movie movie = MOVIE_DATA.get(key);
-        HttpRequestor.download(movie.getDownloadURL(), movie.getFileName());
+        HttpRequester.download(movie.getDownloadURL(), movie.getFileName());
     }
 
     public void continuousDownload() throws InterruptedException {

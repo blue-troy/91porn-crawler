@@ -2,7 +2,7 @@ package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.repository.CrawlerList;
 import com.bluetroy.crawler91.repository.Movie;
-import com.bluetroy.crawler91.utils.HttpRequestor;
+import com.bluetroy.crawler91.utils.HttpRequester;
 import org.jsoup.nodes.Node;
 import org.seimicrawler.xpath.JXDocument;
 import org.seimicrawler.xpath.JXNode;
@@ -17,10 +17,9 @@ import static com.bluetroy.crawler91.repository.CrawlerList.*;
  */
 public class Scanner {
     public void crawHotMovieList() throws Exception {
-        String content = HttpRequestor.get("http://91porn.com/v.php?category=hot&viewtype=basic");
+        String content = HttpRequester.get("http://91porn.com/v.php?category=hot&viewtype=basic");
         JXDocument doc = JXDocument.create(content);
-        List<JXNode> rs = null;
-        rs = doc.selN("//div[@id='videobox']/table//div[@class='listchannel']");
+        List<JXNode> rs  = doc.selN("//div[@id='videobox']/table//div[@class='listchannel']");
         for (JXNode r : rs) {
             try {
                 Movie movie = getMovie(r);
@@ -56,7 +55,7 @@ public class Scanner {
             Movie movie = MOVIE_DATA.get(k);
             String content;
             try {
-                content = HttpRequestor.get(movie.getDetailURL());
+                content = HttpRequester.get(movie.getDetailURL());
                 JXDocument doc = JXDocument.create(content);
                 List<JXNode> rs = doc.selN("//source");
                 String src = rs.get(0).getElement().attributes().get("src");

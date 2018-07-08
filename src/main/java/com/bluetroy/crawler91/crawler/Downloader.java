@@ -11,16 +11,35 @@ import static com.bluetroy.crawler91.repository.CrawlerList.*;
  * @author heyixin
  */
 public class Downloader {
-    private void downloadMovieByKey(String key) throws IOException {
-        Movie movie = MOVIE_DATA.get(key);
-        HttpRequester.download(movie.getDownloadURL(), movie.getFileName());
+    private volatile boolean isContinuousDownloadStart = false;
+
+    public void continuousDownload() {
+        try {
+            isContinuousDownloadStart = true;
+            startContinuousDownload();
+        } catch (InterruptedException e) {
+            isContinuousDownloadStart = false;
+            e.printStackTrace();
+        }
     }
 
-    public void continuousDownload() throws InterruptedException {
+    public void downloadNow() {
+        String key;
+        while ((!isContinuousDownloadStart) && ((key = TO_DOWNLOAD_MOVIES.peek()) != null)) {
+            downloadProcessByKey(key);
+        }
+    }
+
+    private void startContinuousDownload() throws InterruptedException {
         while (true) {
             String key = TO_DOWNLOAD_MOVIES.take();
             downloadProcessByKey(key);
         }
+    }
+
+    private void downloadMovieByKey(String key) throws IOException {
+        Movie movie = MOVIE_DATA.get(key);
+        HttpRequester.download(movie.getDownloadURL(), movie.getFileName());
     }
 
     private void downloadProcessByKey(String key) {
@@ -30,13 +49,6 @@ public class Downloader {
         } catch (IOException e) {
             setDownloadedMovies(key);
             e.printStackTrace();
-        }
-    }
-
-    public void downloadNow() {
-        String key;
-        while ((key = TO_DOWNLOAD_MOVIES.peek()) != null) {
-            downloadProcessByKey(key);
         }
     }
 }

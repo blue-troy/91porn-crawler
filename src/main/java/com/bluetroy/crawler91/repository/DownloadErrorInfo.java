@@ -12,9 +12,8 @@ import java.util.List;
 @ToString
 public class DownloadErrorInfo {
     private final String key;
-    private Integer errorTime;
-
     private final List<String> errorTimes = new LinkedList<>();
+    private int errorTime;
 
     public DownloadErrorInfo(String key) {
         this.key = key;

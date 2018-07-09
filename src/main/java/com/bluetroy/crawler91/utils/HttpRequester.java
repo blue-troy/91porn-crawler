@@ -1,5 +1,7 @@
 package com.bluetroy.crawler91.utils;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,11 +13,11 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 /**
  * @author heyixin
  */
+@Log4j2
 public class HttpRequester {
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;
 
@@ -26,8 +28,9 @@ public class HttpRequester {
     }
 
     public static String get(URL url) throws Exception {
-        System.out.println("get  " + url.toString());
+        log.info("get  " + url.toString());
         StringBuilder stringBuffer = new StringBuilder();
+        //todo 用代理访问？ httpURLConnection.usingProxy()
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
         httpURLConnection.setRequestProperty("Accept-Charset", "utf-8");
         httpURLConnection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
@@ -53,10 +56,12 @@ public class HttpRequester {
     }
 
     public static void download(String url, String filename) throws IOException {
+        log.info("下载文件：文件名: %c 下载地址：%c", filename, url);
         try (InputStream inputStream = new URL(url).openStream()) {
             Path filePath = Paths.get(filename);
             if (Files.notExists(filePath)) {
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(inputStream, filePath);
+                log.info("下载成功");
             }
         }
     }

@@ -7,6 +7,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * @author heyixin
+ * todo 闭包
  */
 public class CrawlerList {
     public static final ConcurrentHashMap<String, Boolean> SCANNED_MOVIES = new ConcurrentHashMap<>();
@@ -15,6 +16,11 @@ public class CrawlerList {
     public static final ConcurrentHashMap<String, Movie> MOVIE_DATA = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, String> DOWNLOADED_MOVIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, DownloadErrorInfo> DOWNLOAD_ERROR = new ConcurrentHashMap<>();
+
+    public static void addToDownloadMoviesByKey(String k) {
+        TO_DOWNLOAD_MOVIES.offer(k);
+        FILTERED_MOVIES.replace(k, true);
+    }
 
     public static void setScannedMovie(Movie movie) {
         CrawlerList.SCANNED_MOVIES.putIfAbsent(movie.getKey(), false);

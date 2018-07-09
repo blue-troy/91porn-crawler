@@ -3,19 +3,24 @@ package com.bluetroy.crawler91.crawler;
 import com.bluetroy.crawler91.repository.CrawlerList;
 import com.bluetroy.crawler91.repository.Movie;
 import com.bluetroy.crawler91.utils.HttpRequester;
+import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Node;
 import org.seimicrawler.xpath.JXDocument;
 import org.seimicrawler.xpath.JXNode;
 import org.seimicrawler.xpath.exception.XpathSyntaxErrorException;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bluetroy.crawler91.repository.CrawlerList.*;
+import static com.bluetroy.crawler91.repository.CrawlerList.FILTERED_MOVIES;
+import static com.bluetroy.crawler91.repository.CrawlerList.MOVIE_DATA;
 
 /**
  * @author heyixin
  */
+@Log4j2
+@Component
 public class Scanner {
     private static final List<String> URLS_FOR_SCAN = new ArrayList<>();
 
@@ -31,25 +36,22 @@ public class Scanner {
         scanMoviesByUrlList();
     }
 
-    public void scanMovieDetail() {
+    public void setFilteredMoviesDownloadURL() {
         FILTERED_MOVIES.forEach(5, (k, v) -> {
             if (v) {
                 return;
             }
-            Movie movie = MOVIE_DATA.get(k);
-            String content;
-            try {
-                content = HttpRequester.get(movie.getDetailURL());
-                JXDocument doc = JXDocument.create(content);
-                List<JXNode> rs = doc.selN("//source");
-                String src = rs.get(0).getElement().attributes().get("src");
-                movie.setDownloadURL(src.trim());
-                TO_DOWNLOAD_MOVIES.offer(k);
-                FILTERED_MOVIES.replace(k, true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            //todo 名称很奇怪不是吗
+            setMovieDownloadURL(MOVIE_DATA.get(k));
         });
+    }
+
+    private String getMovieDownloadURLbyDetailURL(String string) throws Exception {
+        String responseContent = HttpRequester.get(string);
+        JXDocument doc = JXDocument.create(responseContent);
+        List<JXNode> rs = doc.selN("//source");
+        //todo 如果得不到就会 java.lang.IndexOutOfBoundsException
+        return rs.get(0).getElement().attributes().get("src");
     }
 
     private void scanMoviesByUrlList() {
@@ -80,15 +82,27 @@ public class Scanner {
         //todo 空异常
         List<Node> nodes = r.getElement().childNodes();
         Movie movie = new Movie();
-        movie.setTitle(r.sel(".//a[@target='blank']/@title").get(1).getTextVal())
-                .setDetailURL(r.sel(".//a[@target='blank']/@href").get(0).getTextVal())
-                .setLength(nodes.get(8).toString())
-                .setAddTime(nodes.get(12).toString())
-                .setAuthor(nodes.get(16).toString())
-                .setView(nodes.get(20).toString())
-                .setCollect(nodes.get(22).toString())
-                .setMessageNumber(nodes.get(26).toString())
-                .setIntegration(nodes.get(28).toString());
+        movie.setTitle(r.sel(".//a[@target='blank']/@title").get(1).getTextVal().replaceAll("\\s*", ""))
+                .setDetailURL(r.sel(".//a[@target='blank']/@href").get(0).getTextVal().replaceAll("\\s*", ""))
+                .setLength(nodes.get(8).toString().replaceAll("\\s*", ""))
+                .setAddTime(nodes.get(12).toString().replaceAll("\\s*", ""))
+                .setAuthor(nodes.get(16).toString().replaceAll("\\s*", ""))
+                .setView(nodes.get(20).toString().replaceAll("\\s*", ""))
+                .setCollect(nodes.get(22).toString().replaceAll("\\s*", ""))
+                .setMessageNumber(nodes.get(26).toString().replaceAll("\\s*", ""))
+                .setIntegration(nodes.get(28).toString().replaceAll("\\s*", ""));
+        log.info(movie.toString());
         return movie;
+    }
+
+    private void setMovieDownloadURL(Movie movie) {
+        try {
+            String downloadURL = getMovieDownloadURLbyDetailURL(movie.getDetailURL());
+            movie.setDownloadURL(downloadURL);
+            log.info(movie.toString());
+            CrawlerList.addToDownloadMoviesByKey(movie.getKey());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

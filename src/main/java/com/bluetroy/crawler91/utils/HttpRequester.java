@@ -56,12 +56,15 @@ public class HttpRequester {
     }
 
     public static void download(String url, String filename) throws IOException {
-        log.info("下载文件：文件名: %c 下载地址：%c", filename, url);
+        log.info("下载文件：文件名: {} 下载地址：{}", filename, url);
         try (InputStream inputStream = new URL(url).openStream()) {
             Path filePath = Paths.get(filename);
             if (Files.notExists(filePath)) {
                 Files.copy(inputStream, filePath);
-                log.info("下载成功");
+                log.info("下载成功 : {}", filePath);
+            }else {
+                //todo 文件同名处理？
+                log.info("本地已存在同名文件{}",filePath);
             }
         }
     }

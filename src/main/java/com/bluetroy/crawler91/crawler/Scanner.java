@@ -11,7 +11,6 @@ import org.seimicrawler.xpath.JXNode;
 import org.seimicrawler.xpath.exception.XpathSyntaxErrorException;
 import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -138,7 +137,7 @@ public class Scanner {
         return movie;
     }
 
-    private KeyContent getKeyContentMap(String key) throws MalformedURLException {
+    private KeyContent getKeyContentMap(String key) {
         return new KeyContent(key, HttpRequester.get(MOVIE_DATA.get(key).getDetailURL()));
     }
 
@@ -148,12 +147,7 @@ public class Scanner {
             if (v) {
                 return;
             }
-            try {
-                contentQueue.offer(getKeyContentMap(k));
-            } catch (MalformedURLException e) {
-                log.warn("string -> url格式错误");
-                e.printStackTrace();
-            }
+            contentQueue.offer(getKeyContentMap(k));
         });
         return contentQueue;
     }
@@ -161,12 +155,7 @@ public class Scanner {
     private LinkedBlockingDeque<Future<String>> getContentsQueue() {
         LinkedBlockingDeque<Future<String>> contentQueue = new LinkedBlockingDeque<>();
         for (String url : Scanner.URLS_FOR_SCAN) {
-            try {
-                contentQueue.offer(HttpRequester.get(url));
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.warn("string -> url格式错误");
-            }
+            contentQueue.offer(HttpRequester.get(url));
         }
         return contentQueue;
     }

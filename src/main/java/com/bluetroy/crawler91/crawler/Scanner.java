@@ -50,7 +50,7 @@ public class Scanner {
         String responseContent = HttpRequester.get(string);
         JXDocument doc = JXDocument.create(responseContent);
         List<JXNode> rs = doc.selN("//source");
-        //todo 如果得不到就会 java.lang.IndexOutOfBoundsException
+        //todo 如果得不到就会 java.lang.IndexOutOfBoundsException 可以增加一个判断是否被ban了
         return rs.get(0).getElement().attributes().get("src");
     }
 
@@ -103,6 +103,7 @@ public class Scanner {
             CrawlerList.addToDownloadMoviesByKey(movie.getKey());
         } catch (Exception e) {
             e.printStackTrace();
+            log.warn("搜索不到下载地址，应该是被ban了");
         }
     }
 }

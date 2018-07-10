@@ -3,11 +3,13 @@ package com.bluetroy.crawler91.repository;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.io.Serializable;
+
 /**
  * @author heyixin
  */
 @Data
-public class Movie {
+public class Movie implements Serializable {
     String title;
     String length;
     String addTime;

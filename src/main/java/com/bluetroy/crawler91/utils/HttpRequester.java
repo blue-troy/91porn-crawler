@@ -64,7 +64,7 @@ public class HttpRequester {
                 log.info("下载成功 : {}", filePath);
             }else {
                 //todo 文件同名处理？
-                log.info("本地已存在同名文件{}",filePath);
+                log.info("本地已存在同名文件： {}",filePath);
             }
         }
     }

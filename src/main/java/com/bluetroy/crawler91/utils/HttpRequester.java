@@ -7,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,7 +32,7 @@ public class HttpRequester {
         String host = "http://91porn.com/";
     }
 
-    public static Future<String> get(String url) throws Exception {
+    public static Future<String> get(String url) throws MalformedURLException {
         return get(new URL(url));
     }
 
@@ -60,7 +57,7 @@ public class HttpRequester {
 
     }
 
-    private static Future<String> get(URL url) throws Exception {
+    private static Future<String> get(URL url) {
         return HTTP_GET_SERVICE.submit(new Connect(url));
     }
 
@@ -91,6 +88,7 @@ public class HttpRequester {
                     stringBuffer.append("\r\n");
                 }
             } catch (IOException e1) {
+                log.warn("网页：{} 流读取错误",url.toString());
                 e1.printStackTrace();
             }
             return stringBuffer.toString();

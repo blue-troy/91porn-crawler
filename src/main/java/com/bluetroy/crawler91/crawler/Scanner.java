@@ -11,6 +11,7 @@ import org.seimicrawler.xpath.JXNode;
 import org.seimicrawler.xpath.exception.XpathSyntaxErrorException;
 import org.springframework.stereotype.Component;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -67,7 +68,8 @@ public class Scanner {
             scanDownloadUrlInDoc(doc, keyContent);
         } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
             e.printStackTrace();
-            log.warn("搜索不到下载地址，应该是被ban了");
+            Movie movie = MOVIE_DATA.get(keyContent.getKey());
+            log.warn("搜索不到 {} {} 的下载地址，应该是被ban了", movie.getTitle(), movie.getDetailURL());
         }
     }
 
@@ -77,7 +79,7 @@ public class Scanner {
         //todo 如果得不到就会 java.lang.IndexOutOfBoundsException 可以增加一个判断是否被ban了
         String downloadURL = rs.get(0).getElement().attributes().get("src");
         movie.setDownloadURL(downloadURL);
-        log.info(movie.toString());
+        log.info("扫描到了 {} 的下载链接：{}", movie.getTitle(), movie.getDownloadURL());
         Repository.addToDownloadMoviesByKey(movie.getKey());
     }
 
@@ -132,11 +134,11 @@ public class Scanner {
                 .setCollect(nodes.get(22).toString().replaceAll("\\s*", ""))
                 .setMessageNumber(nodes.get(26).toString().replaceAll("\\s*", ""))
                 .setIntegration(nodes.get(28).toString().replaceAll("\\s*", ""));
-        log.info(movie.toString());
+        log.info("扫描到了视频：{} ", movie.toString());
         return movie;
     }
 
-    private KeyContent getKeyContentMap(String key) throws Exception {
+    private KeyContent getKeyContentMap(String key) throws MalformedURLException {
         return new KeyContent(key, HttpRequester.get(MOVIE_DATA.get(key).getDetailURL()));
     }
 
@@ -148,7 +150,8 @@ public class Scanner {
             }
             try {
                 contentQueue.offer(getKeyContentMap(k));
-            } catch (Exception e) {
+            } catch (MalformedURLException e) {
+                log.warn("string -> url格式错误");
                 e.printStackTrace();
             }
         });
@@ -162,6 +165,7 @@ public class Scanner {
                 contentQueue.offer(HttpRequester.get(url));
             } catch (Exception e) {
                 e.printStackTrace();
+                log.warn("string -> url格式错误");
             }
         }
         return contentQueue;

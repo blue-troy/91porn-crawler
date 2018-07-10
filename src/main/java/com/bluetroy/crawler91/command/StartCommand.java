@@ -31,7 +31,7 @@ public class StartCommand implements CommandLineRunner {
         System.out.println("开始执行操作");
         scanner.scanMovies();
         filter.doFilter();
-//        scanner.setFilteredMoviesDownloadURL();
+        scanner.scanDownloadUrl();
 //        downloader.downloadNow();
 
     }

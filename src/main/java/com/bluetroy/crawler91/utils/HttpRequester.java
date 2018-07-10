@@ -13,12 +13,18 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Queue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author heyixin
  */
 @Log4j2
 public class HttpRequester {
+    private static final ExecutorService service = Executors.newFixedThreadPool(5);
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;
 
     static {
@@ -27,33 +33,10 @@ public class HttpRequester {
         String host = "http://91porn.com/";
     }
 
-    public static String get(URL url) throws Exception {
-        log.info("get  " + url.toString());
-        StringBuilder stringBuffer = new StringBuilder();
-        //todo 用代理访问？ httpURLConnection.usingProxy()
-        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-        httpURLConnection.setRequestProperty("Accept-Charset", "utf-8");
-        httpURLConnection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
-        httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1");
-        if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
-            throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
-        }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuffer.append(line);
-                stringBuffer.append("\r\n");
-            }
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return stringBuffer.toString();
-    }
-
-    public static String get(String url) throws Exception {
+    public static Future<String> get(String url) throws Exception {
         return get(new URL(url));
     }
+
 
     public static void download(String url, String filename) throws IOException {
         log.info("下载文件：文件名: {} 下载地址：{}", filename, url);
@@ -62,9 +45,9 @@ public class HttpRequester {
             if (Files.notExists(filePath)) {
                 Files.copy(inputStream, filePath);
                 log.info("下载成功 : {}", filePath);
-            }else {
+            } else {
                 //todo 文件同名处理？
-                log.info("本地已存在同名文件： {}",filePath);
+                log.info("本地已存在同名文件： {}", filePath);
             }
         }
     }
@@ -74,5 +57,43 @@ public class HttpRequester {
         Files.createDirectory(target.getParent());
         download(url, target.toString());
     }
+
+    private static Future<String> get(URL url) throws Exception {
+        return service.submit(new Connect(url));
+    }
+
+    static class Connect implements Callable<String> {
+        private final URL url;
+
+        public Connect(URL url) {
+            this.url = url;
+        }
+
+        @Override
+        public String call() throws Exception {
+            log.info("get  " + url.toString());
+            StringBuilder stringBuffer = new StringBuilder();
+            //todo 用代理访问？ httpURLConnection.usingProxy()
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestProperty("Accept-Charset", "utf-8");
+            httpURLConnection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
+            httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1");
+            if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
+                throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
+            }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuffer.append(line);
+                    stringBuffer.append("\r\n");
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return stringBuffer.toString();
+        }
+    }
+
 }
 

@@ -1,8 +1,8 @@
 package com.bluetroy.crawler91.command;
 
-import com.bluetroy.crawler91.repository.CrawlerList;
-import com.bluetroy.crawler91.repository.DownloadErrorInfo;
-import com.bluetroy.crawler91.repository.Movie;
+import com.bluetroy.crawler91.repository.Repository;
+import com.bluetroy.crawler91.repository.pojo.DownloadErrorInfo;
+import com.bluetroy.crawler91.repository.pojo.Movie;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -43,7 +43,7 @@ public class PreStartCommand implements CommandLineRunner {
             ConcurrentHashMap<String, Movie> movieData = (ConcurrentHashMap<String, Movie>) movieDataInputStream.readObject();
             ConcurrentHashMap<String, String> downloadedMovies = (ConcurrentHashMap<String, String>) downloadedMoviesInputStream.readObject();
             ConcurrentHashMap<String, DownloadErrorInfo> downloadError = (ConcurrentHashMap<String, DownloadErrorInfo>) downloadErrorInputStream.readObject();
-            CrawlerList.init(scannedMovies, toDownloadMovies, filteredMovies, movieData, downloadedMovies, downloadError);
+            Repository.init(scannedMovies, toDownloadMovies, filteredMovies, movieData, downloadedMovies, downloadError);
         } catch (IOException e) {
             log.warn("数据加载失败");
             e.printStackTrace();

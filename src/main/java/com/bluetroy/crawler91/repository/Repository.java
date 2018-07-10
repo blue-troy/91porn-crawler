@@ -1,5 +1,7 @@
 package com.bluetroy.crawler91.repository;
 
+import com.bluetroy.crawler91.repository.pojo.DownloadErrorInfo;
+import com.bluetroy.crawler91.repository.pojo.Movie;
 import com.bluetroy.crawler91.utils.TimeUtils;
 
 import java.io.IOException;
@@ -12,7 +14,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * @author heyixin
  * todo 闭包
  */
-public class CrawlerList implements Serializable {
+public class Repository implements Serializable {
     /**
      * 扫描下来的 movie 信息
      * key:movie的key
@@ -56,8 +58,8 @@ public class CrawlerList implements Serializable {
     }
 
     public static void setScannedMovie(Movie movie) {
-        CrawlerList.SCANNED_MOVIES.putIfAbsent(movie.getKey(), false);
-        CrawlerList.MOVIE_DATA.putIfAbsent(movie.getKey(), movie);
+        Repository.SCANNED_MOVIES.putIfAbsent(movie.getKey(), false);
+        Repository.MOVIE_DATA.putIfAbsent(movie.getKey(), movie);
     }
 
     public static void setDownloadError(String key) {

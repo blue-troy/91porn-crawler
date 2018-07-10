@@ -1,0 +1,24 @@
+package com.bluetroy.crawler91.repository.pojo;
+
+import lombok.Getter;
+
+import java.util.concurrent.Future;
+
+/**
+ * Created with IntelliJ IDEA.
+ * Description:
+ *
+ * @author: heyixin
+ * Date: 2018-07-10
+ * Time: 下午4:15
+ */
+@Getter
+public class KeyContent {
+    private final String Key;
+    private final Future<String> content;
+
+    public KeyContent(String key, Future<String> content) {
+        Key = key;
+        this.content = content;
+    }
+}

@@ -1,12 +1,12 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.repository.Movie;
+import com.bluetroy.crawler91.repository.pojo.Movie;
 import com.bluetroy.crawler91.utils.HttpRequester;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static com.bluetroy.crawler91.repository.CrawlerList.*;
+import static com.bluetroy.crawler91.repository.Repository.*;
 
 /**
  * @author heyixin

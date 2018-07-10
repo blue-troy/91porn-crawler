@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.command;
 
-import com.bluetroy.crawler91.repository.CrawlerList;
+import com.bluetroy.crawler91.repository.Repository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +31,7 @@ public class PreDestroyCommand {
                 ObjectOutputStream downloadedMoviesOutputStream = new ObjectOutputStream(new FileOutputStream("DOWNLOADED_MOVIES.dat"));
                 ObjectOutputStream downloadErrorOutputStream = new ObjectOutputStream(new FileOutputStream("DOWNLOAD_ERROR.dat"))
         ) {
-            CrawlerList.writeObject(scannedMoviesOutputStream, toDownloadMoviesOutputStream, filteredMoviesOutputStream, movieDataOutputStream, downloadedMoviesOutputStream, downloadErrorOutputStream);
+            Repository.writeObject(scannedMoviesOutputStream, toDownloadMoviesOutputStream, filteredMoviesOutputStream, movieDataOutputStream, downloadedMoviesOutputStream, downloadErrorOutputStream);
         } catch (IOException e) {
             log.warn("数据保存失败");
             e.printStackTrace();

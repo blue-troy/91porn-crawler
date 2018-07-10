@@ -1,14 +1,14 @@
 package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.filter.impl.FilterChainFactory;
-import com.bluetroy.crawler91.repository.CrawlerList;
+import com.bluetroy.crawler91.repository.Repository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.bluetroy.crawler91.repository.CrawlerList.FILTERED_MOVIES;
-import static com.bluetroy.crawler91.repository.CrawlerList.SCANNED_MOVIES;
+import static com.bluetroy.crawler91.repository.Repository.FILTERED_MOVIES;
+import static com.bluetroy.crawler91.repository.Repository.SCANNED_MOVIES;
 
 /**
  * @author heyixin
@@ -20,7 +20,7 @@ public class Filter {
         ConcurrentHashMap<String, Boolean> tobeFilter = getTobeFilterMap();
         FilterChainFactory.getShowFaceCollectFilterChain(10).doFilter(tobeFilter);
         tobeFilter.forEachKey(1, k -> {
-            log.info(CrawlerList.MOVIE_DATA.get(k).toString());
+            log.info(Repository.MOVIE_DATA.get(k).toString());
         });
         FILTERED_MOVIES.putAll(tobeFilter);
     }

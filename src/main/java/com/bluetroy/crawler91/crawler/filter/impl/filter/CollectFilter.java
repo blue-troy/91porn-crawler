@@ -4,7 +4,7 @@ import com.bluetroy.crawler91.crawler.filter.Filter;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.bluetroy.crawler91.repository.CrawlerList.MOVIE_DATA;
+import static com.bluetroy.crawler91.repository.Repository.MOVIE_DATA;
 
 /**
  * @author heyixin

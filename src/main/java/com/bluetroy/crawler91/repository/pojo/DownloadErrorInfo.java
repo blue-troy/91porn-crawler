@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.repository;
+package com.bluetroy.crawler91.repository.pojo;
 
 import com.bluetroy.crawler91.utils.TimeUtils;
 import lombok.ToString;

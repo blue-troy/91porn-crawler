@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.repository;
+package com.bluetroy.crawler91.repository.pojo;
 
 import lombok.Data;
 import lombok.NonNull;

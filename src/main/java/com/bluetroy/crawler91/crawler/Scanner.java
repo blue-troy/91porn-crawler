@@ -1,7 +1,8 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.repository.CrawlerList;
-import com.bluetroy.crawler91.repository.Movie;
+import com.bluetroy.crawler91.repository.Repository;
+import com.bluetroy.crawler91.repository.pojo.KeyContent;
+import com.bluetroy.crawler91.repository.pojo.Movie;
 import com.bluetroy.crawler91.utils.HttpRequester;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Node;
@@ -12,9 +13,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingDeque;
 
-import static com.bluetroy.crawler91.repository.CrawlerList.FILTERED_MOVIES;
-import static com.bluetroy.crawler91.repository.CrawlerList.MOVIE_DATA;
+import static com.bluetroy.crawler91.repository.Repository.FILTERED_MOVIES;
+import static com.bluetroy.crawler91.repository.Repository.MOVIE_DATA;
 
 /**
  * @author heyixin
@@ -36,42 +40,79 @@ public class Scanner {
         scanMoviesByUrlList();
     }
 
-    public void setFilteredMoviesDownloadURL() {
-        FILTERED_MOVIES.forEach(5, (k, v) -> {
-            if (v) {
-                return;
-            }
-            //todo 名称很奇怪不是吗
-            setMovieDownloadURL(MOVIE_DATA.get(k));
-        });
+    public void scanDownloadUrl() {
+        scanFilteredMovieDownloadUrl();
     }
 
-    private String getMovieDownloadURLbyDetailURL(String string) throws Exception {
-        String responseContent = HttpRequester.get(string);
-        JXDocument doc = JXDocument.create(responseContent);
-        List<JXNode> rs = doc.selN("//source");
-        //todo 如果得不到就会 java.lang.IndexOutOfBoundsException 可以增加一个判断是否被ban了
-        return rs.get(0).getElement().attributes().get("src");
+    private void scanFilteredMovieDownloadUrl() {
+        LinkedBlockingDeque<KeyContent> keyContentQueue = getDetailContentsQueue();
+        scanDownloadUrlInKeyContentQueue(keyContentQueue);
     }
 
-    private void scanMoviesByUrlList() {
-        for (String url : Scanner.URLS_FOR_SCAN) {
-            try {
-                scanMoviesByUrlString(url);
-            } catch (Exception e) {
-                e.printStackTrace();
+    private void scanDownloadUrlInKeyContentQueue(LinkedBlockingDeque<KeyContent> keyContentQueue) {
+        KeyContent keyContent;
+        while ((keyContent = keyContentQueue.poll()) != null) {
+            if (keyContent.getContent().isDone()) {
+                scanDownloadUrlInKeyContent(keyContent);
+            } else {
+                keyContentQueue.offer(keyContent);
             }
         }
     }
 
-    private void scanMoviesByUrlString(String url) throws Exception {
-        String content = HttpRequester.get(url);
-        JXDocument doc = JXDocument.create(content);
+    private void scanDownloadUrlInKeyContent(KeyContent keyContent) {
+        try {
+            String content = keyContent.getContent().get();
+            JXDocument doc = JXDocument.create(content);
+            scanDownloadUrlInDoc(doc, keyContent);
+        } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
+            e.printStackTrace();
+            log.warn("搜索不到下载地址，应该是被ban了");
+        }
+    }
+
+    private void scanDownloadUrlInDoc(JXDocument doc, KeyContent keyContent) throws XpathSyntaxErrorException {
+        Movie movie = MOVIE_DATA.get(keyContent.getKey());
+        List<JXNode> rs = doc.selN("//source");
+        //todo 如果得不到就会 java.lang.IndexOutOfBoundsException 可以增加一个判断是否被ban了
+        String downloadURL = rs.get(0).getElement().attributes().get("src");
+        movie.setDownloadURL(downloadURL);
+        log.info(movie.toString());
+        Repository.addToDownloadMoviesByKey(movie.getKey());
+    }
+
+    private void scanMoviesByUrlList() {
+        LinkedBlockingDeque<Future<String>> contentQueue = getContentsQueue();
+        scanMoviesInContentQueue(contentQueue);
+    }
+
+    private void scanMoviesInContentQueue(LinkedBlockingDeque<Future<String>> contentQueue) {
+        Future<String> future;
+        while ((future = contentQueue.poll()) != null) {
+            if (future.isDone()) {
+                scanMovieInContent(future);
+            } else {
+                contentQueue.offer(future);
+            }
+        }
+    }
+
+    private void scanMovieInContent(Future<String> future) {
+        try {
+            String content = future.get();
+            JXDocument doc = JXDocument.create(content);
+            scanMovieInDoc(doc);
+        } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void scanMovieInDoc(JXDocument doc) throws XpathSyntaxErrorException {
         List<JXNode> rs = doc.selN("//div[@id='videobox']/table//div[@class='listchannel']");
         for (JXNode r : rs) {
             try {
                 Movie movie = getMovieFromJXNode(r);
-                CrawlerList.setScannedMovie(movie);
+                Repository.setScannedMovie(movie);
             } catch (XpathSyntaxErrorException e) {
                 e.printStackTrace();
             }
@@ -95,15 +136,34 @@ public class Scanner {
         return movie;
     }
 
-    private void setMovieDownloadURL(Movie movie) {
-        try {
-            String downloadURL = getMovieDownloadURLbyDetailURL(movie.getDetailURL());
-            movie.setDownloadURL(downloadURL);
-            log.info(movie.toString());
-            CrawlerList.addToDownloadMoviesByKey(movie.getKey());
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.warn("搜索不到下载地址，应该是被ban了");
+    private KeyContent getKeyContentMap(String key) throws Exception {
+        return new KeyContent(key, HttpRequester.get(MOVIE_DATA.get(key).getDetailURL()));
+    }
+
+    private LinkedBlockingDeque<KeyContent> getDetailContentsQueue() {
+        LinkedBlockingDeque<KeyContent> contentQueue = new LinkedBlockingDeque<>();
+        FILTERED_MOVIES.forEach(5, (k, v) -> {
+            if (v) {
+                return;
+            }
+            try {
+                contentQueue.offer(getKeyContentMap(k));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return contentQueue;
+    }
+
+    private LinkedBlockingDeque<Future<String>> getContentsQueue() {
+        LinkedBlockingDeque<Future<String>> contentQueue = new LinkedBlockingDeque<>();
+        for (String url : Scanner.URLS_FOR_SCAN) {
+            try {
+                contentQueue.offer(HttpRequester.get(url));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        return contentQueue;
     }
 }

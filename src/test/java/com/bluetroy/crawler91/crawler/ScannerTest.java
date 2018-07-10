@@ -32,6 +32,6 @@ public class ScannerTest {
         //todo 修改成符合"单元"测试的测试。
         scanner.scanMovies();
         filter.doFilter();
-        scanner.setFilteredMoviesDownloadURL();
+        //scanner.setFilteredMoviesDownloadURL();
     }
 }

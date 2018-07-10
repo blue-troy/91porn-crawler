@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.utils;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.BufferedReader;
@@ -13,21 +14,22 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Queue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * @author heyixin
  */
 @Log4j2
 public class HttpRequester {
-    private static final ExecutorService service = Executors.newFixedThreadPool(5);
+    private static final ExecutorService HTTP_GET_SERVICE;
+    private static final ExecutorService DOWNLOAD_SERVICE;
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;
 
     static {
+        HTTP_GET_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
+                .setNameFormat("HTTP-GET-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
+        DOWNLOAD_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
+                .setNameFormat("DOWNLOAD-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
         CookieManager manager = new CookieManager();
         CookieHandler.setDefault(manager);
         String host = "http://91porn.com/";
@@ -38,28 +40,28 @@ public class HttpRequester {
     }
 
 
-    public static void download(String url, String filename) throws IOException {
-        log.info("下载文件：文件名: {} 下载地址：{}", filename, url);
-        try (InputStream inputStream = new URL(url).openStream()) {
-            Path filePath = Paths.get(filename);
-            if (Files.notExists(filePath)) {
-                Files.copy(inputStream, filePath);
-                log.info("下载成功 : {}", filePath);
-            } else {
-                //todo 文件同名处理？
-                log.info("本地已存在同名文件： {}", filePath);
+    public static Future<String> download(String url, String filename) {
+        return DOWNLOAD_SERVICE.submit(() -> {
+            log.info("下载文件：文件名: {} 下载地址：{}", filename, url);
+            try (InputStream inputStream = new URL(url).openStream()) {
+                Path filePath = Paths.get(filename);
+                if (Files.notExists(filePath)) {
+                    Files.copy(inputStream, filePath);
+                    log.info("下载成功 : {}", filePath);
+                } else {
+                    //todo 文件同名处理？
+                    log.info("本地已存在同名文件： {}", filePath);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
-    }
+            return "fuck";
+        });
 
-    public static void download(String url, String filename, String dir) throws IOException {
-        Path target = Paths.get(dir, filename);
-        Files.createDirectory(target.getParent());
-        download(url, target.toString());
     }
 
     private static Future<String> get(URL url) throws Exception {
-        return service.submit(new Connect(url));
+        return HTTP_GET_SERVICE.submit(new Connect(url));
     }
 
     static class Connect implements Callable<String> {

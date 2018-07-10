@@ -1,10 +1,12 @@
 package com.bluetroy.crawler91.crawler;
 
+import com.bluetroy.crawler91.repository.pojo.KeyContent;
 import com.bluetroy.crawler91.repository.pojo.Movie;
 import com.bluetroy.crawler91.utils.HttpRequester;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.SynchronousQueue;
 
 import static com.bluetroy.crawler91.repository.Repository.*;
 
@@ -13,6 +15,7 @@ import static com.bluetroy.crawler91.repository.Repository.*;
  */
 @Component
 public class Downloader {
+    private static SynchronousQueue<KeyContent> downloadTask = new SynchronousQueue();
     private volatile boolean isContinuousDownloadStart = false;
 
     public void continuousDownload() {
@@ -28,29 +31,54 @@ public class Downloader {
     public void downloadNow() {
         String key;
         while ((!isContinuousDownloadStart) && ((key = TO_DOWNLOAD_MOVIES.poll()) != null)) {
-            downloadProcessByKey(key);
+            downloadMovieByKey(key);
+        }
+        verifyDownloadTask();
+    }
+
+    private void downloadProcessByKey(String key) {
+        downloadTask.offer(downloadMovieByKey(key));
+    }
+
+    private void continuousVerifyDownloadTask() {
+        while (isContinuousDownloadStart) {
+            try {
+                KeyContent keyContent = downloadTask.take();
+                verifyProcess(keyContent);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void verifyProcess(KeyContent keyContent) {
+        if (keyContent.getContent().isDone()) {
+            try {
+                keyContent.getContent().get();
+                setDownloadedMovies(keyContent.getKey());
+            } catch (InterruptedException | ExecutionException e) {
+                setDownloadError(keyContent.getKey());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void verifyDownloadTask() {
+        KeyContent keyContent;
+        while ((keyContent = downloadTask.poll()) != null) {
+            verifyProcess(keyContent);
         }
     }
 
     private void startContinuousDownload() throws InterruptedException {
-        while (true) {
+        while (isContinuousDownloadStart) {
             String key = TO_DOWNLOAD_MOVIES.take();
             downloadProcessByKey(key);
         }
     }
 
-    private void downloadMovieByKey(String key) throws IOException {
+    private KeyContent downloadMovieByKey(String key) {
         Movie movie = MOVIE_DATA.get(key);
-        HttpRequester.download(movie.getDownloadURL(), movie.getFileName());
-    }
-
-    private void downloadProcessByKey(String key) {
-        try {
-            downloadMovieByKey(key);
-            setDownloadedMovies(key);
-        } catch (IOException e) {
-            setDownloadError(key);
-            e.printStackTrace();
-        }
+        return new KeyContent(key, HttpRequester.download(movie.getDownloadURL(), movie.getFileName()));
     }
 }

@@ -36,9 +36,8 @@ public class XpathUtils {
             JXDocument doc = JXDocument.create(content);
             scanDownloadUrlInDoc(doc, keyContent);
         } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
-            e.printStackTrace();
             Movie movie = MOVIE_DATA.get(keyContent.getKey());
-            log.warn("搜索不到 {} {} 的下载地址，应该是被ban了", movie.getTitle(), movie.getDetailURL());
+            log.warn("搜索不到 {} {} 的下载地址，应该是被ban了", movie.getTitle(), movie.getDetailURL(),e);
             //todo 应该得有被ban的策略
         }
     }
@@ -86,7 +85,7 @@ public class XpathUtils {
                 Movie movie = getMovie(r);
                 Repository.setScannedMovie(movie);
             } catch (XpathSyntaxErrorException e) {
-                e.printStackTrace();
+                log.warn("xpath 解析错误",e);
             }
         }
     }

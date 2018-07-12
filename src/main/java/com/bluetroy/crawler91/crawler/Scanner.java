@@ -2,7 +2,6 @@ package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.repository.pojo.KeyContent;
 import com.bluetroy.crawler91.utils.ScannerUtils;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import static com.bluetroy.crawler91.utils.ContentUtils.getMovieContents;
 /**
  * @author heyixin
  */
-@Log4j2
 @Component
 public class Scanner {
     private static final List<String> URLS_FOR_SCAN = new ArrayList<>();

@@ -70,11 +70,8 @@ public class PreStartCommand implements CommandLineRunner {
             ConcurrentHashMap<String, String> downloadedMovies = (ConcurrentHashMap<String, String>) downloadedMoviesInputStream.readObject();
             ConcurrentHashMap<String, DownloadErrorInfo> downloadError = (ConcurrentHashMap<String, DownloadErrorInfo>) downloadErrorInputStream.readObject();
             Repository.init(scannedMovies, toDownloadMovies, filteredMovies, movieData, downloadedMovies, downloadError);
-        } catch (IOException e) {
-            log.warn("数据加载失败");
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            log.warn("数据加载失败", e);
         }
     }
 }

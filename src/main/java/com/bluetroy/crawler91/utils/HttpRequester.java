@@ -55,8 +55,7 @@ public class HttpRequester {
                     stringBuffer.append("\r\n");
                 }
             } catch (IOException e1) {
-                log.warn("网页：{} 流读取错误", url.toString());
-                e1.printStackTrace();
+                log.warn("网页：{} 流读取错误", url.toString(), e1);
             }
             return stringBuffer.toString();
         });
@@ -76,7 +75,7 @@ public class HttpRequester {
                     log.info("本地已存在同名文件： {}", filePath);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.warn("文件下载失败：文件名: {} 下载地址：{}", filename, url, e);
             }
             return "fuck";
         });

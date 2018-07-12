@@ -33,8 +33,7 @@ public class PreDestroyCommand {
         ) {
             Repository.writeObject(scannedMoviesOutputStream, toDownloadMoviesOutputStream, filteredMoviesOutputStream, movieDataOutputStream, downloadedMoviesOutputStream, downloadErrorOutputStream);
         } catch (IOException e) {
-            log.warn("数据保存失败");
-            e.printStackTrace();
+            log.warn("数据保存失败",e);
         }
     }
 }

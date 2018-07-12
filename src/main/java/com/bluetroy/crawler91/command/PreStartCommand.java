@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -26,17 +28,40 @@ import java.util.concurrent.LinkedBlockingDeque;
 @Order(1)
 @Log4j2
 public class PreStartCommand implements CommandLineRunner {
+    private static final String SCANNED_MOVIES = "SCANNED_MOVIES.dat";
+    private static final String TO_DOWNLOAD_MOVIES = "TO_DOWNLOAD_MOVIES.dat";
+    private static final String FILTERED_MOVIES = "FILTERED_MOVIES.dat";
+    private static final String MOVIE_DATA = "MOVIE_DATA.dat";
+    private static final String DOWNLOADED_MOVIES = "DOWNLOADED_MOVIES.dat";
+    private static final String DOWNLOAD_ERROR = "DOWNLOAD_ERROR.dat";
 
     @Override
     public void run(String... args) throws Exception {
-        //todo 若文件不存在 要新建文件
         System.out.println("容器加载完毕， 要把数据从数据库中加载出来");
-        try (ObjectInputStream scannedMoviesInputStream = new ObjectInputStream(new FileInputStream("SCANNED_MOVIES.dat"));
-             ObjectInputStream toDownloadMoviesInputStream = new ObjectInputStream(new FileInputStream("TO_DOWNLOAD_MOVIES.dat"));
-             ObjectInputStream filteredMoviesInputStream = new ObjectInputStream(new FileInputStream("FILTERED_MOVIES.dat"));
-             ObjectInputStream movieDataInputStream = new ObjectInputStream(new FileInputStream("MOVIE_DATA.dat"));
-             ObjectInputStream downloadedMoviesInputStream = new ObjectInputStream(new FileInputStream("DOWNLOADED_MOVIES.dat"));
-             ObjectInputStream downloadErrorInputStream = new ObjectInputStream(new FileInputStream("DOWNLOAD_ERROR.dat"));
+        if (dataFilesExists()) {
+            initData();
+        } else {
+            log.info("文件不存在");
+        }
+    }
+
+    private boolean dataFilesExists() {
+        return Files.exists(Paths.get(SCANNED_MOVIES))
+                && Files.exists(Paths.get(TO_DOWNLOAD_MOVIES))
+                && Files.exists(Paths.get(FILTERED_MOVIES))
+                && Files.exists(Paths.get(MOVIE_DATA))
+                && Files.exists(Paths.get(DOWNLOADED_MOVIES))
+                && Files.exists(Paths.get(DOWNLOAD_ERROR));
+    }
+
+
+    private void initData() {
+        try (ObjectInputStream scannedMoviesInputStream = new ObjectInputStream(new FileInputStream(SCANNED_MOVIES));
+             ObjectInputStream toDownloadMoviesInputStream = new ObjectInputStream(new FileInputStream(TO_DOWNLOAD_MOVIES));
+             ObjectInputStream filteredMoviesInputStream = new ObjectInputStream(new FileInputStream(FILTERED_MOVIES));
+             ObjectInputStream movieDataInputStream = new ObjectInputStream(new FileInputStream(MOVIE_DATA));
+             ObjectInputStream downloadedMoviesInputStream = new ObjectInputStream(new FileInputStream(DOWNLOADED_MOVIES));
+             ObjectInputStream downloadErrorInputStream = new ObjectInputStream(new FileInputStream(DOWNLOAD_ERROR));
         ) {
             ConcurrentHashMap<String, Boolean> scannedMovies = (ConcurrentHashMap<String, Boolean>) scannedMoviesInputStream.readObject();
             LinkedBlockingDeque<String> toDownloadMovies = (LinkedBlockingDeque<String>) toDownloadMoviesInputStream.readObject();
@@ -47,6 +72,8 @@ public class PreStartCommand implements CommandLineRunner {
             Repository.init(scannedMovies, toDownloadMovies, filteredMovies, movieData, downloadedMovies, downloadError);
         } catch (IOException e) {
             log.warn("数据加载失败");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

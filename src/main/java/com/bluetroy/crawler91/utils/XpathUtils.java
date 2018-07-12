@@ -47,7 +47,7 @@ public class XpathUtils {
         try {
             setMovie(future.get());
         } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
-            e.printStackTrace();
+            log.warn("网络访问错误", e);
         }
     }
 

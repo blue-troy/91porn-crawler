@@ -24,7 +24,7 @@ public class ScanCommand {
     @Autowired
     Downloader downloader;
 
-    @Scheduled(cron = "0 */4 * * * ?")
+    @Scheduled(cron = "0 0 */4 * * ?")
     public void process() {
         System.out.println("开始执行操作");
         scanner.scanMovies();

@@ -29,6 +29,7 @@ public class PreStartCommand implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        //todo 若文件不存在 要新建文件
         System.out.println("容器加载完毕， 要把数据从数据库中加载出来");
         try (ObjectInputStream scannedMoviesInputStream = new ObjectInputStream(new FileInputStream("SCANNED_MOVIES.dat"));
              ObjectInputStream toDownloadMoviesInputStream = new ObjectInputStream(new FileInputStream("TO_DOWNLOAD_MOVIES.dat"));

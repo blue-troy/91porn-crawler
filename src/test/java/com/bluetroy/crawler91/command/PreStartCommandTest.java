@@ -2,8 +2,6 @@ package com.bluetroy.crawler91.command;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created with IntelliJ IDEA.
  * Description:

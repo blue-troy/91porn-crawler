@@ -2,8 +2,6 @@ package com.bluetroy.crawler91.utils;
 
 import org.junit.Test;
 
-import java.io.IOException;
-
 /**
  * Created with IntelliJ IDEA.
  * Description:

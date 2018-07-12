@@ -25,6 +25,10 @@ public class Scanner {
         URLS_FOR_SCAN.add("http://91porn.com/v.php?category=hot&viewtype=basic");
     }
 
+    public static List<String> getUrlsForScan() {
+        return URLS_FOR_SCAN;
+    }
+
     public void addUrlForScan(String url) {
         URLS_FOR_SCAN.add(url);
     }
@@ -45,10 +49,6 @@ public class Scanner {
     private void scanMoviesByUrlList() {
         LinkedBlockingDeque<Future<String>> movieContents = getMovieContents();
         ScannerUtils.scanMovies(movieContents);
-    }
-
-    public static List<String> getUrlsForScan() {
-        return URLS_FOR_SCAN;
     }
 
 }

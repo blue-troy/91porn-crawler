@@ -39,6 +39,15 @@ public class XpathUtils {
             e.printStackTrace();
             Movie movie = MOVIE_DATA.get(keyContent.getKey());
             log.warn("搜索不到 {} {} 的下载地址，应该是被ban了", movie.getTitle(), movie.getDetailURL());
+            //todo 应该得有被ban的策略
+        }
+    }
+
+    public static void setMovie(Future<String> future) {
+        try {
+            setMovie(future.get());
+        } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
+            e.printStackTrace();
         }
     }
 
@@ -67,15 +76,6 @@ public class XpathUtils {
                 .setIntegration(nodes.get(28).toString().replaceAll("\\s*", ""));
         log.info("扫描到了视频：{} ", movie.toString());
         return movie;
-    }
-
-
-    public static void setMovie(Future<String> future) {
-        try {
-            setMovie(future.get());
-        } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
-            e.printStackTrace();
-        }
     }
 
     private static void setMovie(String contentString) throws XpathSyntaxErrorException {

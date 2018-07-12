@@ -32,7 +32,7 @@ public class StartCommand implements CommandLineRunner {
         scanner.scanMovies();
         filter.doFilter();
         scanner.scanDownloadUrl();
-//        downloader.downloadNow();
+        downloader.downloadNow();
 
     }
 }

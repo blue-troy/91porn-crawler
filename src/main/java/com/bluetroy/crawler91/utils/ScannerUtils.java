@@ -17,6 +17,7 @@ import static com.bluetroy.crawler91.utils.XpathUtils.setMovie;
  */
 public class ScannerUtils {
     public static void scanDownloadUrls(LinkedBlockingDeque<KeyContent> keyContentQueue) {
+        //todo 增加延时获取的功能，因为contentQueue中的内容会动态的增加
         KeyContent keyContent;
         while ((keyContent = keyContentQueue.poll()) != null) {
             if (keyContent.getContent().isDone()) {
@@ -28,6 +29,7 @@ public class ScannerUtils {
     }
 
     public static void scanMovies(LinkedBlockingDeque<Future<String>> movieContents) {
+        //todo 增加延时获取的功能，因为contentQueue中的内容会动态的增加
         Future<String> future;
         while ((future = movieContents.poll()) != null) {
             if (future.isDone()) {

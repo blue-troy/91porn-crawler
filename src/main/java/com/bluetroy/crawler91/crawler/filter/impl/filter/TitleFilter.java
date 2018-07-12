@@ -1,6 +1,7 @@
 package com.bluetroy.crawler91.crawler.filter.impl.filter;
 
 import com.bluetroy.crawler91.crawler.filter.Filter;
+import lombok.ToString;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,6 +10,7 @@ import static com.bluetroy.crawler91.repository.Repository.MOVIE_DATA;
 /**
  * @author heyixin
  */
+@ToString
 public class TitleFilter implements Filter {
     private String keyword;
 

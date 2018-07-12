@@ -18,7 +18,7 @@ import static com.bluetroy.crawler91.repository.Repository.SCANNED_MOVIES;
 public class Filter {
     public void doFilter() {
         ConcurrentHashMap<String, Boolean> tobeFilter = getTobeFilterMap();
-        FilterChainFactory.getShowFaceCollectFilterChain(10).doFilter(tobeFilter);
+        FilterChainFactory.getShowFaceCollectFilterChain(200).doFilter(tobeFilter);
         tobeFilter.forEachKey(1, k -> {
             log.info(Repository.MOVIE_DATA.get(k).toString());
         });

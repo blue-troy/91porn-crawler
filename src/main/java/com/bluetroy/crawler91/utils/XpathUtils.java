@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static com.bluetroy.crawler91.dao.Repository.MOVIE_DATA;
-
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -37,7 +35,7 @@ public class XpathUtils {
             scanDownloadUrlInDoc(doc, keyContent);
         } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
             Movie movie = Repository.getMovieData().get(keyContent.getKey());
-            log.warn("搜索不到 {} {} 的下载地址，应该是被ban了", movie.getTitle(), movie.getDetailURL(),e);
+            log.warn("搜索不到 {} {} 的下载地址，应该是被ban了", movie.getTitle(), movie.getDetailURL(), e);
             //todo 应该得有被ban的策略
         }
     }
@@ -85,7 +83,7 @@ public class XpathUtils {
                 Movie movie = getMovie(r);
                 Repository.setScannedMovie(movie);
             } catch (XpathSyntaxErrorException e) {
-                log.warn("xpath 解析错误",e);
+                log.warn("xpath 解析错误", e);
             }
         }
     }

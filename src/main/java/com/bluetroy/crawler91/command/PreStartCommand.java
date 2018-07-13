@@ -1,7 +1,6 @@
 package com.bluetroy.crawler91.command;
 
 import com.bluetroy.crawler91.dao.Repository;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

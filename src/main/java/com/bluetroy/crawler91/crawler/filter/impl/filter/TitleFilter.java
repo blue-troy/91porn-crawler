@@ -6,8 +6,6 @@ import lombok.ToString;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.bluetroy.crawler91.dao.Repository.MOVIE_DATA;
-
 /**
  * @author heyixin
  */

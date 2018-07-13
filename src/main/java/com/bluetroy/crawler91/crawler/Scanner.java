@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.repository.pojo.KeyContent;
+import com.bluetroy.crawler91.dao.entity.KeyContent;
 import com.bluetroy.crawler91.utils.ScannerUtils;
 import org.springframework.stereotype.Component;
 

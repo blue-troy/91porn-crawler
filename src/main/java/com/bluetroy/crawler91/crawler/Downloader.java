@@ -1,14 +1,14 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.repository.pojo.KeyContent;
-import com.bluetroy.crawler91.repository.pojo.Movie;
+import com.bluetroy.crawler91.dao.entity.KeyContent;
+import com.bluetroy.crawler91.dao.entity.Movie;
 import com.bluetroy.crawler91.utils.HttpRequester;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.SynchronousQueue;
 
-import static com.bluetroy.crawler91.repository.Repository.*;
+import static com.bluetroy.crawler91.dao.Repository.*;
 
 /**
  * @author heyixin
@@ -30,7 +30,7 @@ public class Downloader {
 
     public void downloadNow() {
         String key;
-        while ((!isContinuousDownloadStart) && ((key = TO_DOWNLOAD_MOVIES.poll()) != null)) {
+        while ((!isContinuousDownloadStart) && ((key = getToDownloadMovies().poll()) != null)) {
             downloadMovieByKey(key);
         }
         verifyDownloadTask();
@@ -72,13 +72,13 @@ public class Downloader {
 
     private void startContinuousDownload() throws InterruptedException {
         while (isContinuousDownloadStart) {
-            String key = TO_DOWNLOAD_MOVIES.take();
+            String key = getToDownloadMovies().take();
             downloadProcessByKey(key);
         }
     }
 
     private KeyContent downloadMovieByKey(String key) {
-        Movie movie = MOVIE_DATA.get(key);
+        Movie movie = getMovieData().get(key);
         return new KeyContent(key, HttpRequester.download(movie.getDownloadURL(), movie.getFileName()));
     }
 }

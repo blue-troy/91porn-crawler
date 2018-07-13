@@ -1,13 +1,13 @@
 package com.bluetroy.crawler91.utils;
 
 import com.bluetroy.crawler91.crawler.Scanner;
-import com.bluetroy.crawler91.repository.pojo.KeyContent;
+import com.bluetroy.crawler91.dao.entity.KeyContent;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import static com.bluetroy.crawler91.repository.Repository.FILTERED_MOVIES;
-import static com.bluetroy.crawler91.repository.Repository.MOVIE_DATA;
+import static com.bluetroy.crawler91.dao.Repository.getFilteredMovies;
+import static com.bluetroy.crawler91.dao.Repository.getMovieData;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +21,7 @@ public class ContentUtils {
     public static LinkedBlockingDeque<KeyContent> getDetailContents() {
         //todo 这边可以做成异步的，先返回contentQueue对象，对象中的的内容咱可以慢慢添加不是，这就要求处理contentQueue对象的方法需要有一定的等待功能
         LinkedBlockingDeque<KeyContent> contentQueue = new LinkedBlockingDeque<>();
-        FILTERED_MOVIES.forEach(5, (k, v) -> {
+        getFilteredMovies().forEach(5, (k, v) -> {
             if (v) {
                 return;
             }
@@ -40,6 +40,6 @@ public class ContentUtils {
     }
 
     private static KeyContent getKeyContentMap(String key) {
-        return new KeyContent(key, HttpRequester.get(MOVIE_DATA.get(key).getDetailURL()));
+        return new KeyContent(key, HttpRequester.get(getMovieData().get(key).getDetailURL()));
     }
 }

@@ -1,8 +1,8 @@
 package com.bluetroy.crawler91.utils;
 
-import com.bluetroy.crawler91.repository.Repository;
-import com.bluetroy.crawler91.repository.pojo.KeyContent;
-import com.bluetroy.crawler91.repository.pojo.Movie;
+import com.bluetroy.crawler91.dao.Repository;
+import com.bluetroy.crawler91.dao.entity.KeyContent;
+import com.bluetroy.crawler91.dao.entity.Movie;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Node;
 import org.seimicrawler.xpath.JXDocument;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static com.bluetroy.crawler91.repository.Repository.MOVIE_DATA;
+import static com.bluetroy.crawler91.dao.Repository.MOVIE_DATA;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,7 +36,7 @@ public class XpathUtils {
             JXDocument doc = JXDocument.create(content);
             scanDownloadUrlInDoc(doc, keyContent);
         } catch (InterruptedException | ExecutionException | XpathSyntaxErrorException e) {
-            Movie movie = MOVIE_DATA.get(keyContent.getKey());
+            Movie movie = Repository.getMovieData().get(keyContent.getKey());
             log.warn("搜索不到 {} {} 的下载地址，应该是被ban了", movie.getTitle(), movie.getDetailURL(),e);
             //todo 应该得有被ban的策略
         }
@@ -51,7 +51,7 @@ public class XpathUtils {
     }
 
     private static void scanDownloadUrlInDoc(JXDocument doc, KeyContent keyContent) throws XpathSyntaxErrorException {
-        Movie movie = MOVIE_DATA.get(keyContent.getKey());
+        Movie movie = Repository.getMovieData().get(keyContent.getKey());
         List<JXNode> rs = doc.selN(DOWNLOAD_URL_XPATH);
         //todo 如果得不到就会 java.lang.IndexOutOfBoundsException 可以增加一个判断是否被ban了
         String downloadURL = rs.get(0).getElement().attributes().get("src");

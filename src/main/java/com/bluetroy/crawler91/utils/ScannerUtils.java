@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.utils;
 
-import com.bluetroy.crawler91.repository.pojo.KeyContent;
+import com.bluetroy.crawler91.dao.entity.KeyContent;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;

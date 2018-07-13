@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.crawler;
 
+import com.bluetroy.crawler91.dao.Repository;
 import com.bluetroy.crawler91.dao.entity.KeyContent;
 import com.bluetroy.crawler91.dao.entity.Movie;
 import com.bluetroy.crawler91.utils.HttpRequester;
@@ -34,6 +35,7 @@ public class Downloader {
             downloadMovieByKey(key);
         }
         verifyDownloadTask();
+        Repository.save();//保存一次数据 避免异常退出时没有保存
     }
 
     private void downloadProcessByKey(String key) {

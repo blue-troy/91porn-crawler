@@ -24,6 +24,8 @@ public class HttpRequester {
     private static final ExecutorService HTTP_GET_SERVICE;
     private static final ExecutorService DOWNLOAD_SERVICE;
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;
+    private static final int TEN_MINUTE = 10 * 60 * 1000;
+    private static final int THIRTY_SECONDS = 30 * 1000;
 
     static {
         HTTP_GET_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
@@ -38,16 +40,13 @@ public class HttpRequester {
     public static Future<String> get(String url) {
         return HTTP_GET_SERVICE.submit(() -> {
             log.info("get  " + url.toString());
+            HttpURLConnection httpURLConnection = getConnection(url);
             StringBuilder stringBuffer = new StringBuilder();
             //todo 用代理访问？ httpURLConnection.usingProxy()
-            HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
-            httpURLConnection.setRequestProperty("Accept-Charset", "utf-8");
-            httpURLConnection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
-            httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1");
             if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
                 throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
             }
+            //todo 用buffer
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -61,11 +60,16 @@ public class HttpRequester {
         });
     }
 
+    //todo 并发问题
 
     public static Future<String> download(String url, String filename) {
         return DOWNLOAD_SERVICE.submit(() -> {
+            HttpURLConnection httpURLConnection = getDownloadConnection(url);
+            if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
+                throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
+            }
             log.info("下载文件：文件名: {} 下载地址：{}", filename, url);
-            try (InputStream inputStream = new URL(url).openStream()) {
+            try (InputStream inputStream = httpURLConnection.getInputStream()) {
                 Path filePath = Paths.get(filename);
                 if (Files.notExists(filePath)) {
                     Files.copy(inputStream, filePath);
@@ -79,6 +83,24 @@ public class HttpRequester {
             }
             return "fuck";
         });
+    }
+
+    private static HttpURLConnection getConnection(String url) throws IOException {
+        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
+        httpURLConnection.setRequestProperty("Accept-Charset", "utf-8");
+        httpURLConnection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
+        httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1");
+        httpURLConnection.setConnectTimeout(THIRTY_SECONDS);
+        httpURLConnection.setReadTimeout(THIRTY_SECONDS);
+        return httpURLConnection;
+    }
+
+    private static HttpURLConnection getDownloadConnection(String url) throws IOException {
+        HttpURLConnection httpURLConnection = getConnection(url);
+        httpURLConnection.setReadTimeout(TEN_MINUTE);
+        httpURLConnection.setConnectTimeout(TEN_MINUTE);
+        return httpURLConnection;
     }
 }
 

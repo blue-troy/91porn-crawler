@@ -39,4 +39,8 @@ public class ScannerUtils {
             }
         }
     }
+
+    public static String scanLoginState(String loginResult) {
+        return XpathUtils.getLoginState(loginResult);
+    }
 }

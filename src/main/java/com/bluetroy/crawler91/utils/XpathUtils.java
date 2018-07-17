@@ -48,6 +48,16 @@ public class XpathUtils {
         }
     }
 
+    public static String getLoginState(String loginResult) {
+        JXDocument document = JXDocument.create(loginResult);
+        try {
+            return document.selNOne("//*[@id='usermenu']/div[1]/h4/text()").getTextVal();
+        } catch (XpathSyntaxErrorException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     private static void scanDownloadUrlInDoc(JXDocument doc, KeyContent keyContent) throws XpathSyntaxErrorException {
         Movie movie = Repository.getMovieData().get(keyContent.getKey());
         List<JXNode> rs = doc.selN(DOWNLOAD_URL_XPATH);

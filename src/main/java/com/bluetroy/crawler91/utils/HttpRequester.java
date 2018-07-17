@@ -3,10 +3,9 @@ package com.bluetroy.crawler91.utils;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
@@ -41,26 +40,29 @@ public class HttpRequester {
         return HTTP_GET_SERVICE.submit(() -> {
             log.info("get  " + url.toString());
             HttpURLConnection httpURLConnection = getConnection(url);
-            StringBuilder stringBuffer = new StringBuilder();
             //todo 用代理访问？ httpURLConnection.usingProxy()
             if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
                 throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
             }
             //todo 用buffer
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuffer.append(line);
-                    stringBuffer.append("\r\n");
-                }
-            } catch (IOException e1) {
-                log.warn("网页：{} 流读取错误", url.toString(), e1);
-            }
-            return stringBuffer.toString();
+            return getInputString(httpURLConnection);
         });
     }
 
-    //todo 并发问题
+    //todo post
+
+    public static String post(String url, String params) throws Exception {
+        HttpURLConnection connection = getConnection(url);
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        try (OutputStream outputStream = connection.getOutputStream()) {
+            outputStream.write(params.getBytes());
+        }
+        if (connection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
+            throw new Exception("HTTP Request is not success, Response code is " + connection.getResponseCode());
+        }
+        return getInputString(connection);
+    }
 
     public static Future<String> download(String url, String filename) {
         return DOWNLOAD_SERVICE.submit(() -> {
@@ -83,6 +85,16 @@ public class HttpRequester {
             }
             return "fuck";
         });
+    }
+
+    private static String getInputString(HttpURLConnection connection) throws IOException {
+        return new String(getInputBytes(connection));
+    }
+
+    private static byte[] getInputBytes(HttpURLConnection connection) throws IOException {
+        try (InputStream inputStream = connection.getInputStream()) {
+            return inputStream.readAllBytes();
+        }
     }
 
     private static HttpURLConnection getConnection(String url) throws IOException {

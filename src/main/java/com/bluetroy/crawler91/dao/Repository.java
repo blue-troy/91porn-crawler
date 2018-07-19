@@ -122,9 +122,25 @@ public class Repository implements Serializable {
         }
     }
 
+    /**
+     * 设置扫描到的视频
+     * 若视频曾经被扫描过，且有所不同则应该去更新视频的信息
+     * 没有不同就算了。
+     * 若不被扫描过，则应当去增加视频的信息。
+     *
+     * @param movie
+     */
     public static void setScannedMovie(Movie movie) {
-        Repository.SCANNED_MOVIES.putIfAbsent(movie.getKey(), false);
-        Repository.MOVIE_DATA.putIfAbsent(movie.getKey(), movie);
+        if (Repository.SCANNED_MOVIES.containsKey(movie.getKey())) {
+            if (movie.compareTo(MOVIE_DATA.get(movie.getKey())) != 0) {
+                Repository.MOVIE_DATA.get(movie.getKey()).update(movie);
+                Repository.SCANNED_MOVIES.replace(movie.getKey(), false);
+                Repository.MOVIE_DATA.get(movie.getKey()).update(movie);
+            }
+        } else {
+            Repository.SCANNED_MOVIES.putIfAbsent(movie.getKey(), false);
+            Repository.MOVIE_DATA.put(movie.getKey(), movie);
+        }
     }
 
     private static void writeObject(ObjectOutputStream scannedMoviesOutputStream, ObjectOutputStream toDownloadMoviesOutputStream, ObjectOutputStream filteredMoviesOutputStream, ObjectOutputStream movieDataOutputStream, ObjectOutputStream downloadedMoviesOutputStream, ObjectOutputStream downloadErrorOutputStream) throws IOException {

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author heyixin
  */
 @Data
-public class Movie implements Serializable {
+public class Movie implements Serializable, Comparable<Movie> {
     String title;
     String length;
     String addTime;
@@ -30,6 +30,21 @@ public class Movie implements Serializable {
         s = s.trim();
         return Integer.valueOf(s);
     }
+
+    public void update(Movie movie) {
+        this.view = movie.getView();
+        this.collect = movie.collect;
+        this.messageNumber = movie.getMessageNumber();
+    }
+
+    @Override
+    public int compareTo(Movie o) {
+        if (o.view.equals(this.view) && o.collect.equals(this.collect) && o.messageNumber.equals(this.messageNumber)) {
+            return 0;
+        }
+        return 1;
+    }
+
 
     public String getKey() {
         Integer index = detailURL.indexOf("viewkey=");

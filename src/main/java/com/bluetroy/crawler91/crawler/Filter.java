@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.crawler;
 
+import com.bluetroy.crawler91.crawler.filter.FilterChain;
 import com.bluetroy.crawler91.crawler.filter.impl.FilterChainFactory;
 import com.bluetroy.crawler91.dao.Repository;
 import lombok.extern.log4j.Log4j2;
@@ -22,5 +23,19 @@ public class Filter {
             log.info(Repository.getMovieData().get(k).toString());
         });
         Repository.addFilteredMovies(tobeFilter);
+    }
+
+    //todo filter新功能
+
+    public void changeFilter(FilterChain filterChain) {
+
+    }
+
+    public void addFilter(FilterChain filterChain) {
+
+    }
+
+    public void addOrFilter(FilterChain filterChain) {
+
     }
 }

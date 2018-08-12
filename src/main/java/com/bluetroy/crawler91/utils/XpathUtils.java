@@ -51,6 +51,7 @@ public class XpathUtils {
     public static String getLoginState(String loginResult) {
         JXDocument document = JXDocument.create(loginResult);
         try {
+            //todo debug
             return document.selNOne("//*[@id='usermenu']/div[1]/h4/text()").getTextVal();
         } catch (XpathSyntaxErrorException e) {
             e.printStackTrace();

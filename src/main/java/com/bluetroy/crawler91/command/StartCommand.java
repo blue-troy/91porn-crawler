@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
  * Date: 2018-07-09
  * Time: 下午7:49
  */
-@Order(2)
-@Component
+/*@Order(2)
+@Component*/
 public class StartCommand implements CommandLineRunner {
     @Autowired
     ScanCommand scanCommand;

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>91 crawler</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>91 爬虫</h1>
+<button onclick="start()">开始</button>
+<button onclick="shutdown()">关闭程序</button>
+</body>
+<script>
+    function start() {
+        $.get("/start", function (data) {
+            $.ajaxSuccess(alert(data))
+        })
+    }
+
+    function shutdown() {
+        $.get("/shutdown", function (data) {
+            $.ajaxSuccess(alert(data))
+        })
+    }
+</script>
+</html>

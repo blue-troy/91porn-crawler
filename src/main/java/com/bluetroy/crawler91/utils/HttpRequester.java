@@ -10,6 +10,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -88,7 +89,7 @@ public class HttpRequester {
     }
 
     private static String getInputString(HttpURLConnection connection) throws IOException {
-        return new String(getInputBytes(connection));
+        return new String(getInputBytes(connection), StandardCharsets.UTF_8);
     }
 
     private static byte[] getInputBytes(HttpURLConnection connection) throws IOException {

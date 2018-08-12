@@ -7,4 +7,10 @@
 - [Spring-Boot](https://github.com/spring-projects/spring-boot)
 - [JsoupXpath](https://github.com/zhegexiaohuozi/JsoupXpath)
 * 运行本程序需要安装>=java8
-
+## 开发
+导入IDE里时需要安装lombok插件。
+### 环境
+  ![](https://img.shields.io/badge/JAVA-1.8%2B-brightgreen.svg) ![](https://img.shields.io/badge/maven-3.0%2B-brightgreen.svg)
+### 运行
+```
+java -jar proxyee-down.jar

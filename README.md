@@ -6,7 +6,6 @@
 ## 技术栈
 - [Spring-Boot](https://github.com/spring-projects/spring-boot)
 - [JsoupXpath](https://github.com/zhegexiaohuozi/JsoupXpath)
-* 运行本程序需要安装>=java8
 ## 开发
 导入IDE里时需要安装lombok插件。
 ### 环境

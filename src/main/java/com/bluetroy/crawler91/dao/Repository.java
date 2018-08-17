@@ -10,6 +10,7 @@ import javax.annotation.PreDestroy;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -196,4 +197,11 @@ public class Repository implements Serializable {
         }
     }
 
+    public static HashMap<String, Movie> getToDownloadMoviesMap() {
+        HashMap<String, Movie> hashMap = new HashMap<>();
+        TO_DOWNLOAD_MOVIES.forEach(k -> {
+            hashMap.put(k, MOVIE_DATA.get(k));
+        });
+        return hashMap;
+    }
 }

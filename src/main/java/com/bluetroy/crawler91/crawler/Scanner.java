@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.crawler;
 
+import com.bluetroy.crawler91.dao.Repository;
 import com.bluetroy.crawler91.dao.entity.KeyContent;
 import com.bluetroy.crawler91.utils.ScannerUtils;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class Scanner {
     private static final List<String> URLS_FOR_SCAN = new ArrayList<>();
 
     static {
-        URLS_FOR_SCAN.add("http://92.91p08.space/v.php?category=hot&viewtype=basic");
+        URLS_FOR_SCAN.add("http://91porn.com/v.php?category=hot&viewtype=basic");
     }
 
     public static List<String> getUrlsForScan() {
@@ -49,4 +50,7 @@ public class Scanner {
         ScannerUtils.scanMovies(movieContents);
     }
 
+    public Integer getCount() {
+        return Repository.getFilteredMovies().size();
+    }
 }

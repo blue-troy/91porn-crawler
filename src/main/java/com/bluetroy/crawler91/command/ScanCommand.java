@@ -26,10 +26,12 @@ public class ScanCommand {
 
     @Scheduled(cron = "0 0 */4 * * ?")
     public void process() {
-        System.out.println("开始执行操作");
-        scanner.scanMovies();
-        filter.doFilter();
-        scanner.scanDownloadUrl();
-        downloader.downloadNow();
+        new Thread(() -> {
+            System.out.println("开始执行操作");
+            scanner.scanMovies();
+            filter.doFilter();
+            scanner.scanDownloadUrl();
+            downloader.downloadNow();
+        }).start();
     }
 }

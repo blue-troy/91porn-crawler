@@ -144,6 +144,22 @@ public class Repository implements Serializable {
         }
     }
 
+    public static HashMap<String, Movie> getToDownloadMoviesMap() {
+        HashMap<String, Movie> hashMap = new HashMap<>();
+        TO_DOWNLOAD_MOVIES.forEach(k -> {
+            hashMap.put(k, MOVIE_DATA.get(k));
+        });
+        return hashMap;
+    }
+
+    public static HashMap<String, Movie> getFilteredMoviesMap() {
+        HashMap<String, Movie> hashMap = new HashMap<>();
+        FILTERED_MOVIES.forEachKey(1, k -> {
+            hashMap.put(k, MOVIE_DATA.get(k));
+        });
+        return hashMap;
+    }
+
     private static void writeObject(ObjectOutputStream scannedMoviesOutputStream, ObjectOutputStream toDownloadMoviesOutputStream, ObjectOutputStream filteredMoviesOutputStream, ObjectOutputStream movieDataOutputStream, ObjectOutputStream downloadedMoviesOutputStream, ObjectOutputStream downloadErrorOutputStream) throws IOException {
         scannedMoviesOutputStream.writeObject(SCANNED_MOVIES);
         toDownloadMoviesOutputStream.writeObject(TO_DOWNLOAD_MOVIES);
@@ -197,11 +213,4 @@ public class Repository implements Serializable {
         }
     }
 
-    public static HashMap<String, Movie> getToDownloadMoviesMap() {
-        HashMap<String, Movie> hashMap = new HashMap<>();
-        TO_DOWNLOAD_MOVIES.forEach(k -> {
-            hashMap.put(k, MOVIE_DATA.get(k));
-        });
-        return hashMap;
-    }
 }

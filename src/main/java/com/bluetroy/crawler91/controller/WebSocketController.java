@@ -21,22 +21,24 @@ import java.io.IOException;
 @Component
 @Log4j2
 @ServerEndpoint(value = "/websocket")
-public class WebSocketController {
-    private Session session;
-
-    @OnOpen
-    public void open(Session session) {
-        log.info("webSocket open");
-        this.session = session;
-    }
+public class WebSocketController<T> {
+    private static Session SESSION;
 
     @OnMessage
     public void message(String message) throws IOException {
         log.info("send message " + message);
-        session.getBasicRemote().sendText(message);
+        SESSION.getBasicRemote().sendText(message);
     }
 
-    public void send(String method, Object object) throws IOException {
-        message(new JsonResponse(method, object).get());
+    @OnOpen
+    public void open(Session session) {
+        if (SESSION != session) {
+            log.info(session + " open");
+            SESSION = session;
+        }
+    }
+
+    public void send(String method, T t) throws IOException {
+        message(new JsonResponse(method, t).get());
     }
 }

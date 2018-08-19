@@ -15,17 +15,16 @@ import java.io.Serializable;
  * Time: 下午4:33
  */
 @Data
-public class JsonResponse implements Serializable {
+public class JsonResponse<T> implements Serializable {
     String method;
-    Object data;
+    T data;
 
-    public JsonResponse(String method, Object o) {
+    public JsonResponse(String method, T t) {
         this.method = method;
-        this.data = o;
+        this.data = t;
     }
 
     public String get() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(this);
+        return new ObjectMapper().writeValueAsString(this);
     }
 }

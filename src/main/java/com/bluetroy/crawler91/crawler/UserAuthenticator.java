@@ -2,9 +2,10 @@ package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.utils.HttpRequester;
 import com.bluetroy.crawler91.utils.ScannerUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 /**
@@ -15,14 +16,17 @@ import java.io.OutputStreamWriter;
  * Date: 2018-07-14
  * Time: 下午8:12
  */
+@Component
 public class UserAuthenticator {
-    public static boolean login(String name, String password, String verificationCode) {
+    @Autowired
+    ScannerUtils scannerUtils;
+    public  boolean login(String name, String password, String verificationCode) {
         String loginResult = null;
         try {
             //todo host统一问题
             loginResult = HttpRequester.post("http://92.91p08.space/login.php", getLoginParams(name, password, verificationCode));
             //todo 这个一个测试 提取测试文件
-            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("loginResult.txt"),"utf-8")){
+            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream("loginResult.txt"), "utf-8")) {
                 writer.write(loginResult);
                 writer.flush();
             }
@@ -32,11 +36,11 @@ public class UserAuthenticator {
         return verifyLogin(loginResult);
     }
 
-    private static boolean verifyLogin(String loginResult) {
-        return !ScannerUtils.scanLoginState(loginResult).contains("我的状态");
+    private  boolean verifyLogin(String loginResult) {
+        return !scannerUtils.scanLoginState(loginResult).contains("我的状态");
     }
 
-    private static String getLoginParams(String name, String password, String verificationCode) {
+    private  String getLoginParams(String name, String password, String verificationCode) {
         return "user=" + name + "&password=" + password + "&captcha_input=" + verificationCode;
     }
 

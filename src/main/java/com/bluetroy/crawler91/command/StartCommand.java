@@ -2,8 +2,6 @@ package com.bluetroy.crawler91.command;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * Created with IntelliJ IDEA.

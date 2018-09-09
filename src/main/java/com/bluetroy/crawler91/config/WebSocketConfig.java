@@ -9,8 +9,8 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  * Description:
  *
  * @author: heyixin
- * Date: 2018-08-16
- * Time: 下午2:53
+ * Date: 2018-08-19
+ * Time: 上午10:04
  */
 @Configuration
 public class WebSocketConfig {

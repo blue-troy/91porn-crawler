@@ -20,10 +20,12 @@ import java.io.IOException;
 public class InfoController {
     @Autowired
     WebSocketController webSocketController;
+    @Autowired
+    Repository repository;
 
     @RequestMapping("/get")
     public String getInfo() throws IOException {
-        webSocketController.send("/filteredMovies/get", Repository.getFilteredMoviesMap());
+        webSocketController.send("/filteredMovies/get", repository.getFilteredMoviesMap());
         return "success";
     }
 }

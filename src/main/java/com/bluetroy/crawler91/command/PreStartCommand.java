@@ -1,11 +1,10 @@
 package com.bluetroy.crawler91.command;
 
 import com.bluetroy.crawler91.dao.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,8 +17,11 @@ import java.io.File;
 @Component
 @Order(1)
 public class PreStartCommand implements CommandLineRunner {
+    @Autowired
+    Repository repository;
+
     @Override
     public void run(String... args) throws Exception {
-        Repository.init();
+        repository.init();
     }
 }

@@ -5,12 +5,10 @@ import com.bluetroy.crawler91.crawler.filter.impl.FilterChainFactory;
 import com.bluetroy.crawler91.dao.Repository;
 import com.bluetroy.crawler91.vo.FilterVO;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
-
-import static com.bluetroy.crawler91.dao.Repository.getMovieData;
-import static com.bluetroy.crawler91.dao.Repository.getTobeFilter;
 
 /**
  * @author heyixin
@@ -18,15 +16,17 @@ import static com.bluetroy.crawler91.dao.Repository.getTobeFilter;
 @Component()
 @Log4j2
 public class Filter {
+    @Autowired
+    Repository repository;
     private FilterChain filterChain = FilterChainFactory.getShowFaceCollectFilterChain(200);
 
     public void doFilter() {
-        ConcurrentHashMap<String, Boolean> tobeFilter = getTobeFilter();
+        ConcurrentHashMap<String, Boolean> tobeFilter = repository.getTobeFilter();
         getFilterChain().doFilter(tobeFilter);
         tobeFilter.forEachKey(1, k -> {
-            log.info(Repository.getMovieData().get(k).toString());
+            log.info(repository.getMovieData().get(k).toString());
         });
-        Repository.addFilteredMovies(tobeFilter);
+        repository.addFilteredMovies(tobeFilter);
     }
 
     public void changeFilter(FilterChain filterChain) {

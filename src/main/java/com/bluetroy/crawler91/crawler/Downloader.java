@@ -4,12 +4,11 @@ import com.bluetroy.crawler91.dao.Repository;
 import com.bluetroy.crawler91.dao.entity.KeyContent;
 import com.bluetroy.crawler91.dao.entity.Movie;
 import com.bluetroy.crawler91.utils.HttpRequester;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.SynchronousQueue;
-
-import static com.bluetroy.crawler91.dao.Repository.*;
 
 /**
  * @author heyixin
@@ -17,6 +16,8 @@ import static com.bluetroy.crawler91.dao.Repository.*;
 @Component
 public class Downloader {
     private static SynchronousQueue<KeyContent> downloadTask = new SynchronousQueue();
+    @Autowired
+    Repository repository;
     private volatile boolean isContinuousDownloadStart = false;
 
     public void continuousDownload() {
@@ -31,11 +32,11 @@ public class Downloader {
 
     public void downloadNow() {
         String key;
-        while ((!isContinuousDownloadStart) && ((key = getToDownloadMovies().poll()) != null)) {
+        while ((!isContinuousDownloadStart) && ((key = repository.getToDownloadMovies().poll()) != null)) {
             downloadMovieByKey(key);
         }
         verifyDownloadTask();
-        Repository.save();//保存一次数据 避免异常退出时没有保存
+        repository.save();//保存一次数据 避免异常退出时没有保存
     }
 
     private void downloadProcessByKey(String key) {
@@ -57,9 +58,9 @@ public class Downloader {
         if (keyContent.getContent().isDone()) {
             try {
                 keyContent.getContent().get();
-                setDownloadedMovies(keyContent.getKey());
+                repository.setDownloadedMovies(keyContent.getKey());
             } catch (InterruptedException | ExecutionException e) {
-                setDownloadError(keyContent.getKey());
+                repository.setDownloadError(keyContent.getKey());
                 e.printStackTrace();
             }
         }
@@ -74,13 +75,13 @@ public class Downloader {
 
     private void startContinuousDownload() throws InterruptedException {
         while (isContinuousDownloadStart) {
-            String key = getToDownloadMovies().take();
+            String key = repository.getToDownloadMovies().take();
             downloadProcessByKey(key);
         }
     }
 
     private KeyContent downloadMovieByKey(String key) {
-        Movie movie = getMovieData().get(key);
+        Movie movie = repository.getMovieData(key);
         return new KeyContent(key, HttpRequester.download(movie.getDownloadURL(), movie.getFileName()));
     }
 }

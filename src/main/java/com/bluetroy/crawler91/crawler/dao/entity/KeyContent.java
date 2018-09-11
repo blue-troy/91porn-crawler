@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.dao.entity;
+package com.bluetroy.crawler91.crawler.dao.entity;
 
 import lombok.Getter;
 

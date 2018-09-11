@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.utils;
+package com.bluetroy.crawler91.crawler.untils;
 
 import java.lang.reflect.Field;
 

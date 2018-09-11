@@ -1,6 +1,6 @@
-package com.bluetroy.crawler91.utils;
+package com.bluetroy.crawler91.crawler.tools;
 
-import com.bluetroy.crawler91.dao.entity.KeyContent;
+import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,16 +16,16 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Time: 下午3:49
  */
 @Component
-public class ScannerUtils {
+public class ScannerTool {
     @Autowired
-    XpathUtils xpathUtils;
+    XpathTool xpathTool;
 
     public void scanDownloadUrls(LinkedBlockingDeque<KeyContent> keyContentQueue) {
         //todo 增加延时获取的功能，因为contentQueue中的内容会动态的增加
         KeyContent keyContent;
         while ((keyContent = keyContentQueue.poll()) != null) {
             if (keyContent.getContent().isDone()) {
-                xpathUtils.scanDownloadUrl(keyContent);
+                xpathTool.scanDownloadUrl(keyContent);
             } else {
                 keyContentQueue.offer(keyContent);
             }
@@ -37,7 +37,7 @@ public class ScannerUtils {
         Future<String> future;
         while ((future = movieContents.poll()) != null) {
             if (future.isDone()) {
-                xpathUtils.setMovie(future);
+                xpathTool.setMovie(future);
             } else {
                 movieContents.offer(future);
             }
@@ -45,6 +45,6 @@ public class ScannerUtils {
     }
 
     public String scanLoginState(String loginResult) {
-        return xpathUtils.getLoginState(loginResult);
+        return xpathTool.getLoginState(loginResult);
     }
 }

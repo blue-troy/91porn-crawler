@@ -1,7 +1,7 @@
 package com.bluetroy.crawler91.crawler.filter.impl.filter;
 
+import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.filter.Filter;
-import com.bluetroy.crawler91.dao.Repository;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,8 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @ToString
 public class TitleFilter implements Filter {
+    @ToString.Exclude
     @Autowired
-    transient Repository repository;
+    Repository repository;
     private String keyword;
 
     public TitleFilter(String keyword) {

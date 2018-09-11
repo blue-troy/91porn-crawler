@@ -1,6 +1,6 @@
-package com.bluetroy.crawler91.dao.entity;
+package com.bluetroy.crawler91.crawler.dao.entity;
 
-import com.bluetroy.crawler91.utils.TimeUtils;
+import com.bluetroy.crawler91.crawler.untils.TimeUtils;
 import lombok.ToString;
 
 import java.util.LinkedList;

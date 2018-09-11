@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.utils;
+package com.bluetroy.crawler91.crawler.tools;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
@@ -20,7 +20,7 @@ import java.util.concurrent.*;
  * @author heyixin
  */
 @Log4j2
-public class HttpRequester {
+public class HttpTool {
     private static final ExecutorService HTTP_GET_SERVICE;
     private static final ExecutorService DOWNLOAD_SERVICE;
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;

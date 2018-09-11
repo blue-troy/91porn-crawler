@@ -1,7 +1,7 @@
-package com.bluetroy.crawler91.dao;
+package com.bluetroy.crawler91.crawler.dao;
 
-import com.bluetroy.crawler91.dao.entity.DownloadErrorInfo;
-import com.bluetroy.crawler91.dao.entity.Movie;
+import com.bluetroy.crawler91.crawler.dao.entity.DownloadErrorInfo;
+import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -27,12 +27,13 @@ public class Persistence implements Persistability {
         try {
             initDataFromFile(repository);
         } catch (IOException | ClassNotFoundException e) {
-            log.warn("无法从文件中读取初始化信息", e);
+            log.warn("无法从文件中读取repository初始化信息");
             initDataWithEmpty(repository);
         }
     }
 
     private void initDataWithEmpty(Repository repository) {
+        log.warn("repository数据初始化为空");
         repository.scannedMovies = new ConcurrentHashMap<String, Boolean>();
         repository.filteredMovies = new ConcurrentHashMap<String, Boolean>();
         repository.toDownloadMovies = new LinkedBlockingDeque<String>();

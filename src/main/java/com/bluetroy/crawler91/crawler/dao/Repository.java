@@ -1,8 +1,8 @@
-package com.bluetroy.crawler91.dao;
+package com.bluetroy.crawler91.crawler.dao;
 
-import com.bluetroy.crawler91.dao.entity.DownloadErrorInfo;
-import com.bluetroy.crawler91.dao.entity.Movie;
-import com.bluetroy.crawler91.utils.TimeUtils;
+import com.bluetroy.crawler91.crawler.dao.entity.DownloadErrorInfo;
+import com.bluetroy.crawler91.crawler.dao.entity.Movie;
+import com.bluetroy.crawler91.crawler.untils.TimeUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

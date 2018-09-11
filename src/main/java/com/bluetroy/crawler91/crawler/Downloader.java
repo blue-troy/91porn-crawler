@@ -1,9 +1,9 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.dao.Repository;
-import com.bluetroy.crawler91.dao.entity.KeyContent;
-import com.bluetroy.crawler91.dao.entity.Movie;
-import com.bluetroy.crawler91.utils.HttpRequester;
+import com.bluetroy.crawler91.crawler.dao.Repository;
+import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
+import com.bluetroy.crawler91.crawler.dao.entity.Movie;
+import com.bluetroy.crawler91.crawler.tools.HttpTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -82,6 +82,6 @@ public class Downloader {
 
     private KeyContent downloadMovieByKey(String key) {
         Movie movie = repository.getMovieData(key);
-        return new KeyContent(key, HttpRequester.download(movie.getDownloadURL(), movie.getFileName()));
+        return new KeyContent(key, HttpTool.download(movie.getDownloadURL(), movie.getFileName()));
     }
 }

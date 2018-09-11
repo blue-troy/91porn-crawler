@@ -1,9 +1,9 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.dao.Repository;
-import com.bluetroy.crawler91.dao.entity.KeyContent;
-import com.bluetroy.crawler91.utils.ContentUtils;
-import com.bluetroy.crawler91.utils.ScannerUtils;
+import com.bluetroy.crawler91.crawler.dao.Repository;
+import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
+import com.bluetroy.crawler91.crawler.tools.ContentTool;
+import com.bluetroy.crawler91.crawler.tools.ScannerTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +25,11 @@ public class Scanner {
     }
 
     @Autowired
-    private ScannerUtils scannerUtils;
+    private ScannerTool scannerTool;
     @Autowired
     private Repository repository;
     @Autowired
-    private ContentUtils contentUtils;
+    private ContentTool contentTool;
 
     public static List<String> getUrlsForScan() {
         return URLS_FOR_SCAN;
@@ -48,13 +48,13 @@ public class Scanner {
     }
 
     private void scanFilteredMovieDownloadUrl() {
-        LinkedBlockingDeque<KeyContent> keyContentQueue = contentUtils.getDetailContents();
-        scannerUtils.scanDownloadUrls(keyContentQueue);
+        LinkedBlockingDeque<KeyContent> keyContentQueue = contentTool.getDetailContents();
+        scannerTool.scanDownloadUrls(keyContentQueue);
     }
 
     private void scanMoviesByUrlList() {
-        LinkedBlockingDeque<Future<String>> movieContents = contentUtils.getMovieContents();
-        scannerUtils.scanMovies(movieContents);
+        LinkedBlockingDeque<Future<String>> movieContents = contentTool.getMovieContents();
+        scannerTool.scanMovies(movieContents);
     }
 
     public Integer getCount() {

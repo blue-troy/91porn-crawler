@@ -1,8 +1,8 @@
-package com.bluetroy.crawler91.utils;
+package com.bluetroy.crawler91.crawler.tools;
 
 import com.bluetroy.crawler91.crawler.Scanner;
-import com.bluetroy.crawler91.dao.Repository;
-import com.bluetroy.crawler91.dao.entity.KeyContent;
+import com.bluetroy.crawler91.crawler.dao.Repository;
+import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +18,12 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Time: 下午3:46
  */
 @Component
-public class ContentUtils {
+public class ContentTool {
     @Autowired
     Repository repository;
 
     private KeyContent getKeyContentMap(String key) {
-        return new KeyContent(key, HttpRequester.get(repository.getMovieData().get(key).getDetailURL()));
+        return new KeyContent(key, HttpTool.get(repository.getMovieData().get(key).getDetailURL()));
     }
 
     /**
@@ -33,7 +33,7 @@ public class ContentUtils {
         //todo 这边可以做成异步的，先返回contentQueue对象，对象中的的内容咱可以慢慢添加不是，这就要求处理contentQueue对象的方法需要有一定的等待功能
         LinkedBlockingDeque<Future<String>> contentQueue = new LinkedBlockingDeque<>();
         for (String url : Scanner.getUrlsForScan()) {
-            contentQueue.offer(HttpRequester.get(url));
+            contentQueue.offer(HttpTool.get(url));
         }
         return contentQueue;
     }

@@ -1,9 +1,11 @@
-package com.bluetroy.crawler91.command;
+package com.bluetroy.crawler91.service;
 
 import com.bluetroy.crawler91.crawler.Downloader;
 import com.bluetroy.crawler91.crawler.Filter;
 import com.bluetroy.crawler91.crawler.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,13 +18,20 @@ import org.springframework.stereotype.Component;
  * Time: 下午1:49
  */
 @Component
-public class ScanCommand {
+@Order(2)
+public class ProjectService implements CommandLineRunner {
     @Autowired
     Scanner scanner;
     @Autowired
     Filter filter;
     @Autowired
     Downloader downloader;
+
+    public void shutdown() {
+        new Thread(() -> {
+            System.exit(0);
+        }).start();
+    }
 
     @Scheduled(cron = "0 0 */4 * * ?")
     public void process() {
@@ -33,5 +42,10 @@ public class ScanCommand {
             scanner.scanDownloadUrl();
             downloader.downloadNow();
         }).start();
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+//        process();
     }
 }

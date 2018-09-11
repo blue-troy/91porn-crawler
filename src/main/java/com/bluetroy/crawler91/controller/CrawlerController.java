@@ -1,7 +1,6 @@
 package com.bluetroy.crawler91.controller;
 
-import com.bluetroy.crawler91.command.ScanCommand;
-import com.bluetroy.crawler91.command.ShutdownCommand;
+import com.bluetroy.crawler91.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 public class CrawlerController {
     @Autowired
-    ScanCommand scanCommand;
+    ProjectService projectService;
 
     @RequestMapping("/start")
     public String start() {
-        scanCommand.process();
+        projectService.process();
         return "启动成功";
     }
 
     @RequestMapping("/shutdown")
     public String shutdown() {
-        ShutdownCommand.process();
+        projectService.shutdown();
         return "关闭成功";
     }
 }

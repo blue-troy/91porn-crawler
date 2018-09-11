@@ -1,8 +1,8 @@
 package com.bluetroy.crawler91.crawler;
 
+import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.filter.FilterChain;
 import com.bluetroy.crawler91.crawler.filter.impl.FilterChainFactory;
-import com.bluetroy.crawler91.dao.Repository;
 import com.bluetroy.crawler91.vo.FilterVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

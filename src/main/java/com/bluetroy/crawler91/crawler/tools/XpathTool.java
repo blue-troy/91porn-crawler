@@ -1,8 +1,8 @@
-package com.bluetroy.crawler91.utils;
+package com.bluetroy.crawler91.crawler.tools;
 
-import com.bluetroy.crawler91.dao.Repository;
-import com.bluetroy.crawler91.dao.entity.KeyContent;
-import com.bluetroy.crawler91.dao.entity.Movie;
+import com.bluetroy.crawler91.crawler.dao.Repository;
+import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
+import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Node;
 import org.seimicrawler.xpath.JXDocument;
@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
  */
 @Log4j2
 @Component
-public class XpathUtils {
+public class XpathTool {
     private static final String MOVIE_LIST_CHANNEL_XPATH = "//div[@id='videobox']/table//div[@class='listchannel']";
     private static final String TITLE_IN_MOVIE_XPATH = ".//a[@target='blank']/@title";
     private static final String DETAIL_URL_IN_MOVIE_XPATH = ".//a[@target='blank']/@href";

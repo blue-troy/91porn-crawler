@@ -1,6 +1,5 @@
-package com.bluetroy.crawler91.command;
+package com.bluetroy.crawler91.crawler.dao;
 
-import com.bluetroy.crawler91.dao.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(1)
-public class PreStartCommand implements CommandLineRunner {
+public class PreStartService implements CommandLineRunner {
     @Autowired
     Repository repository;
 

@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.dao;
+package com.bluetroy.crawler91.crawler.dao;
 
 import java.io.Serializable;
 

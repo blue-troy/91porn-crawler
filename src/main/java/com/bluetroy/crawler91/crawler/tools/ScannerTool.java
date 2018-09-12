@@ -44,7 +44,4 @@ public class ScannerTool {
         }
     }
 
-    public String scanLoginState(String loginResult) {
-        return xpathTool.getLoginState(loginResult);
-    }
 }

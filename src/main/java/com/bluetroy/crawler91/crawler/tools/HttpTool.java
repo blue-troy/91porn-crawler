@@ -50,6 +50,17 @@ public class HttpTool {
         });
     }
 
+    public static String getNow(String url) throws Exception {
+        log.info("get  " + url.toString());
+        HttpURLConnection httpURLConnection = getConnection(url);
+        //todo 用代理访问？ httpURLConnection.usingProxy()
+        if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
+            throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
+        }
+        //todo 用buffer
+        return getInputString(httpURLConnection);
+    }
+
     //todo post
 
     public static String post(String url, String params) throws Exception {

@@ -4,11 +4,11 @@ $(function () {
 });
 
 function start() {
-    put("/start").then((response) => console.log(response.json()));
+    patch("/start").then((response) => console.log(response.json()));
 }
 
 function shutdown() {
-    put("/shutdown").then((response) => alert(response.json()));
+    patch("/shutdown").then((response) => alert(response.json()));
 }
 
 function showFilterEditor() {
@@ -128,8 +128,8 @@ function initTable() {
     $.get("/info");
 }
 
-function get(path) {
-    return fetch(path, {method: 'GET'});
+function patch(path) {
+    return fetch(path, {method: 'PATCH'});
 }
 
 function put(path) {

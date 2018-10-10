@@ -4,15 +4,11 @@ $(function () {
 });
 
 function start() {
-    $.get("/start", function (data) {
-        $.ajaxSuccess(alert(data))
-    })
+    put("/start").then((response) => console.log(response.json()));
 }
 
 function shutdown() {
-    $.get("/shutdown", function (data) {
-        $.ajaxSuccess(alert(data))
-    })
+    put("/shutdown").then((response) => alert(response.json()));
 }
 
 function showFilterEditor() {
@@ -20,14 +16,14 @@ function showFilterEditor() {
 }
 
 function setFilter() {
-    $.post("/filter/set", $('#FilterEditor').serialize(), function (data) {
+    $.post("/filter", $('#FilterEditor').serialize(), function (data) {
         $.ajaxSuccess(alert(data));
         showFilter();
     });
 }
 
 function showFilter() {
-    $.post("/filter/get", function (data) {
+    $.get("/filter", function (data) {
         $.ajaxSuccess($("#info-panel").append("<h4>当前过滤器为 " + data));
     })
 }
@@ -129,13 +125,13 @@ function login() {
 
 function initTable() {
     $("#info-table-body").empty();
-    $.get("/info/get");
+    $.get("/info");
 }
 
-function echo() {
-    fetch("/echo").then((response) => {
-        return response.text()
-    }).then((response) => {
-        console.log(response);
-    })
+function get(path) {
+    return fetch(path, {method: 'GET'});
+}
+
+function put(path) {
+    return fetch(path, {method: 'PUT'})
 }

@@ -2,7 +2,7 @@ package com.bluetroy.crawler91.controller;
 
 import com.bluetroy.crawler91.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -18,13 +18,13 @@ public class CrawlerController {
     @Autowired
     ProjectService projectService;
 
-    @RequestMapping("/start")
+    @PutMapping("/start")
     public String start() {
         projectService.process();
         return "启动成功";
     }
 
-    @RequestMapping("/shutdown")
+    @PutMapping("/shutdown")
     public String shutdown() {
         projectService.shutdown();
         return "关闭成功";

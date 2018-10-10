@@ -18,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Filter {
     @Autowired
     Repository repository;
-    private FilterChain filterChain = FilterChainFactory.getShowFaceCollectFilterChain(200);
+
+    private FilterChain filterChain;
 
     public void doFilter() {
         ConcurrentHashMap<String, Boolean> tobeFilter = repository.getTobeFilter();
@@ -48,6 +49,9 @@ public class Filter {
     }
 
     private FilterChain getFilterChain() {
+        if (filterChain == null) {
+            filterChain = FilterChainFactory.getShowFaceCollectFilterChain(200);
+        }
         return this.filterChain;
     }
 

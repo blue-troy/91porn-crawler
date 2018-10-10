@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.crawler.filter.impl.filter;
 
 import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.filter.Filter;
+import com.bluetroy.crawler91.crawler.untils.ApplicationContextProvider;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,13 +14,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @ToString
 public class CollectFilter implements Filter {
     private final Integer collectNum;
-    @Autowired
     @ToString.Exclude
-    Repository repository;
+    private Repository repository;
 
 
     public CollectFilter(Integer collectNum) {
         this.collectNum = collectNum;
+        repository = ApplicationContextProvider.getBean("repository", Repository.class);
     }
 
     @Override

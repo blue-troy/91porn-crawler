@@ -121,8 +121,21 @@ function getTableBody(method) {
     return tableBody;
 }
 
+function login() {
+    $.post("/user/login", $("#login-form").serialize()).done(function (res) {
+        $('#myModal').modal('hide');
+    });
+}
+
 function initTable() {
     $("#info-table-body").empty();
     $.get("/info/get");
 }
 
+function echo() {
+    fetch("/echo").then((response) => {
+        return response.text()
+    }).then((response) => {
+        console.log(response);
+    })
+}

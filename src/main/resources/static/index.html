@@ -13,9 +13,13 @@
     <div id="info-panel">
         <div id="scan-count"></div>
     </div>
-    <button onclick="start()">开始</button>
-    <button onclick="shutdown()">关闭程序</button>
-    <button onclick="showFilterEditor()">设置过滤器</button>
+    <button onclick="echo()" class="btn btn-default">echo</button>
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+        登陆
+    </button>
+    <button onclick="start()" class="btn btn-default">开始</button>
+    <button onclick="shutdown()" class="btn btn-default">关闭程序</button>
+    <button onclick="showFilterEditor()" class="btn btn-default">设置过滤器</button>
     <form id="FilterEditor" style="visibility: hidden">
         <label>
             标题
@@ -25,7 +29,7 @@
             收藏量
             <input type="text" name="collect">
         </label>
-        <button type="button" onclick="setFilter()">设置</button>
+        <button type="button" onclick="setFilter()" class="btn btn-default">设置</button>
     </form>
     <div>
         <table id="info-table" class="table table-bordered">
@@ -47,6 +51,30 @@
             <tbody id="info-table-body-downloadError">
             </tbody>
         </table>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">登陆</h4>
+            </div>
+            <div class="modal-body">
+                <form id="login-form">
+                    <input type="text" name="username" title="用户名">
+                    <input type="password" name="password" title="密码">
+                    <input type="text" name="captcha_input" title="验证码">
+                    <img src="http://94.91p30.space/captcha.php">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="login()">Save changes</button>
+            </div>
+        </div>
     </div>
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>

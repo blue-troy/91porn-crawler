@@ -33,6 +33,7 @@ function showFilter() {
 function addTable(response) {
     const status = getStatus(response.method);
     const tableBody = getTableBody(response.method);
+    const data = response.data;
     for (let key in data) {
         tableBody.append("<tr id=" + key +
             ">\n" +
@@ -63,10 +64,10 @@ function updateTable(response) {
 
 function handleTable(response) {
     switch (response.method) {
-        case method.match("get"):
+        case contain(response.method, "get"):
             addTable(response);
             break;
-        case method.match("update"):
+        case contain(response.method, "update"):
             updateTable(response);
             break;
         default :
@@ -75,19 +76,27 @@ function handleTable(response) {
 
 }
 
+function contain(method, keyword) {
+    if (method.indexOf(keyword) !== -1) {
+        return method;
+    } else {
+        return false;
+    }
+}
+
 function getStatus(method) {
     let status;
     switch (method) {
-        case method.match("filtered"):
+        case contain(method, "filtered"):
             status = "等待加入下载队列";
             break;
-        case method.match("downloaded"):
+        case contain(method, "downloaded"):
             status = "下载完成";
             break;
-        case method.match("toDownload"):
+        case contain(method, "toDownload"):
             status = "正在下载";
             break;
-        case method.match("downloadError"):
+        case contain(method, "downloadError"):
             status = "下载失败";
             break;
         default:
@@ -100,16 +109,16 @@ function getStatus(method) {
 function getTableBody(method) {
     let tableBody;
     switch (method) {
-        case method.match("filtered"):
+        case contain(method, "filtered"):
             tableBody = $("#info-table-body-filtered");
             break;
-        case method.match("downloaded"):
+        case contain(method, "downloaded"):
             tableBody = $("#info-table-body-downloaded");
             break;
-        case method.match("toDownload"):
+        case contain(method, "toDownload"):
             tableBody = $("#info-table-body-toDownloaded");
             break;
-        case method.match("downloadError"):
+        case contain(method, "downloadError"):
             tableBody = $("#info-table-body-downloadError");
             break;
         default:

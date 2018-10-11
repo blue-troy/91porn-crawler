@@ -4,11 +4,13 @@ $(function () {
 });
 
 function start() {
-    patch("/start").then((response) => console.log(response.json()));
+    patch("/start")
+        .then(response => response.text())
+        .then(data => alert(data))
 }
 
 function shutdown() {
-    patch("/shutdown").then((response) => alert(response.json()));
+    patch("/shutdown").then((response) => alert(response.text()));
 }
 
 function showFilterEditor() {

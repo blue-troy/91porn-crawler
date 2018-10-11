@@ -45,7 +45,7 @@ public class Filter {
     }
 
     public String getFilterInfo() {
-        return this.filterChain.toString();
+        return getFilterChain().toString();
     }
 
     private FilterChain getFilterChain() {

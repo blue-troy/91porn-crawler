@@ -1,6 +1,7 @@
 package com.bluetroy.crawler91.controller;
 
 import com.bluetroy.crawler91.service.ProjectService;
+import com.bluetroy.crawler91.vo.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,14 +20,15 @@ public class CrawlerController {
     @Autowired
     ProjectService projectService;
 
-    @PatchMapping("/start")
-    public String start() {
+    //todo 重复提交问题
+    @PatchMapping(value = "/start")
+    String start() {
         projectService.process();
-        return "启动成功";
+        return "开启成功";
     }
 
     @PatchMapping("/shutdown")
-    public String shutdown() {
+    String shutdown() {
         projectService.shutdown();
         return "关闭成功";
     }

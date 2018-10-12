@@ -22,6 +22,7 @@ public class Filter {
     private FilterChain filterChain;
 
     public void doFilter() {
+        log.info("doing filter. filterChain : " + getFilterInfo());
         ConcurrentHashMap<String, Boolean> tobeFilter = repository.getTobeFilter();
         getFilterChain().doFilter(tobeFilter);
         tobeFilter.forEachKey(1, k -> {

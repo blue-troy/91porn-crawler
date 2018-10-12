@@ -18,7 +18,6 @@ websocket.onopen = function () {
 //接收到消息的回调方法
 websocket.onmessage = function (event) {
     const response = JSON.parse(event.data);
-    console.log(response);
     switch (response.method) {
         case "/scanner/count":
             $("#scan-count").html("<h4>扫描到了" + response.data + "个视频</h4>");

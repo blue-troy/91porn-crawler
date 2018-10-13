@@ -26,8 +26,12 @@ function setFilter() {
 
 function showFilter() {
     $.get("/filter", function (data) {
-        $.ajaxSuccess($("#info-panel").append("<h4>当前过滤器为 " + data));
+        $.ajaxSuccess($("#filter-info").append("<h4>当前过滤器为 " + data));
     })
+}
+
+function showScannedMovieCount(numberOfScannedMovies) {
+    $("#scan-count").append("<h4>扫描到了 " + numberOfScannedMovies + "个视频");
 }
 
 function addTable(response) {

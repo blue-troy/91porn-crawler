@@ -19,7 +19,12 @@ public class EchoController {
     @RequestMapping("/fuck")
     public String fuck() {
         String s = "fuck";
+        test();
         return s;
+    }
+
+    private void test() {
+
     }
 
     /**
@@ -46,7 +51,7 @@ class Student {
         return sId;
     }
 
-    public void setsId(Integer sId) {
+    void setsId(Integer sId) {
         this.sId = sId;
     }
 
@@ -54,7 +59,7 @@ class Student {
         return sName;
     }
 
-    public void setsName(String sName) {
+    void setsName(String sName) {
         this.sName = sName;
     }
 
@@ -62,7 +67,7 @@ class Student {
         return gender;
     }
 
-    public void setGender(String gender) {
+    void setGender(String gender) {
         this.gender = gender;
     }
 }

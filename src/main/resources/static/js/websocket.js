@@ -23,7 +23,7 @@ websocket.onmessage = function (event) {
         case "/scannedMovies/count":
             showScannedMovieCount(response.data);
             break;
-        case "/filteredMovies/get":
+        default:
             handleTable(response);
     }
 };

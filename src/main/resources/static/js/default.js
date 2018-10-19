@@ -34,12 +34,21 @@ function showScannedMovieCount(numberOfScannedMovies) {
     $("#scan-count").append("<h4>扫描到了 " + numberOfScannedMovies + "个视频");
 }
 
-function addTable(response) {
+function handleTable(response) {
+    console.log(response);
     const status = getStatus(response.method);
     const tableBody = getTableBody(response.method);
     const data = response.data;
+    console.log(status, tableBody, data);
+
+    function getId(key) {
+        return key.substring(key.indexOf("=") + 1, key.indexOf("&"));
+    }
+
     for (let key in data) {
-        tableBody.append("<tr id=" + key +
+        const id = getId(key);
+        $("#" + id).remove();
+        tableBody.append("<tr id=" + id +
             ">\n" +
             "                <th>" + data[key].title + "</th>\n" +
             "                <th>" + data[key].collect + "</th>\n" +
@@ -48,36 +57,6 @@ function addTable(response) {
             "            </tr>"
         )
     }
-}
-
-function updateTable(response) {
-    const status = getStatus(response.method);
-    const tableBody = getTableBody(response.method);
-    for (let key in data) {
-        $("#" + key).remove();
-        tableBody.append("<tr id=" + key +
-            ">\n" +
-            "                <th>" + data[key].title + "</th>\n" +
-            "                <th>" + data[key].collect + "</th>\n" +
-            "                <th>" + data[key].author + "</th>\n" +
-            "                <th>" + status + "</th>\n" +
-            "            </tr>"
-        )
-    }
-}
-
-function handleTable(response) {
-    switch (response.method) {
-        case contain(response.method, "get"):
-            addTable(response);
-            break;
-        case contain(response.method, "update"):
-            updateTable(response);
-            break;
-        default :
-            console.log(response);
-    }
-
 }
 
 function contain(method, keyword) {
@@ -87,6 +66,8 @@ function contain(method, keyword) {
         return false;
     }
 }
+
+//todo 下面两个方法可以改成一个方法
 
 function getStatus(method) {
     let status;

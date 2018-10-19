@@ -15,7 +15,7 @@ import java.util.concurrent.SynchronousQueue;
  */
 @Component
 public class Downloader {
-    private static SynchronousQueue<KeyContent> downloadTask = new SynchronousQueue();
+    private static final SynchronousQueue<KeyContent> downloadTask = new SynchronousQueue();
     @Autowired
     Repository repository;
     private volatile boolean isContinuousDownloadStart = false;
@@ -66,7 +66,9 @@ public class Downloader {
         }
     }
 
-    private void verifyDownloadTask() {
+    //todo 本来是private方法 由于spring aop获取不到 暂时改成public
+
+    public void verifyDownloadTask() {
         KeyContent keyContent;
         while ((keyContent = downloadTask.poll()) != null) {
             verifyProcess(keyContent);
@@ -80,8 +82,14 @@ public class Downloader {
         }
     }
 
-    private KeyContent downloadMovieByKey(String key) {
+    //todo 本来是private方法 由于spring aop获取不到 暂时改成public
+
+    public KeyContent downloadMovieByKey(String key) {
         Movie movie = repository.getMovieData(key);
         return new KeyContent(key, HttpTool.download(movie.getDownloadURL(), movie.getFileName()));
+    }
+
+    public SynchronousQueue<KeyContent> getDownloadTask() {
+        return downloadTask;
     }
 }

@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.controller;
 
-import com.bluetroy.crawler91.crawler.dao.Repository;
+import com.bluetroy.crawler91.aspect.StatisticsAspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +20,12 @@ import java.io.IOException;
 @RequestMapping("/info")
 public class InfoController {
     @Autowired
-    WebSocketController webSocketController;
-    @Autowired
-    Repository repository;
+    StatisticsAspect statisticsAspect;
+
 
     @GetMapping
     public String getInfo() throws IOException {
-        webSocketController.send("/filteredMovies/get", repository.getFilteredMoviesMap());
+        statisticsAspect.gatherAllMoviesStatistics();
         return "success";
     }
 }

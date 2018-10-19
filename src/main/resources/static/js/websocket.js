@@ -19,10 +19,10 @@ websocket.onopen = function () {
 websocket.onmessage = function (event) {
     const response = JSON.parse(event.data);
     switch (response.method) {
-        case "/scanner/count":
-            $("#scan-count").html("<h4>扫描到了" + response.data + "个视频</h4>");
+        case "/scannedMovies/count":
+            showScannedMovieCount(response.data);
             break;
-        case "/filteredMovies/get":
+        default:
             handleTable(response);
     }
 };

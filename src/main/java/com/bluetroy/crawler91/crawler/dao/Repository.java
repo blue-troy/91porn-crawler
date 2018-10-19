@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -46,12 +47,37 @@ public class Repository implements Serializable, Persistability {
         filteredMovies.replace(k, true);
     }
 
+    //todo 完成功能
     public HashMap<String, Movie> getMoviesData(MovieStatus movieStatus) {
         HashMap<String, Movie> hashMap = new HashMap<>();
-        toDownloadMovies.forEach(k -> {
-            hashMap.put(k, movieData.get(k));
-        });
+        switch (movieStatus) {
+            case TO_DOWNLOAD_MOVIES:
+                toDownloadMovies.forEach(k -> {
+                    hashMap.put(k, movieData.get(k));
+                });
+                break;
+            default:
+                getMap(movieStatus).forEachKey(1, k -> {
+                    hashMap.put((String) k, movieData.get((String) k));
+                });
+        }
+
         return hashMap;
+    }
+
+    private ConcurrentHashMap getMap(MovieStatus movieStatus) {
+        switch (movieStatus) {
+            case SCANNED_MOVIES:
+                return scannedMovies;
+            case FILTERED_MOVIES:
+                return filteredMovies;
+            case DOWNLOAD_ERROR:
+                return downloadError;
+            case DOWNLOADED_MOVIES:
+                return downloadedMovies;
+            default:
+        }
+        return (ConcurrentHashMap) Collections.EMPTY_MAP;
     }
 
     @Override

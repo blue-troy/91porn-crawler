@@ -39,6 +39,9 @@ public class Scanner {
         URLS_FOR_SCAN.add(url);
     }
 
+    /**
+     * 扫描 urlList中页面的视频，当扫描完毕的时候返回，同步方法
+     */
     public void scanMovies() {
         scanMoviesByUrlList();
     }
@@ -55,9 +58,5 @@ public class Scanner {
     private void scanMoviesByUrlList() {
         LinkedBlockingDeque<Future<String>> movieContents = contentTool.getMovieContents();
         scannerTool.scanMovies(movieContents);
-    }
-
-    public Integer getCount() {
-        return repository.getFilteredMovies().size();
     }
 }

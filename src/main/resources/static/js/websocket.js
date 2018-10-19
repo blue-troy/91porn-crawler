@@ -18,7 +18,6 @@ websocket.onopen = function () {
 //接收到消息的回调方法
 websocket.onmessage = function (event) {
     const response = JSON.parse(event.data);
-    console.log(response);
     switch (response.method) {
         case "/scannedMovies/count":
             showScannedMovieCount(response.data);

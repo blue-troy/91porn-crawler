@@ -52,7 +52,7 @@ public class StatisticsAspect {
 
     @After("downloadPerformance()")
     public void gatherToDownloadMovies() throws IOException {
-        webSocketController.send("/downloadingMovies", getData(MovieStatus.TO_DOWNLOAD_MOVIES));
+        webSocketController.send("/toDownloadMovies", getData(MovieStatus.TO_DOWNLOAD_MOVIES));
     }
 
     @After("downloadPerformance()")
@@ -62,8 +62,8 @@ public class StatisticsAspect {
 
     @After("execution(* com.bluetroy.crawler91.crawler.Downloader.verifyDownloadTask())")
     public void gatherDownloadResult() throws IOException {
-        webSocketController.send("downloadedMovies", getData(MovieStatus.DOWNLOADED_MOVIES));
-        webSocketController.send("downloadErrorMovies", getData(MovieStatus.DOWNLOAD_ERROR));
+        webSocketController.send("/downloadedMovies", getData(MovieStatus.DOWNLOADED_MOVIES));
+        webSocketController.send("/downloadErrorMovies", getData(MovieStatus.DOWNLOAD_ERROR));
     }
 
     private HashMap getData(MovieStatus movieStatus) {

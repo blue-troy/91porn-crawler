@@ -26,91 +26,66 @@ function setFilter() {
 
 function showFilter() {
     $.get("/filter", function (data) {
-        $.ajaxSuccess($("#filter-info").append("<h4>当前过滤器为 " + data));
+        $.ajaxSuccess($("#filter-info").html("<h4>当前过滤器为 " + data));
     })
 }
 
 function showScannedMovieCount(numberOfScannedMovies) {
-    $("#scan-count").append("<h4>扫描到了 " + numberOfScannedMovies + "个视频");
+    $("#scan-count").html("<h4>扫描到了 " + numberOfScannedMovies + "个视频");
 }
 
 function handleTable(response) {
-    console.log(response);
-    const status = getStatus(response.method);
-    const tableBody = getTableBody(response.method);
     const data = response.data;
-    console.log(status, tableBody, data);
-
-    function getId(key) {
-        return key.substring(key.indexOf("=") + 1, key.indexOf("&"));
-    }
-
-    for (let key in data) {
-        const id = getId(key);
-        $("#" + id).remove();
-        tableBody.append("<tr id=" + id +
-            ">\n" +
-            "                <th>" + data[key].title + "</th>\n" +
-            "                <th>" + data[key].collect + "</th>\n" +
-            "                <th>" + data[key].author + "</th>\n" +
-            "                <th>" + status + "</th>\n" +
-            "            </tr>"
-        )
-    }
-}
-
-function contain(method, keyword) {
-    if (method.indexOf(keyword) !== -1) {
-        return method;
-    } else {
-        return false;
+    for (let index in data) {
+        const movie = new Movie(data[index], response.method);
+        $("#" + movie.id).remove();
+        movie.tableBody.append(`<tr id=${movie.id}>
+                <th>${movie.title}</th>
+                <th>${movie.collect}</th>
+                <th>${movie.author}</th>
+                <th>${movie.status}</th>
+            </tr>`
+        );
     }
 }
 
 //todo 下面两个方法可以改成一个方法
-
-function getStatus(method) {
-    let status;
-    switch (method) {
-        case contain(method, "filtered"):
-            status = "等待加入下载队列";
-            break;
-        case contain(method, "downloaded"):
-            status = "下载完成";
-            break;
-        case contain(method, "toDownload"):
-            status = "正在下载";
-            break;
-        case contain(method, "downloadError"):
-            status = "下载失败";
-            break;
-        default:
-            console.log("无法匹配状态");
-            break;
+class Movie {
+    constructor(data, method) {
+        this.title = data.title;
+        this.collect = data.collect;
+        this.author = data.author;
+        this.id = Movie.getId(data.key);
+        switch (method) {
+            case "/filteredMovies" :
+                this.status = "扫描过滤";
+                this.tableBody = $("#info-table-body-filtered");
+                break;
+            case "/toDownloadMovies":
+                this.status = "等待加入下载队列";
+                this.tableBody = $("#info-table-body-toDownload");
+                break;
+            case "/downloadingMovies" :
+                this.status = "正在下载";
+                this.tableBody = $("#info-table-body-downloading");
+                break;
+            case "/downloadedMovies":
+                this.status = "下载完成";
+                this.tableBody = $("#info-table-body-downloaded");
+                break;
+            case "/downloadErrorMovies":
+                this.status = "下载失败";
+                this.tableBody = $("#info-table-body-downloadError");
+                break;
+            default:
+                console.log("无法匹配状态");
+                break;
+        }
     }
-    return status;
-}
 
-function getTableBody(method) {
-    let tableBody;
-    switch (method) {
-        case contain(method, "filtered"):
-            tableBody = $("#info-table-body-filtered");
-            break;
-        case contain(method, "downloaded"):
-            tableBody = $("#info-table-body-downloaded");
-            break;
-        case contain(method, "toDownload"):
-            tableBody = $("#info-table-body-toDownloaded");
-            break;
-        case contain(method, "downloadError"):
-            tableBody = $("#info-table-body-downloadError");
-            break;
-        default:
-            console.log("无法匹配状态");
-            break;
+    static getId(key) {
+        return key.substring(key.indexOf("=") + 1, key.indexOf("&"));
     }
-    return tableBody;
 }
 
 function login() {

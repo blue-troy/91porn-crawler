@@ -4,6 +4,7 @@ import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import com.bluetroy.crawler91.crawler.tools.HttpTool;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,7 @@ public class Downloader {
     public void downloadNow() {
         String key;
         while ((!isContinuousDownloadStart) && ((key = repository.getToDownloadMovies().poll()) != null)) {
-            downloadMovieByKey(key);
+            ((Downloader) AopContext.currentProxy()).downloadMovieByKey(key);
         }
         verifyDownloadTask();
         repository.save();//保存一次数据 避免异常退出时没有保存

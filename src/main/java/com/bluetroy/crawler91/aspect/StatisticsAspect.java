@@ -32,6 +32,7 @@ public class StatisticsAspect {
     WebSocketController webSocketController;
 
     //todo 应该去监控downloadTask才是真正的下载中
+
     @Pointcut("execution(* com.bluetroy.crawler91.crawler.Downloader.downloadMovieByKey())")
     public void downloadPerformance() {
 

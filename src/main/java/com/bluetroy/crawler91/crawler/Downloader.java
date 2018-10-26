@@ -31,6 +31,8 @@ public class Downloader {
         }
     }
 
+    //todo 这部分逻辑有问题，容易导致空异常
+
     public void downloadNow() {
         String key;
         while ((!isContinuousDownloadStart) && ((key = repository.getToDownloadMovies().poll()) != null)) {

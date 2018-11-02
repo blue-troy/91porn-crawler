@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.crawler.untils;
+package com.bluetroy.crawler91.crawler.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

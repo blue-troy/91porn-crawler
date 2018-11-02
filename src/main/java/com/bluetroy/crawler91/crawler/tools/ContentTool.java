@@ -23,7 +23,7 @@ public class ContentTool {
     Repository repository;
 
     private KeyContent getKeyContentMap(String key) {
-        return new KeyContent(key, HttpTool.get(repository.getMovieData().get(key).getDetailURL()));
+        return new KeyContent(key, HttpClient.get(repository.getMovieData().get(key).getDetailURL()));
     }
 
     /**
@@ -33,7 +33,7 @@ public class ContentTool {
         //todo 这边可以做成异步的，先返回contentQueue对象，对象中的的内容咱可以慢慢添加不是，这就要求处理contentQueue对象的方法需要有一定的等待功能
         LinkedBlockingDeque<Future<String>> contentQueue = new LinkedBlockingDeque<>();
         for (String url : Scanner.getUrlsForScan()) {
-            contentQueue.offer(HttpTool.get(url));
+            contentQueue.offer(HttpClient.get(url));
         }
         return contentQueue;
     }

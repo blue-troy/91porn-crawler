@@ -2,10 +2,8 @@ package com.bluetroy.crawler91.crawler.filter.impl.filter;
 
 import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.filter.Filter;
-import com.bluetroy.crawler91.crawler.untils.ApplicationContextProvider;
+import com.bluetroy.crawler91.crawler.utils.ApplicationContextProvider;
 import lombok.ToString;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.ConcurrentHashMap;
 

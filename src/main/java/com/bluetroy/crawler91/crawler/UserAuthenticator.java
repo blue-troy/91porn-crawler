@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.tools.HttpTool;
+import com.bluetroy.crawler91.crawler.tools.HttpClient;
 import com.bluetroy.crawler91.crawler.tools.ScannerTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class UserAuthenticator {
         String loginResult = "";
         try {
             //todo host统一问题
-            loginResult = HttpTool.post("http://94.91p30.space/login.php", getLoginParams(name, password, verificationCode));
+            loginResult = HttpClient.post("http://94.91p30.space/login.php", getLoginParams(name, password, verificationCode));
         } catch (Exception e) {
             e.printStackTrace();
         }

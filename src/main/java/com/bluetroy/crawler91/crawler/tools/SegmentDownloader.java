@@ -1,13 +1,14 @@
-package com.bluetroy.crawler91.crawler.untils;
+package com.bluetroy.crawler91.crawler.tools;
 
+import com.bluetroy.crawler91.crawler.utils.HttpUtils;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,9 @@ import java.util.concurrent.*;
  * Date: 2018-10-24
  * Time: 6:41 AM
  */
-public class Downloader {
+@Log4j2
+public class SegmentDownloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
-    private static String url = "http://ws4.sinaimg.cn/large/6b5a0580ly1fwiddba2x1j20g81iuju9.jpg";
     private static int numberOfConcurrentThreads = 4;
 
     static {
@@ -31,21 +32,32 @@ public class Downloader {
                 .setNameFormat("DOWNLOAD-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        download(url);
+    public static Future<String> downloadInFuture(String url) {
+        return DOWNLOAD_SERVICE.submit(() -> {
+            download(url);
+            return "success";
+        });
     }
 
-    private static void download(String url) throws IOException, InterruptedException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+    public static void download(String url) throws Exception {
+        log.info("下载文件：文件名: {} 下载地址：{}", getFileName(url), url);
+        HttpURLConnection connection = HttpUtils.getConnection(url);
         File file = new File(getFileName(url));
-        if (connection.getResponseCode() == 200) {
-            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
-            randomAccessFile.setLength(connection.getContentLength());
-            System.out.println("文件大小理论值" + connection.getContentLength());
-            CountDownLatch latch = new CountDownLatch(numberOfConcurrentThreads);
-            segmentDownload(file, url, latch);
-            merge(file, latch);
+        if (Files.notExists(file.toPath())) {
+            if (connection.getResponseCode() == 200) {
+                RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
+                randomAccessFile.setLength(connection.getContentLength());
+                CountDownLatch latch = new CountDownLatch(numberOfConcurrentThreads);
+                segmentDownload(file, url, latch);
+                merge(file, latch);
+                log.info("下载成功 : {}", file);
+            } else {
+                throw new Exception("HTTP Request is not success, Response code is " + connection.getResponseCode());
+            }
+        } else {
+            log.info("本地已存在同名文件： {}", file);
         }
+
     }
 
     private static void segmentDownload(File file, String url, CountDownLatch latch) {
@@ -68,7 +80,6 @@ public class Downloader {
             randomAccessFile.write(Files.readAllBytes(tempFile.toPath()));
             tempFile.delete();
         }
-        System.out.println("merge success");
     }
 
 
@@ -82,7 +93,6 @@ public class Downloader {
 
     private static void waitUntilSegmentDownloadFinished(CountDownLatch latch) throws InterruptedException {
         latch.await();
-        System.out.println("子线程下载完毕");
     }
 
 
@@ -97,24 +107,26 @@ public class Downloader {
     private static void downloadThread(String url, int threadId, long startPoint, long endPoint, CountDownLatch latch) {
         DOWNLOAD_SERVICE.submit(() -> {
             try {
-                //todo 加入已经存在文件的判断逻辑
                 File file = new File(getTempFileName(url, threadId));
-                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-                connection.setReadTimeout(5000);
-                connection.setRequestProperty("Range", "bytes=" + startPoint + "-" + endPoint);
-                System.out.println(connection.getResponseCode());
-                if (connection.getResponseCode() == 206) {
-                    try (InputStream inputStream = connection.getInputStream();
-                    ) {
-                        Files.copy(inputStream, file.toPath());
-                        latch.countDown();
+                if (Files.exists(file.toPath()) && file.length() == endPoint - startPoint) {
+                    latch.countDown();
+                } else {
+                    HttpURLConnection connection = HttpUtils.getConnection(url);
+                    connection.setReadTimeout(5000);
+                    connection.setRequestProperty("Range", "bytes=" + startPoint + "-" + endPoint);
+                    System.out.println(connection.getResponseCode());
+                    if (connection.getResponseCode() == 206) {
+                        try (InputStream inputStream = connection.getInputStream();
+                        ) {
+                            Files.copy(inputStream, file.toPath());
+                            latch.countDown();
+                        }
                     }
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 }
-
-

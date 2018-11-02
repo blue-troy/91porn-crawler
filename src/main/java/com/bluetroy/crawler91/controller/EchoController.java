@@ -1,9 +1,13 @@
 package com.bluetroy.crawler91.controller;
 
-import com.bluetroy.crawler91.crawler.dao.entity.Movie;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,8 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
  * Date: 2018-10-11
  * Time: 4:51 PM
  */
+@Log4j2
 @RestController
-@RequestMapping("/echo")
+@RequestMapping("/test")
 public class EchoController {
     @RequestMapping("/fuck")
     public String fuck() {
@@ -25,6 +30,17 @@ public class EchoController {
 
     private void test() {
 
+    }
+
+    @RequestMapping("/cookie")
+    public String setCookie(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            System.out.println(cookies[0].getValue());
+        }
+        Cookie cookie = new Cookie("name", "blue");
+        response.addCookie(cookie);
+        return "success";
     }
 
     /**

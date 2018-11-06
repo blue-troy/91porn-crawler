@@ -6,7 +6,10 @@ import com.bluetroy.crawler91.crawler.dao.MovieStatus;
 import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,13 +56,10 @@ public class StatisticsAspect {
         webSocketController.send("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }
 
-    //TODO 时机错误
-    @Before(value = "downloadPerformance(key)", argNames = "key")
-    public void gatherToDownloadMovies(String key) throws IOException {
+    @After("execution(void com.bluetroy.crawler91.crawler.tools.XpathTool.scanDownloadUrl(*))")
+    public void gatherToDownloadMovies() throws IOException {
         sendToDownloadMovies();
     }
-
-    //todo 并不知道何时下载完毕所以remove部分是有问题的
 
     @Around(value = "downloadPerformance(key)", argNames = "proceedingJoinPoint,key")
     public Object gatherDownloadingMovies(ProceedingJoinPoint proceedingJoinPoint, String key) throws Throwable {

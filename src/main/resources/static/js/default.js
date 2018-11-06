@@ -17,6 +17,7 @@ function showFilterEditor() {
     document.getElementById("FilterEditor").style.visibility = "";
 }
 
+//todo 设置完成以后只是通知了，没有改变titile上的显示 也没有收起输入框
 function setFilter() {
     $.post("/filter", $('#FilterEditor').serialize(), function (data) {
         $.ajaxSuccess(alert(data));

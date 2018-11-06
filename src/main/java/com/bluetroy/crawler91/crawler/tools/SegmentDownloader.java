@@ -22,6 +22,7 @@ import java.util.concurrent.*;
  * Date: 2018-10-24
  * Time: 6:41 AM
  */
+//TODO 可设置文件名
 @Log4j2
 public class SegmentDownloader {
     private static final ExecutorService DOWNLOAD_SERVICE;

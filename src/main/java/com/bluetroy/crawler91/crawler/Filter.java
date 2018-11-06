@@ -21,6 +21,7 @@ public class Filter {
 
     private FilterChain filterChain;
 
+    //todo 过滤后再修改filter 扫描不出东西
     public void doFilter() {
         log.info("doing filter. filterChain : " + getFilterInfo());
         ConcurrentHashMap<String, Boolean> tobeFilter = repository.getTobeFilter();

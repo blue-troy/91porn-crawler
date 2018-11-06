@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.Future;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,9 +36,7 @@ public class StatisticsAspect {
 
     private HashMap<String, Movie> downloadingMovies = new HashMap<>();
 
-    //todo 应该去监控downloadTask才是真正的下载中
-
-    @Pointcut("execution(void com.bluetroy.crawler91.crawler.Downloader.downloadByKey(String)) && args(key)")
+    @Pointcut("execution(java.util.concurrent.Future com.bluetroy.crawler91.crawler.Downloader.downloadByKey(String)) && args(key)")
     public void downloadPerformance(String key) {
     }
 
@@ -54,18 +53,20 @@ public class StatisticsAspect {
         webSocketController.send("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }
 
+    //TODO 时机错误
     @Before(value = "downloadPerformance(key)", argNames = "key")
     public void gatherToDownloadMovies(String key) throws IOException {
         sendToDownloadMovies();
     }
 
-    //todo 如果不行的话就要把key去掉 从join point 中手动获取key
+    //todo 并不知道何时下载完毕所以remove部分是有问题的
 
     @Around(value = "downloadPerformance(key)", argNames = "proceedingJoinPoint,key")
     public Object gatherDownloadingMovies(ProceedingJoinPoint proceedingJoinPoint, String key) throws Throwable {
         addDownloadingMovie(key);
-        Object returnObject = proceedingJoinPoint.proceed();
-        removeDownloadMovie(key);
+        Future returnObject = (Future) proceedingJoinPoint.proceed();
+        returnObject.get();
+        removeDownloadingMovie(key);
         return returnObject;
     }
 
@@ -97,10 +98,10 @@ public class StatisticsAspect {
 
     private void addDownloadingMovie(String key) throws IOException {
         downloadingMovies.put(key, repository.getMovieData(key));
-        sendToDownloadMovies();
+        sendDownloadingMovies();
     }
 
-    private void removeDownloadMovie(String key) throws IOException {
+    private void removeDownloadingMovie(String key) throws IOException {
         downloadingMovies.remove(key);
         sendDownloadingMovies();
     }

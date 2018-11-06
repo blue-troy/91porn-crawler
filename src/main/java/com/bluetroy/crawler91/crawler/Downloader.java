@@ -4,13 +4,11 @@ import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.tools.SegmentDownloader;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author heyixin
@@ -33,7 +31,7 @@ public class Downloader {
     public void downloadNow() {
         String key;
         while ((!isContinuousDownloadStart) && ((key = repository.getToDownloadMovies().poll()) != null)) {
-            downloadByKey(key);
+            ((Downloader) AopContext.currentProxy()).downloadByKey(key);
         }
         repository.save();//保存一次数据 避免异常退出时没有保存
     }
@@ -43,13 +41,13 @@ public class Downloader {
             isContinuousDownloadStart = true;
             while (isContinuousDownloadStart) {
                 String key = repository.getToDownloadMovies().take();
-                downloadByKey(key);
+                ((Downloader) AopContext.currentProxy()).downloadByKey(key);
             }
         }
     }
 
-    public void downloadByKey(String key) {
-        DOWNLOAD_SERVICE.submit(() -> {
+    public Future downloadByKey(String key) {
+        return DOWNLOAD_SERVICE.submit(() -> {
             try {
                 SegmentDownloader.download(getDownloadUrl(key));
                 repository.setDownloadedMovies(key);

@@ -45,8 +45,6 @@ public class HttpClient {
         return getInputString(httpURLConnection);
     }
 
-    //todo post
-
     public static String post(String url, String params) throws Exception {
         HttpURLConnection connection = getConnection(url);
         connection.setRequestMethod("POST");

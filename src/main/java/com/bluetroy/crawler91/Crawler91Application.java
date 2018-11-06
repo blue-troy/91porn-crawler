@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author heyixin
  */
 @EnableScheduling
-@EnableAspectJAutoProxy(proxyTargetClass=true)
+@EnableAspectJAutoProxy(proxyTargetClass=true,exposeProxy = true)
 @SpringBootApplication
 public class Crawler91Application {
 

@@ -30,12 +30,12 @@ public class HttpClient {
         String host = "http://91porn.com/";
     }
 
-    public static Future<String> get(String url) {
+    public static Future<String> getInFuture(String url) {
         return HTTP_GET_SERVICE.submit(() -> getNow(url));
     }
 
     public static String getNow(String url) throws Exception {
-        log.info("get  " + url.toString());
+        log.info("getNow  " + url.toString());
         HttpURLConnection httpURLConnection = getConnection(url);
         //todo 用代理访问？ httpURLConnection.usingProxy()
         if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
@@ -58,10 +58,6 @@ public class HttpClient {
             throw new Exception("HTTP Request is not success, Response code is " + connection.getResponseCode());
         }
         return getInputString(connection);
-    }
-
-    public static Future<String> download(String url, String filename) {
-        return SegmentDownloader.downloadInFuture(url);
     }
 
     private static String getInputString(HttpURLConnection connection) throws IOException {

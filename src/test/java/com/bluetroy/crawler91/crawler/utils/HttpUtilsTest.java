@@ -27,7 +27,7 @@ public class HttpUtilsTest {
     @Test
     public void getConnection() throws IOException {
         HttpURLConnection connection = HttpUtils.getConnection("http://91porn.com/index.php");
-        log.info("get code ",connection.getResponseCode());
+        log.info("getInFuture code ",connection.getResponseCode());
         Map<String, List<String>> headerFields = connection.getHeaderFields();
         for (Map.Entry<String, List<String>> entry : headerFields.entrySet()) {
             log.info("key = {} ,value = {}",entry.getKey(),entry.getValue().toString());

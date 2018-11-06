@@ -1,98 +1,66 @@
 package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.dao.Repository;
-import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
-import com.bluetroy.crawler91.crawler.dao.entity.Movie;
-import com.bluetroy.crawler91.crawler.tools.HttpClient;
-import org.springframework.aop.framework.AopContext;
+import com.bluetroy.crawler91.crawler.tools.SegmentDownloader;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author heyixin
+ * description : downloadNow采用多线程下载，一次把ToDownloadMovies下载完毕并验证
+ * ContinuousDownload 持续下载，单线程发出下载指令，监听ToDownloadMovies，一旦有需要下载的视频即刻下载，下载完成后验证
  */
 @Component
+@Log4j2
 public class Downloader {
-    private static final SynchronousQueue<KeyContent> downloadTask = new SynchronousQueue();
+    private static final ExecutorService DOWNLOAD_SERVICE;
     @Autowired
-    Repository repository;
+    private Repository repository;
     private volatile boolean isContinuousDownloadStart = false;
 
-    public void continuousDownload() {
-        try {
-            isContinuousDownloadStart = true;
-            startContinuousDownload();
-        } catch (InterruptedException e) {
-            isContinuousDownloadStart = false;
-            e.printStackTrace();
-        }
+    static {
+        DOWNLOAD_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
+                .setNameFormat("DOWNLOAD-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
     }
-
-    //todo 这部分逻辑有问题，容易导致空异常
 
     public void downloadNow() {
         String key;
         while ((!isContinuousDownloadStart) && ((key = repository.getToDownloadMovies().poll()) != null)) {
-            ((Downloader) AopContext.currentProxy()).downloadMovieByKey(key);
+            downloadByKey(key);
         }
-        verifyDownloadTask();
         repository.save();//保存一次数据 避免异常退出时没有保存
     }
 
-    private void downloadProcessByKey(String key) {
-        downloadTask.offer(downloadMovieByKey(key));
-    }
-
-    private void continuousVerifyDownloadTask() {
-        while (isContinuousDownloadStart) {
-            try {
-                KeyContent keyContent = downloadTask.take();
-                verifyProcess(keyContent);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    public synchronized void startContinuousDownload() throws InterruptedException {
+        if (!isContinuousDownloadStart) {
+            isContinuousDownloadStart = true;
+            while (isContinuousDownloadStart) {
+                String key = repository.getToDownloadMovies().take();
+                downloadByKey(key);
             }
         }
     }
 
-    private void verifyProcess(KeyContent keyContent) {
-        if (keyContent.getContent().isDone()) {
+    public void downloadByKey(String key) {
+        DOWNLOAD_SERVICE.submit(() -> {
             try {
-                keyContent.getContent().get();
-                repository.setDownloadedMovies(keyContent.getKey());
-            } catch (InterruptedException | ExecutionException e) {
-                repository.setDownloadError(keyContent.getKey());
-                e.printStackTrace();
+                SegmentDownloader.download(getDownloadUrl(key));
+                repository.setDownloadedMovies(key);
+            } catch (Exception e) {
+                repository.setDownloadError(key);
+                log.info("下载失败", e);
             }
-        }
+        });
     }
 
-    //todo 本来是private方法 由于spring aop获取不到 暂时改成public
-
-    public void verifyDownloadTask() {
-        KeyContent keyContent;
-        while ((keyContent = downloadTask.poll()) != null) {
-            verifyProcess(keyContent);
-        }
-    }
-
-    private void startContinuousDownload() throws InterruptedException {
-        while (isContinuousDownloadStart) {
-            String key = repository.getToDownloadMovies().take();
-            downloadProcessByKey(key);
-        }
-    }
-
-    //todo 本来是private方法 由于spring aop获取不到 暂时改成public
-
-    public KeyContent downloadMovieByKey(String key) {
-        Movie movie = repository.getMovieData(key);
-        return new KeyContent(key, HttpClient.download(movie.getDownloadURL(), movie.getFileName()));
-    }
-
-    public SynchronousQueue<KeyContent> getDownloadTask() {
-        return downloadTask;
+    private String getDownloadUrl(String key) {
+        return repository.getMovieData(key).getDownloadURL();
     }
 }

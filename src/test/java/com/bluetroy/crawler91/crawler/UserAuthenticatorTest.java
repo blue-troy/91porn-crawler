@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class UserAuthenticatorTest {
     public static void main(String[] args) throws Exception {
         Files.deleteIfExists(Paths.get("captcha.png"));
-        HttpClient.download("http://94.91p30.space/captcha.php", "captcha.png").get();
+        //HttpClient.download("http://94.91p30.space/captcha.php", "captcha.png").get();
         System.out.println("下载验证码成功");
         Scanner scanner = new Scanner(System.in);
         String cat = scanner.next();

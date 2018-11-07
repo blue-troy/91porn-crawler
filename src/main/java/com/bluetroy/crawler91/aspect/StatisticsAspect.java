@@ -35,7 +35,7 @@ public class StatisticsAspect {
     @Autowired
     Downloader downloader;
     @Autowired
-    WebSocketController webSocketController;
+    WebSocketController<java.io.Serializable> webSocketController;
 
     private HashMap<String, Movie> downloadingMovies = new HashMap<>();
 
@@ -106,7 +106,7 @@ public class StatisticsAspect {
         sendDownloadingMovies();
     }
 
-    private HashMap getData(MovieStatus movieStatus) {
+    private HashMap<String, Movie> getData(MovieStatus movieStatus) {
         return repository.getMoviesData(movieStatus);
     }
 

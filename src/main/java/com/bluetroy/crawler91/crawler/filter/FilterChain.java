@@ -27,4 +27,17 @@ public class FilterChain implements Filter {
             filter.doFilter(tobeFilter);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        FilterChain chain = (FilterChain) o;
+        return chain.toString().equals(this.toString());
+    }
+
 }

@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.crawler.filter.impl.filter;
 
 import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.filter.Filter;
+import com.bluetroy.crawler91.crawler.filter.FilterChain;
 import com.bluetroy.crawler91.crawler.utils.ApplicationContextProvider;
 import lombok.ToString;
 
@@ -33,4 +34,5 @@ public class TitleFilter implements Filter {
             tobeFilter.remove(k);
         });
     }
+
 }

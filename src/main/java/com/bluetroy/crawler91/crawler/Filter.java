@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.dao.Repository;
 import com.bluetroy.crawler91.crawler.filter.FilterChain;
+import com.bluetroy.crawler91.crawler.filter.FilterUpdateListener;
 import com.bluetroy.crawler91.crawler.filter.impl.FilterChainFactory;
 import com.bluetroy.crawler91.vo.FilterVO;
 import lombok.extern.log4j.Log4j2;
@@ -17,11 +18,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Log4j2
 public class Filter {
     @Autowired
-    Repository repository;
-
+    private FilterUpdateListener filterUpdateListener;
+    @Autowired
+    private Repository repository;
     private FilterChain filterChain;
 
-    //todo 过滤后再修改filter 扫描不出东西
     public void doFilter() {
         log.info("doing filter. filterChain : " + getFilterInfo());
         ConcurrentHashMap<String, Boolean> tobeFilter = repository.getTobeFilter();
@@ -32,19 +33,7 @@ public class Filter {
         repository.addFilteredMovies(tobeFilter);
     }
 
-    public void changeFilter(FilterChain filterChain) {
-
-    }
-
     //todo filter新功能
-
-    public void addFilter(FilterChain filterChain) {
-
-    }
-
-    public void addOrFilter(FilterChain filterChain) {
-
-    }
 
     public String getFilterInfo() {
         return getFilterChain().toString();
@@ -58,6 +47,10 @@ public class Filter {
     }
 
     public void setFilter(FilterVO filterVO) {
-        this.filterChain = FilterChainFactory.getFilter(filterVO);
+        FilterChain newFilter = FilterChainFactory.getFilter(filterVO);
+        if (!newFilter.equals(this.filterChain)) {
+            this.filterChain = newFilter;
+            filterUpdateListener.update(filterVO);
+        }
     }
 }

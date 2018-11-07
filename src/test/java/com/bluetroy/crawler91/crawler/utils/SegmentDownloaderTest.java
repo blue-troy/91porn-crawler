@@ -1,6 +1,5 @@
 package com.bluetroy.crawler91.crawler.utils;
 
-import com.bluetroy.crawler91.crawler.tools.SegmentDownloader;
 import org.junit.Test;
 
 /**

@@ -1,7 +1,7 @@
 package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.dao.Repository;
-import com.bluetroy.crawler91.crawler.tools.SegmentDownloader;
+import com.bluetroy.crawler91.crawler.utils.SegmentDownloader;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.aop.framework.AopContext;
@@ -49,7 +49,7 @@ public class Downloader {
     public Future downloadByKey(String key) {
         return DOWNLOAD_SERVICE.submit(() -> {
             try {
-                SegmentDownloader.download(getDownloadUrl(key));
+                SegmentDownloader.download(getDownloadUrl(key), getFileName(key));
                 repository.setDownloadedMovies(key);
             } catch (Exception e) {
                 repository.setDownloadError(key);
@@ -60,5 +60,9 @@ public class Downloader {
 
     private String getDownloadUrl(String key) {
         return repository.getMovieData(key).getDownloadURL();
+    }
+
+    private String getFileName(String key) {
+        return repository.getMovieData(key).getFileName();
     }
 }

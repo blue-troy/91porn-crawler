@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.crawler.tools;
+package com.bluetroy.crawler91.crawler.utils;
 
 import com.bluetroy.crawler91.crawler.utils.HttpUtils;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -22,7 +22,6 @@ import java.util.concurrent.*;
  * Date: 2018-10-24
  * Time: 6:41 AM
  */
-//TODO 可设置文件名
 @Log4j2
 public class SegmentDownloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
@@ -40,10 +39,10 @@ public class SegmentDownloader {
         });
     }
 
-    public static void download(String url) throws Exception {
-        log.info("下载文件：文件名: {} 下载地址：{}", getFileName(url), url);
+    public static void download(String url, String fileName) throws Exception {
+        log.info("下载文件：文件名: {} 下载地址：{}", fileName, url);
         HttpURLConnection connection = HttpUtils.getConnection(url);
-        File file = new File(getFileName(url));
+        File file = new File(fileName);
         if (Files.notExists(file.toPath())) {
             if (connection.getResponseCode() == 200) {
                 RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
@@ -58,7 +57,11 @@ public class SegmentDownloader {
         } else {
             log.info("本地已存在同名文件： {}", file);
         }
+    }
 
+    public static void download(String url) throws Exception {
+        log.info("下载文件：文件名: {} 下载地址：{}", getFileNameByUrl(url), url);
+        download(url, getFileNameByUrl(url));
     }
 
     private static void segmentDownload(File file, String url, CountDownLatch latch) {
@@ -70,7 +73,7 @@ public class SegmentDownloader {
             if (i == numberOfConcurrentThreads - 1) {
                 endPoint = fileSize - 1;
             }
-            downloadThread(url, i, startPoint, endPoint, latch);
+            downloadThread(file, url, i, startPoint, endPoint, latch);
         }
     }
 
@@ -87,7 +90,7 @@ public class SegmentDownloader {
     private static List<File> getTempFileList(File file) {
         List<File> tempFileList = new ArrayList<>();
         for (int i = 0; i < numberOfConcurrentThreads; i++) {
-            tempFileList.add(new File(getTempFileName(file.toString(), i)));
+            tempFileList.add(new File(getTempFileName(file, i)));
         }
         return tempFileList;
     }
@@ -97,19 +100,23 @@ public class SegmentDownloader {
     }
 
 
-    private static String getFileName(String url) {
+    private static String getFileNameByUrl(String url) {
         return url.substring(url.lastIndexOf("/") + 1);
     }
 
-    private static String getTempFileName(String url, int threadId) {
-        return getFileName(url) + "." + threadId + ".temp";
+    private static String getTempFileNameByUrl(String url, int threadId) {
+        return getFileNameByUrl(url) + "." + threadId + ".temp";
     }
 
-    private static void downloadThread(String url, int threadId, long startPoint, long endPoint, CountDownLatch latch) {
+    private static String getTempFileName(File file, int threadId) {
+        return file.getName() + "." + threadId + ".temp";
+    }
+
+    private static void downloadThread(File file, String url, int threadId, long startPoint, long endPoint, CountDownLatch latch) {
         DOWNLOAD_SERVICE.submit(() -> {
             try {
-                File file = new File(getTempFileName(url, threadId));
-                if (Files.exists(file.toPath()) && file.length() == endPoint - startPoint) {
+                File tempFile = new File(getTempFileName(file, threadId));
+                if (Files.exists(tempFile.toPath()) && tempFile.length() == endPoint - startPoint) {
                     latch.countDown();
                 } else {
                     HttpURLConnection connection = HttpUtils.getConnection(url);
@@ -119,7 +126,7 @@ public class SegmentDownloader {
                     if (connection.getResponseCode() == 206) {
                         try (InputStream inputStream = connection.getInputStream();
                         ) {
-                            Files.copy(inputStream, file.toPath());
+                            Files.copy(inputStream, tempFile.toPath());
                             latch.countDown();
                         }
                     }

@@ -21,7 +21,7 @@ public class Scanner {
     private static final List<String> URLS_FOR_SCAN = new ArrayList<>();
 
     static {
-        URLS_FOR_SCAN.add("http://91porn.com/v.php?category=hot&viewtype=basic");
+        URLS_FOR_SCAN.add("http://94.91p14.space/v.php?category=hot&viewtype=basic");
     }
 
     @Autowired

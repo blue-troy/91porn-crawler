@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.crawler.utils;
 
+import com.bluetroy.crawler91.crawler.utils.SegmentDownloader;
 import org.junit.Test;
 
 /**
@@ -7,13 +8,14 @@ import org.junit.Test;
  * Description:
  *
  * @author: heyixin
- * Date: 2018-10-27
- * Time: 11:43 AM
+ * Date: 2018-11-07
+ * Time: 3:17 PM
  */
 public class SegmentDownloaderTest {
-
     @Test
     public void download() throws Exception {
-        SegmentDownloader.download("http://ws4.sinaimg.cn/large/6b5a0580ly1fwiddba2x1j20g81iuju9.jpg");
+        String url = "http://185.38.13.130//mp43/288972.mp4?st=qDvoY9O3_8raA0gDT9A-jA&e=1541649489";
+        String fileName = "test.mp4";
+        SegmentDownloader.download(url, fileName);
     }
 }

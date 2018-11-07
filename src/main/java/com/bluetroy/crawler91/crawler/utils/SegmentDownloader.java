@@ -1,6 +1,5 @@
 package com.bluetroy.crawler91.crawler.utils;
 
-import com.bluetroy.crawler91.crawler.utils.HttpUtils;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
 
@@ -22,6 +21,8 @@ import java.util.concurrent.*;
  * Date: 2018-10-24
  * Time: 6:41 AM
  */
+// todo 下载失败时的处理
+
 @Log4j2
 public class SegmentDownloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
@@ -119,8 +120,7 @@ public class SegmentDownloader {
                 if (Files.exists(tempFile.toPath()) && tempFile.length() == endPoint - startPoint) {
                     latch.countDown();
                 } else {
-                    HttpURLConnection connection = HttpUtils.getConnection(url);
-                    connection.setReadTimeout(5000);
+                    HttpURLConnection connection = HttpUtils.getDownloadConnection(url);
                     connection.setRequestProperty("Range", "bytes=" + startPoint + "-" + endPoint);
                     System.out.println(connection.getResponseCode());
                     if (connection.getResponseCode() == 206) {
@@ -133,7 +133,7 @@ public class SegmentDownloader {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+                log.info("tempFile:{}下载失败", getTempFileName(file, threadId), e);
             }
         });
     }

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>91 crawler</title>
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="//cdn.jandan.net/static/img/favicon.ico"/>
+    <link rel="shortcut icon" href="//cdn.jandan.net/static/img/favicon.ico"/>
 </head>
 <body>
 <div class="container">
@@ -16,9 +16,8 @@
         <div id="scan-count" class="col-md-4"></div>
     </div>
     <button onclick="echo()" class="btn btn-default">echo</button>
-    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-        登陆
-    </button>
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#loginModal">登陆</button>
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#setProxyModal">设置代理</button>
     <button onclick="start()" class="btn btn-default">开始</button>
     <button onclick="shutdown()" class="btn btn-default">关闭程序</button>
     <button onclick="showFilterEditor()" class="btn btn-default">设置过滤器</button>
@@ -58,25 +57,47 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">登陆</h4>
+                <h4 class="modal-title" id="loginModalLabel">登陆</h4>
             </div>
             <div class="modal-body">
                 <form id="login-form">
-                    <input type="text" name="username" title="用户名">
-                    <input type="password" name="password" title="密码">
-                    <input type="text" name="captcha_input" title="验证码">
+                    <input type="text" name="username" placeholder="用户名">
+                    <input type="password" name="password" placeholder="密码">
+                    <input type="text" name="captcha_input" placeholder="验证码">
                     <img src="http://94.91p30.space/captcha.php">
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="login()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="setProxyModal" tabindex="-1" role="dialog" aria-labelledby="setProxyModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="setProxyModalLabel">设置代理</h4>
+            </div>
+            <div class="modal-body">
+                <form id="set-proxy-form">
+                    <input type="text" name="proxyHost" placeholder="代理地址">
+                    <input type="text" name="proxyPort" placeholder="代理端口">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="setProxy()">Save changes</button>
             </div>
         </div>
     </div>

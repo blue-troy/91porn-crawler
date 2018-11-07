@@ -17,6 +17,20 @@ function showFilterEditor() {
     document.getElementById("FilterEditor").style.visibility = "";
 }
 
+function setProxy() {
+    const form = new FormData(document.getElementById('set-proxy-form'));
+    fetch("/proxy", {
+        method: 'PATCH',
+        body: form,
+    }).then(response => {
+        if (response.ok) {
+            alert("代理设置成功");
+            $('#setProxyModal').modal('hide');
+        }
+    })
+
+}
+
 function setFilter() {
     $.post("/filter", $('#FilterEditor').serialize(), function (data) {
         alert(data);
@@ -91,7 +105,7 @@ class Movie {
 
 function login() {
     $.post("/user/login", $("#login-form").serialize()).done(function (res) {
-        $('#myModal').modal('hide');
+        $('#loginModal').modal('hide');
     });
 }
 

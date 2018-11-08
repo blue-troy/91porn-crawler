@@ -105,6 +105,7 @@ class Movie {
 
 function login() {
     $.post("/user/login", $("#login-form").serialize()).done(function (res) {
+        alert(res);
         $('#loginModal').modal('hide');
     });
 }

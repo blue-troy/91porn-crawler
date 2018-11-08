@@ -16,6 +16,11 @@ public class HttpUtils {
     private static final int THIRTY_SECONDS = 30 * 1000;
     private static final int TEN_MINUTE = 10 * 60 * 1000;
 
+    static {
+        CookieUtils.init();
+    }
+
+
     public static HttpURLConnection getConnection(String url) throws IOException {
         HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
         httpURLConnection.setRequestProperty("Accept-Charset", "utf-8");

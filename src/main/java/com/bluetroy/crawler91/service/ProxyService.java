@@ -12,6 +12,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ProxyService {
+    static {
+        System.setProperty("http.proxyHost", "127.0.0.1");
+        System.setProperty("http.proxyPort", "1087");
+    }
+
     public void setProxy(String proxyHost, String proxyPort) {
         System.setProperty("http.proxyHost", proxyHost);
         System.setProperty("http.proxyPort", proxyPort);

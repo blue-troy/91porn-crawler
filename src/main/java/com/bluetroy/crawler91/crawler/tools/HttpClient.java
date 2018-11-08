@@ -25,8 +25,6 @@ public class HttpClient {
     static {
         HTTP_GET_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
                 .setNameFormat("HTTP-GET-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
-        CookieManager manager = new CookieManager();
-        CookieHandler.setDefault(manager);
         String host = "http://91porn.com/";
     }
 

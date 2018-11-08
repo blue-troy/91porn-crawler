@@ -22,7 +22,7 @@ public class UserAuthenticator {
         String loginResult = "";
         try {
             //todo host统一问题
-            loginResult = HttpClient.post("http://94.91p30.space/login.php", getLoginParams(name, password, verificationCode));
+            loginResult = HttpClient.post("http://91porn.com/login.php", getLoginParams(name, password, verificationCode));
         } catch (Exception e) {
             e.printStackTrace();
         }

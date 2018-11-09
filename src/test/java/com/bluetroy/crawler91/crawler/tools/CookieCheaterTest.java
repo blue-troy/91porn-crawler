@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.net.CookiePolicy;
+
 /**
  * Created with IntelliJ IDEA.
  * Description:
@@ -24,14 +26,13 @@ public class CookieCheaterTest {
 
     @Test
     public void test() throws Exception {
-        boolean isLogin = userAuthenticator.login("oldblueman", "lx032515.jp", "5528");
+        boolean isLogin = userAuthenticator.login("oldblueman", "lx032515.jp", "8752");
         System.out.println(isLogin);
+        CookieUtils.printCookies();
         if (isLogin) {
             request();
             CookieUtils.printCookies();
             request();
-            CookieUtils.printCookies();
-            CookieCheater.resetWatchTimes(CookieUtils.getCookie("watch_times"));
             CookieUtils.printCookies();
             request();
             CookieUtils.printCookies();

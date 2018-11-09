@@ -15,7 +15,7 @@ import java.util.List;
  * Time: 9:09 AM
  */
 public class CookieUtils {
-    private static CookieManager COOKIE_MANAGER = new CookieManager();
+    private static CookieManager COOKIE_MANAGER = new CookieManager(new CrackLimitCookieStore(), null);
 
     static {
         CookieHandler.setDefault(COOKIE_MANAGER);

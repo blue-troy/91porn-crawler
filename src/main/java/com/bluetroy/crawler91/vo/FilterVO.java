@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.vo;
 
+import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import lombok.Data;
 
 /**
@@ -11,16 +12,5 @@ import lombok.Data;
  * Time: 下午4:11
  */
 @Data
-public class FilterVO {
-    String title;
-    String length;
-    String addTime;
-    String author;
-    Integer view;
-    Integer collect;
-    Integer messageNumber;
-    Integer integration;
-    String detailURL;
-    String downloadURL;
-    String fileName;
+public class FilterVO extends Movie {
 }

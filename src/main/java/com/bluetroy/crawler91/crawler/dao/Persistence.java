@@ -3,6 +3,9 @@ package com.bluetroy.crawler91.crawler.dao;
 import com.bluetroy.crawler91.crawler.dao.entity.DownloadErrorInfo;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -17,9 +20,12 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Date: 2018-08-23
  * Time: 下午7:25
  */
-@Component
 @Log4j2
-public class Persistence implements Persistability {
+@Order(1)
+@Component
+class Persistence implements Persistability, CommandLineRunner {
+    @Autowired
+    private PersistentDao dao;
 
     @Override
     public void init(Persistability persistability) {
@@ -35,6 +41,11 @@ public class Persistence implements Persistability {
         } catch (IOException e) {
             log.warn("数据保存失败", e);
         }
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        dao.init();
     }
 
     private void init(PersistentDao persistentRepository) {

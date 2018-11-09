@@ -27,7 +27,7 @@ class PersistenceAspect {
     @Value("${running.mode}")
     private String runningMode;
 
-    @After("execution(void com.bluetroy.crawler91.crawler.dao.Persistence.save(*))")
+    @After("execution(void com.bluetroy.crawler91.crawler.dao.Persistability.save(com.bluetroy.crawler91.crawler.dao.Persistability))")
     public void cleanTestFile() {
         if (TEST_RUNNING_MODE.equals(runningMode)) {
             log.info("开始清理测试文件");

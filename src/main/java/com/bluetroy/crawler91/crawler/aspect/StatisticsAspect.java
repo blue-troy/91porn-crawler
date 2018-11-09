@@ -31,11 +31,9 @@ import java.util.concurrent.Future;
 @Component
 public class StatisticsAspect {
     @Autowired
-    BaseDao dao;
+    private BaseDao dao;
     @Autowired
-    Crawler crawler;
-    @Autowired
-    WebSocketController<java.io.Serializable> webSocketController;
+    private WebSocketController<java.io.Serializable> webSocketController;
 
     private HashMap<String, Movie> downloadingMovies = new HashMap<>();
 

@@ -2,7 +2,6 @@ package com.bluetroy.crawler91.crawler.utils;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
-import java.net.CookieStore;
 import java.net.HttpCookie;
 import java.util.List;
 
@@ -25,16 +24,8 @@ public class CookieUtils {
 
     }
 
-    public static CookieManager getCookieManager() {
-        return COOKIE_MANAGER;
-    }
-
-    public static CookieStore getCookieStore() {
-        return COOKIE_MANAGER.getCookieStore();
-    }
-
     public static List<HttpCookie> getCookies() {
-        return getCookieStore().getCookies();
+        return COOKIE_MANAGER.getCookieStore().getCookies();
     }
 
     public static void printCookies() {

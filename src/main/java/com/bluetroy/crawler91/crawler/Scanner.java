@@ -1,62 +1,37 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.dao.Repository;
-import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
-import com.bluetroy.crawler91.crawler.tools.ContentTool;
-import com.bluetroy.crawler91.crawler.tools.ScannerTool;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
-
 
 /**
- * @author heyixin
+ * Created with IntelliJ IDEA.
+ * Description:
+ *
+ * @author: heyixin
+ * Date: 2018-11-09
+ * Time: 3:03 PM
  */
-@Component
-public class Scanner {
-    private static final List<String> URLS_FOR_SCAN = new ArrayList<>();
-
-    static {
-        URLS_FOR_SCAN.add("http://94.91p14.space/v.php?category=hot&viewtype=basic");
-    }
-
-    @Autowired
-    private ScannerTool scannerTool;
-    @Autowired
-    private Repository repository;
-    @Autowired
-    private ContentTool contentTool;
-
-    public static List<String> getUrlsForScan() {
-        return URLS_FOR_SCAN;
-    }
-
-    public void addUrlForScan(String url) {
-        URLS_FOR_SCAN.add(url);
-    }
+public interface Scanner {
+    /**
+     * 扫描视频，不包括视频下载地址
+     */
+    void scanMovies();
 
     /**
-     * 扫描 urlList中页面的视频，当扫描完毕的时候返回，同步方法
+     * 扫描视频详细信息，包括下载地址
      */
-    public void scanMovies() {
-        scanMoviesByUrlList();
-    }
+    void scanDownloadUrl();
 
-    public void scanDownloadUrl() {
-        scanFilteredMovieDownloadUrl();
-    }
+    /**
+     * 为scanner添加新的要扫描的地址
+     *
+     * @param url 要扫描的url地址
+     */
+    void addUrl(String url);
 
-    private void scanFilteredMovieDownloadUrl() {
-        LinkedBlockingDeque<KeyContent> keyContentQueue = contentTool.getDetailContents();
-        scannerTool.scanDownloadUrls(keyContentQueue);
-    }
-
-    private void scanMoviesByUrlList() {
-        LinkedBlockingDeque<Future<String>> movieContents = contentTool.getMovieContents();
-        scannerTool.scanMovies(movieContents);
-    }
+    /**
+     * 获取scanner要扫描的地址
+     *
+     * @return 要扫描的地址
+     */
+    List<String> getScanUrls();
 }

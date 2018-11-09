@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.controller;
 
-import com.bluetroy.crawler91.crawler.UserAuthenticator;
+import com.bluetroy.crawler91.crawler.impl.UserAuthenticatorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    UserAuthenticator userAuthenticator;
+    UserAuthenticatorImpl userAuthenticatorImpl;
 
     @RequestMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, @RequestParam("captcha_input") String captchaInput) {
-        if (userAuthenticator.login(username, password, captchaInput)) {
+        if (userAuthenticatorImpl.login(username, password, captchaInput)) {
             return "登陆成功";
         } else {
             return "登陆失败";

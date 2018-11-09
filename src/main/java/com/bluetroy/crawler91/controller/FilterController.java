@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.controller;
 
-import com.bluetroy.crawler91.crawler.Filter;
+import com.bluetroy.crawler91.crawler.impl.FilterImpl;
 import com.bluetroy.crawler91.vo.FilterVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/filter")
 public class FilterController {
     @Autowired
-    Filter filter;
+    FilterImpl filter;
 
     @PostMapping
     String setFilter(FilterVO filterVO) {

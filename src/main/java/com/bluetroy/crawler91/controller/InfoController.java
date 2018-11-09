@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.controller;
 
-import com.bluetroy.crawler91.aspect.StatisticsAspect;
+import com.bluetroy.crawler91.crawler.impl.aspect.StatisticsAspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

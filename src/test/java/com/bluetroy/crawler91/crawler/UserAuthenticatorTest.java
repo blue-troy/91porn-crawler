@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.tools.HttpClient;
+import com.bluetroy.crawler91.crawler.impl.tools.HttpClient;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

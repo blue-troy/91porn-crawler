@@ -21,7 +21,7 @@ public class ProxyController {
     private ProxyService proxyService;
 
     @PatchMapping
-    public void setProxy(String proxyHost,String proxyPort) {
+    public void setProxy(String proxyHost, String proxyPort) {
         proxyService.setProxy(proxyHost, proxyPort);
     }
 }

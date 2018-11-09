@@ -28,10 +28,6 @@ public class EchoController {
         return s;
     }
 
-    private void test() {
-
-    }
-
     @RequestMapping("/cookie")
     public String setCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
@@ -41,6 +37,10 @@ public class EchoController {
         Cookie cookie = new Cookie("name", "blue");
         response.addCookie(cookie);
         return "success";
+    }
+
+    private void test() {
+
     }
 
     /**

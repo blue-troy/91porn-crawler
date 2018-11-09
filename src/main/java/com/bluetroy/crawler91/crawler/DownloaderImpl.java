@@ -1,7 +1,7 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.impl.dao.Repository;
-import com.bluetroy.crawler91.crawler.impl.utils.SegmentDownloader;
+import com.bluetroy.crawler91.crawler.dao.BaseDao;
+import com.bluetroy.crawler91.crawler.utils.SegmentDownloader;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.aop.framework.AopContext;
@@ -20,7 +20,7 @@ import java.util.concurrent.*;
 class DownloaderImpl implements Downloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
     @Autowired
-    private Repository repository;
+    private BaseDao dao;
     private volatile boolean isContinuousDownloadStart = false;
 
     static {
@@ -31,10 +31,9 @@ class DownloaderImpl implements Downloader {
     @Override
     public void downloadNow() {
         String key;
-        while ((!isContinuousDownloadStart) && ((key = repository.getToDownloadMovies().poll()) != null)) {
-            ((DownloaderImpl) AopContext.currentProxy()).downloadByKey(key);
+        while ((!isContinuousDownloadStart) && ((key = dao.getToDownloadMovies().poll()) != null)) {
+            ((Downloader) AopContext.currentProxy()).downloadByKey(key);
         }
-        repository.save();//保存一次数据 避免异常退出时没有保存
     }
 
     @Override
@@ -42,8 +41,8 @@ class DownloaderImpl implements Downloader {
         if (!isContinuousDownloadStart) {
             isContinuousDownloadStart = true;
             while (isContinuousDownloadStart) {
-                String key = repository.getToDownloadMovies().take();
-                ((DownloaderImpl) AopContext.currentProxy()).downloadByKey(key);
+                String key = dao.getToDownloadMovies().take();
+                ((Downloader) AopContext.currentProxy()).downloadByKey(key);
             }
         }
     }
@@ -53,19 +52,19 @@ class DownloaderImpl implements Downloader {
         return DOWNLOAD_SERVICE.submit(() -> {
             try {
                 SegmentDownloader.download(getDownloadUrl(key), getFileName(key));
-                repository.setDownloadedMovies(key);
+                dao.setDownloadedMovies(key);
             } catch (Exception e) {
-                repository.setDownloadError(key);
+                dao.setDownloadError(key);
                 log.info("下载失败", e);
             }
         });
     }
 
     private String getDownloadUrl(String key) {
-        return repository.getMovieData(key).getDownloadURL();
+        return dao.getMovieData(key).getDownloadURL();
     }
 
     private String getFileName(String key) {
-        return repository.getMovieData(key).getFileName();
+        return dao.getMovieData(key).getFileName();
     }
 }

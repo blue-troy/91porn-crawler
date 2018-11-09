@@ -1,12 +1,10 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.impl.dao.Repository;
-import com.bluetroy.crawler91.crawler.impl.dao.entity.KeyContent;
-import com.bluetroy.crawler91.crawler.Scanner;
-import com.bluetroy.crawler91.crawler.impl.tools.ContentTool;
-import com.bluetroy.crawler91.crawler.impl.tools.ScannerTool;
+import com.bluetroy.crawler91.crawler.dao.BaseDao;
+import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
+import com.bluetroy.crawler91.crawler.tools.ContentTool;
+import com.bluetroy.crawler91.crawler.tools.ScannerTool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ class ScannerImpl implements Scanner {
     @Autowired
     private ScannerTool scannerTool;
     @Autowired
-    private Repository repository;
+    private BaseDao dao;
     @Autowired
     private ContentTool contentTool;
 

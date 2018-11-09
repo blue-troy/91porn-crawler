@@ -1,10 +1,8 @@
 package com.bluetroy.crawler91.controller;
 
 import com.bluetroy.crawler91.service.ProjectService;
-import com.bluetroy.crawler91.vo.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**

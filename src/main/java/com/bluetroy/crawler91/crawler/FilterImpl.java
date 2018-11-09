@@ -1,14 +1,12 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.Filter;
-import com.bluetroy.crawler91.crawler.impl.dao.Repository;
-import com.bluetroy.crawler91.crawler.impl.filter.FilterChain;
-import com.bluetroy.crawler91.crawler.impl.filter.FilterUpdateListener;
-import com.bluetroy.crawler91.crawler.impl.filter.impl.FilterChainFactory;
+import com.bluetroy.crawler91.crawler.dao.BaseDao;
+import com.bluetroy.crawler91.crawler.filter.FilterUpdateListener;
+import com.bluetroy.crawler91.crawler.filter.MovieFilterChain;
+import com.bluetroy.crawler91.crawler.filter.impl.FilterChainFactory;
 import com.bluetroy.crawler91.vo.FilterVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,28 +20,26 @@ class FilterImpl implements Filter {
     @Autowired
     private FilterUpdateListener filterUpdateListener;
     @Autowired
-    private Repository repository;
-    private FilterChain filterChain;
+    private BaseDao dao;
+    private MovieFilterChain filterChain;
 
     @Override
     public void doFilter() {
-        log.info("doing filter. filterChain : " + getFilterInfo());
-        ConcurrentHashMap<String, Boolean> tobeFilter = repository.getTobeFilter();
+        log.info("doing filterr. filterChain : " + getFilterInfo());
+        ConcurrentHashMap<String, Boolean> tobeFilter = dao.getTobeFilter();
         getFilterChain().doFilter(tobeFilter);
         tobeFilter.forEachKey(1, k -> {
-            log.info(repository.getMovieData().get(k).toString());
+            log.info(dao.getMovieData().get(k).toString());
         });
-        repository.addFilteredMovies(tobeFilter);
+        dao.addFilteredMovies(tobeFilter);
     }
-
-    //todo filter新功能
 
     @Override
     public String getFilterInfo() {
         return getFilterChain().toString();
     }
 
-    private FilterChain getFilterChain() {
+    private MovieFilterChain getFilterChain() {
         if (filterChain == null) {
             filterChain = FilterChainFactory.getShowFaceCollectFilterChain(200);
         }
@@ -52,7 +48,7 @@ class FilterImpl implements Filter {
 
     @Override
     public void setFilter(FilterVO filterVO) {
-        FilterChain newFilter = FilterChainFactory.getFilter(filterVO);
+        MovieFilterChain newFilter = FilterChainFactory.getFilter(filterVO);
         if (!newFilter.equals(this.filterChain)) {
             this.filterChain = newFilter;
             filterUpdateListener.update(filterVO);

@@ -1,7 +1,7 @@
 package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.impl.tools.HttpClient;
-import com.bluetroy.crawler91.crawler.impl.tools.ScannerTool;
+import com.bluetroy.crawler91.crawler.tools.HttpClient;
+import com.bluetroy.crawler91.crawler.tools.ScannerTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

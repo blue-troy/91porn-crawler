@@ -1,8 +1,6 @@
 package com.bluetroy.crawler91.service;
 
-import com.bluetroy.crawler91.crawler.impl.DownloaderImpl;
-import com.bluetroy.crawler91.crawler.impl.FilterImpl;
-import com.bluetroy.crawler91.crawler.impl.ScannerImpl;
+import com.bluetroy.crawler91.crawler.Crawler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -21,11 +19,7 @@ import org.springframework.stereotype.Component;
 @Order(2)
 public class ProjectService implements CommandLineRunner {
     @Autowired
-    ScannerImpl scannerImpl;
-    @Autowired
-    FilterImpl filter;
-    @Autowired
-    DownloaderImpl downloaderImpl;
+    private Crawler crawler;
 
     public void shutdown() {
         new Thread(() -> {
@@ -37,10 +31,10 @@ public class ProjectService implements CommandLineRunner {
     public void process() {
         new Thread(() -> {
             System.out.println("开始执行操作");
-            scannerImpl.scanMovies();
-            filter.doFilter();
-            scannerImpl.scanDownloadUrl();
-            downloaderImpl.downloadNow();
+            crawler.scanMovies();
+            crawler.doFilter();
+            crawler.scanDownloadUrl();
+            crawler.downloadNow();
         }).start();
     }
 

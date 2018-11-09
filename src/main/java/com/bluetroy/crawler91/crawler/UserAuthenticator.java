@@ -8,7 +8,7 @@ package com.bluetroy.crawler91.crawler;
  * Date: 2018-11-09
  * Time: 3:15 PM
  */
-public interface UserAuthenticator {
+interface UserAuthenticator {
     /**
      * 输入账户信息登陆
      *

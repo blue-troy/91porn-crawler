@@ -20,7 +20,7 @@ import java.io.IOException;
 @RequestMapping("/info")
 public class InfoController {
     @Autowired
-    StatisticsAspect statisticsAspect;
+    private StatisticsAspect statisticsAspect;
 
 
     @GetMapping

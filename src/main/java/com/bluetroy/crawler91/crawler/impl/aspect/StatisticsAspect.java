@@ -1,7 +1,7 @@
 package com.bluetroy.crawler91.crawler.impl.aspect;
 
 import com.bluetroy.crawler91.controller.WebSocketController;
-import com.bluetroy.crawler91.crawler.impl.DownloaderImpl;
+import com.bluetroy.crawler91.crawler.Crawler;
 import com.bluetroy.crawler91.crawler.impl.dao.MovieStatus;
 import com.bluetroy.crawler91.crawler.impl.dao.Repository;
 import com.bluetroy.crawler91.crawler.impl.dao.entity.Movie;
@@ -33,25 +33,25 @@ public class StatisticsAspect {
     @Autowired
     Repository repository;
     @Autowired
-    DownloaderImpl downloaderImpl;
+    Crawler crawler;
     @Autowired
     WebSocketController<java.io.Serializable> webSocketController;
 
     private HashMap<String, Movie> downloadingMovies = new HashMap<>();
 
-    @Pointcut("execution(java.util.concurrent.Future com.bluetroy.crawler91.crawler.impl.DownloaderImpl.downloadByKey(String)) && args(key)")
+    @Pointcut("execution(java.util.concurrent.Future com.bluetroy.crawler91.crawler.Crawler.downloadByKey(String)) && args(key)")
     public void downloadPerformance(String key) {
     }
 
     /**
      * 特例测试：统计扫描视频的数量并通知webSocket通知前端
      */
-    @After("execution(void com.bluetroy.crawler91.crawler.impl.ScannerImpl.scanMovies())")
+    @After("execution(void com.bluetroy.crawler91.crawler.Crawler.scanMovies())")
     public void gatherScannedMoviesCount() throws IOException {
         webSocketController.send("/scannedMovies/count", repository.getScannedMovies().size());
     }
 
-    @After("execution(void com.bluetroy.crawler91.crawler.impl.FilterImpl.doFilter())")
+    @After("execution(void com.bluetroy.crawler91.crawler.Crawler.doFilter())")
     public void gatherFilteredMovies() throws IOException {
         webSocketController.send("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }

@@ -1,13 +1,11 @@
-package com.bluetroy.crawler91.crawler.impl;
+package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.impl.dao.Repository;
-import com.bluetroy.crawler91.crawler.Downloader;
 import com.bluetroy.crawler91.crawler.impl.utils.SegmentDownloader;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.*;
@@ -18,8 +16,8 @@ import java.util.concurrent.*;
  * ContinuousDownload 持续下载，单线程发出下载指令，监听ToDownloadMovies，一旦有需要下载的视频即刻下载，下载完成后验证
  */
 @Log4j2
-@Service
-public class DownloaderImpl implements Downloader {
+@Service("downloader")
+class DownloaderImpl implements Downloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
     @Autowired
     private Repository repository;

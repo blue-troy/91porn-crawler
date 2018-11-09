@@ -1,4 +1,4 @@
-package com.bluetroy.crawler91.crawler.impl;
+package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.Filter;
 import com.bluetroy.crawler91.crawler.impl.dao.Repository;
@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author heyixin
  */
 @Log4j2
-@Service
-public class FilterImpl implements Filter {
+@Service("filter")
+class FilterImpl implements Filter {
     @Autowired
     private FilterUpdateListener filterUpdateListener;
     @Autowired

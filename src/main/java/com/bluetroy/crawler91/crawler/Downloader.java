@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
  * Date: 2018-11-09
  * Time: 2:52 PM
  */
-public interface Downloader {
+interface Downloader {
     /**
      * 立刻开始，一次把ToDownloadMovies下载完毕
      */

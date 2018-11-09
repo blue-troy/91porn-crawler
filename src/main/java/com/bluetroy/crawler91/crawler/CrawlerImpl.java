@@ -1,6 +1,5 @@
-package com.bluetroy.crawler91.crawler.impl;
+package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.*;
 import com.bluetroy.crawler91.vo.FilterVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,8 @@ import java.util.concurrent.Future;
  * Date: 2018-11-09
  * Time: 3:19 PM
  */
-@Service
-public class CrawlerImpl implements Crawler {
+@Service("crawler")
+class CrawlerImpl implements Crawler {
     @Autowired
     private Downloader downloader;
     @Autowired
@@ -60,6 +59,11 @@ public class CrawlerImpl implements Crawler {
     @Override
     public void addUrl(String url) {
         scanner.addUrl(url);
+    }
+
+    @Override
+    public boolean login(String name, String password, String verificationCode) {
+        return userAuthenticator.login(name, password, verificationCode);
     }
 
     @Override

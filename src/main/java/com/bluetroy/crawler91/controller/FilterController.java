@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.controller;
 
-import com.bluetroy.crawler91.crawler.impl.FilterImpl;
+import com.bluetroy.crawler91.crawler.Crawler;
 import com.bluetroy.crawler91.vo.FilterVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/filter")
 public class FilterController {
     @Autowired
-    FilterImpl filter;
+    private Crawler crawler;
 
     @PostMapping
-    String setFilter(FilterVO filterVO) {
-        filter.setFilter(filterVO);
-        return "当前过滤器为" + filter.getFilterInfo();
+    String setFilter(FilterVO crawlerVO) {
+        crawler.setFilter(crawlerVO);
+        return "当前过滤器为" + crawler.getFilterInfo();
     }
 
     @GetMapping
     String getFilterInfo() {
-        return filter.getFilterInfo();
+        return crawler.getFilterInfo();
     }
 
 }

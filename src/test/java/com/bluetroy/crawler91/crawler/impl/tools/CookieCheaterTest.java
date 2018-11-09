@@ -1,6 +1,6 @@
 package com.bluetroy.crawler91.crawler.impl.tools;
 
-import com.bluetroy.crawler91.crawler.impl.UserAuthenticatorImpl;
+import com.bluetroy.crawler91.crawler.Crawler;
 import com.bluetroy.crawler91.crawler.impl.utils.CookieUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,11 +20,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class CookieCheaterTest {
     @Autowired
-    UserAuthenticatorImpl userAuthenticatorImpl;
+    Crawler crawler;
 
     @Test
     public void test() throws Exception {
-        boolean isLogin = userAuthenticatorImpl.login("oldblueman", "lx032515.jp", "8752");
+        boolean isLogin = crawler.login("oldblueman", "lx032515.jp", "8752");
         System.out.println(isLogin);
         CookieUtils.printCookies();
         if (isLogin) {

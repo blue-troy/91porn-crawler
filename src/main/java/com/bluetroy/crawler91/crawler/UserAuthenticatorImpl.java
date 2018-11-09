@@ -1,6 +1,5 @@
-package com.bluetroy.crawler91.crawler.impl;
+package com.bluetroy.crawler91.crawler;
 
-import com.bluetroy.crawler91.crawler.UserAuthenticator;
 import com.bluetroy.crawler91.crawler.impl.tools.HttpClient;
 import com.bluetroy.crawler91.crawler.impl.tools.ScannerTool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,8 @@ import org.springframework.stereotype.Service;
  * Date: 2018-07-14
  * Time: 下午8:12
  */
-@Service
-public class UserAuthenticatorImpl implements UserAuthenticator {
+@Service("userAuthenticator")
+class UserAuthenticatorImpl implements UserAuthenticator {
     @Autowired
     ScannerTool scannerTool;
 

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 public class CrawlerController {
     @Autowired
-    ProjectService projectService;
+    private ProjectService projectService;
 
     //todo 重复提交问题
     @PatchMapping(value = "/start")

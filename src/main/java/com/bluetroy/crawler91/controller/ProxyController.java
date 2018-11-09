@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/proxy")
 public class ProxyController {
     @Autowired
-    ProxyService proxyService;
+    private ProxyService proxyService;
 
     @PatchMapping
     public void setProxy(String proxyHost,String proxyPort) {

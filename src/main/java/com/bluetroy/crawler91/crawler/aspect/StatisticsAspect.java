@@ -1,7 +1,6 @@
 package com.bluetroy.crawler91.crawler.aspect;
 
-import com.bluetroy.crawler91.controller.WebSocketController;
-import com.bluetroy.crawler91.crawler.Crawler;
+import com.bluetroy.crawler91.crawler.Adviser;
 import com.bluetroy.crawler91.crawler.dao.BaseDao;
 import com.bluetroy.crawler91.crawler.dao.MovieStatus;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
@@ -13,7 +12,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.Future;
 
@@ -33,7 +31,7 @@ public class StatisticsAspect {
     @Autowired
     private BaseDao dao;
     @Autowired
-    private WebSocketController<java.io.Serializable> webSocketController;
+    private Adviser adviser;
 
     private HashMap<String, Movie> downloadingMovies = new HashMap<>();
 
@@ -45,17 +43,17 @@ public class StatisticsAspect {
      * 特例测试：统计扫描视频的数量并通知webSocket通知前端
      */
     @After("execution(void com.bluetroy.crawler91.crawler.Crawler.scanMovies())")
-    public void gatherScannedMoviesCount() throws IOException {
-        webSocketController.send("/scannedMovies/count", dao.getScannedMovies().size());
+    public void gatherScannedMoviesCount() throws Exception {
+        adviser.message("/scannedMovies/count", dao.getScannedMovies().size());
     }
 
     @After("execution(void com.bluetroy.crawler91.crawler.Crawler.doFilter())")
-    public void gatherFilteredMovies() throws IOException {
-        webSocketController.send("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
+    public void gatherFilteredMovies() throws Exception {
+        adviser.message("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }
 
     @After("execution(void com.bluetroy.crawler91.crawler.tools.XpathTool.scanDownloadUrl(*))")
-    public void gatherToDownloadMovies() throws IOException {
+    public void gatherToDownloadMovies() throws Exception {
         sendToDownloadMovies();
     }
 
@@ -69,11 +67,11 @@ public class StatisticsAspect {
     }
 
     @After(value = "downloadPerformance(key))", argNames = "key")
-    public void gatherDownloadResult(String key) throws IOException {
+    public void gatherDownloadResult(String key) throws Exception {
         sendDownloadResult();
     }
 
-    public void gatherAllMoviesStatistics() throws IOException {
+    public void gatherAllMoviesStatistics() throws Exception {
         gatherScannedMoviesCount();
         gatherFilteredMovies();
         sendToDownloadMovies();
@@ -81,25 +79,25 @@ public class StatisticsAspect {
         sendDownloadResult();
     }
 
-    private void sendDownloadResult() throws IOException {
-        webSocketController.send("/downloadedMovies", getData(MovieStatus.DOWNLOADED_MOVIES));
-        webSocketController.send("/downloadErrorMovies", getData(MovieStatus.DOWNLOAD_ERROR));
+    private void sendDownloadResult() throws Exception {
+        adviser.message("/downloadedMovies", getData(MovieStatus.DOWNLOADED_MOVIES));
+        adviser.message("/downloadErrorMovies", getData(MovieStatus.DOWNLOAD_ERROR));
     }
 
-    private void sendToDownloadMovies() throws IOException {
-        webSocketController.send("/toDownloadMovies", getData(MovieStatus.TO_DOWNLOAD_MOVIES));
+    private void sendToDownloadMovies() throws Exception {
+        adviser.message("/toDownloadMovies", getData(MovieStatus.TO_DOWNLOAD_MOVIES));
     }
 
-    private void sendDownloadingMovies() throws IOException {
-        webSocketController.send("/downloadingMovies", downloadingMovies);
+    private void sendDownloadingMovies() throws Exception {
+        adviser.message("/downloadingMovies", downloadingMovies);
     }
 
-    private void addDownloadingMovie(String key) throws IOException {
+    private void addDownloadingMovie(String key) throws Exception {
         downloadingMovies.put(key, dao.getMovieData(key));
         sendDownloadingMovies();
     }
 
-    private void removeDownloadingMovie(String key) throws IOException {
+    private void removeDownloadingMovie(String key) throws Exception {
         downloadingMovies.remove(key);
         sendDownloadingMovies();
     }

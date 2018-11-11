@@ -127,13 +127,14 @@ public class SegmentDownloader {
                         try (InputStream inputStream = connection.getInputStream();
                         ) {
                             Files.copy(inputStream, tempFile.toPath());
-                            latch.countDown();
                         }
                     }
                 }
 
             } catch (IOException e) {
                 log.info("tempFile:{}下载失败", getTempFileName(file, threadId), e);
+            } finally {
+                latch.countDown();
             }
         });
     }

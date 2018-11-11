@@ -20,9 +20,9 @@ import java.io.Serializable;
 @Component
 @Scope("request")
 public class JsonResponse<T> implements Serializable {
-    String method;
-    T data;
-    String message;
+    private String method;
+    private T data;
+    private String message;
 
     public JsonResponse() {
 

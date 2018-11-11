@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.controller;
 
+import com.bluetroy.crawler91.crawler.Adviser;
 import com.bluetroy.crawler91.vo.JsonResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -18,15 +19,16 @@ import java.io.IOException;
  * Date: 2018-08-16
  * Time: 下午3:59
  */
-@Component
 @Log4j2
+@Component
 @ServerEndpoint(value = "/websocket")
-public class WebSocketController<T> {
+public class WebSocketController implements Adviser {
     private static Session SESSION;
 
+    @Override
     @OnMessage
     public void message(String message) throws IOException {
-        log.info("send message " + message);
+        log.info("message message " + message);
         SESSION.getBasicRemote().sendText(message);
     }
 
@@ -38,7 +40,8 @@ public class WebSocketController<T> {
         }
     }
 
-    public void send(String method, T t) throws IOException {
+    @Override
+    public <T> void message(String method, T t) throws IOException {
         message(new JsonResponse(method, t).get());
     }
 }

@@ -24,8 +24,7 @@ public class InfoController {
 
 
     @GetMapping
-    public String getInfo() throws IOException {
+    public void getInfo() throws Exception {
         statisticsAspect.gatherAllMoviesStatistics();
-        return "success";
     }
 }

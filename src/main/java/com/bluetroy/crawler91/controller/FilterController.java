@@ -22,15 +22,14 @@ public class FilterController {
     @Autowired
     private Crawler crawler;
 
-    @PostMapping
-    String setFilter(FilterVO crawlerVO) {
-        crawler.setFilter(crawlerVO);
-        return "当前过滤器为" + crawler.getFilterInfo();
-    }
-
     @GetMapping
     String getFilterInfo() {
         return crawler.getFilterInfo();
+    }
+
+    @PostMapping
+    void setFilter(FilterVO crawlerVO) {
+        crawler.setFilter(crawlerVO);
     }
 
 }

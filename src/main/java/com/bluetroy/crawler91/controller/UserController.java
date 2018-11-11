@@ -22,11 +22,7 @@ public class UserController {
     private Crawler crawler;
 
     @RequestMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password, @RequestParam("captcha_input") String captchaInput) {
-        if (crawler.login(username, password, captchaInput)) {
-            return "登陆成功";
-        } else {
-            return "登陆失败";
-        }
+    public void login(@RequestParam String username, @RequestParam String password, @RequestParam("captcha_input") String captchaInput) {
+        crawler.login(username, password, captchaInput);
     }
 }

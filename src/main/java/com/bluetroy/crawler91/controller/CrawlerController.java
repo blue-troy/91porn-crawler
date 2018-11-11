@@ -13,22 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
  * Date: 2018-08-10
  * Time: 下午8:18
  */
+//todo 重复提交问题
+
 @RestController()
 public class CrawlerController {
     @Autowired
     private ProjectService projectService;
 
-    //todo 重复提交问题
-
     @PatchMapping(value = "/start")
-    String start() {
+    void start() {
         projectService.process();
-        return "开启成功";
     }
 
     @PatchMapping("/shutdown")
-    String shutdown() {
+    void shutdown() {
         projectService.shutdown();
-        return "关闭成功";
     }
 }

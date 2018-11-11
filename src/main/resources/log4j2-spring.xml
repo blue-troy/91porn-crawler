@@ -9,12 +9,16 @@
         <Console name="CONSOLE" target="system_out">
             <PatternLayout pattern="${PATTERN}"/>
         </Console>
+        <File name="FILE" fileName="crawler.log" append="false">
+            <PatternLayout pattern="${PATTERN}"/>
+        </File>
     </appenders>
 
     <loggers>
         <Logger name="com.bluetroy.crawler91" level="info"/>
         <root level="warn">
             <appenderref ref="CONSOLE"/>
+            <appenderRef ref="FILE" />
         </root>
     </loggers>
 </configuration>

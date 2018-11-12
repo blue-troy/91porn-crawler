@@ -17,18 +17,14 @@ import org.springframework.stereotype.Service;
 @Service("userAuthenticator")
 class UserAuthenticatorImpl implements UserAuthenticator {
     @Autowired
-    private ScannerTool scannerTool;
-    @Autowired
     private XpathTool xpathTool;
 
     @Override
     public void login(String name, String password, String verificationCode) throws Exception {
-        String loginResult = "";
         //todo host统一问题
-        loginResult = HttpClient.post("http://91porn.com/login.php", getLoginParams(name, password, verificationCode));
+        String loginResult = HttpClient.post("http://91porn.com/login.php", getLoginParams(name, password, verificationCode));
         if (!verifyLogin(loginResult, name)) {
-            String loginError = xpathTool.getLoginError(loginResult);
-            throw new Exception();
+            throw new Exception(xpathTool.getLoginErrorMessage(loginResult));
         }
     }
 

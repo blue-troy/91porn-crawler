@@ -26,7 +26,6 @@ import java.util.concurrent.Future;
 @Log4j2
 @Component
 public class XpathTool {
-    private static final String LOGIN_ERROR_MESSAGE_XPATH = "//div[@class='errorbox']";
     @Autowired
     private BaseDao dao;
 
@@ -46,8 +45,9 @@ public class XpathTool {
         }
     }
 
-    public String getLoginError(String loginResult) {
-        return "";
+    public String getLoginErrorMessage(String html) {
+        return Jsoup.parse(html).select("#container > div.errorbox").text();
+
     }
 
     private Movie getMovie(Element elementMovie) {

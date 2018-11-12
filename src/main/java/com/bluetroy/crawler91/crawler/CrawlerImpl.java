@@ -62,8 +62,8 @@ class CrawlerImpl implements Crawler {
     }
 
     @Override
-    public boolean login(String name, String password, String verificationCode) {
-        return userAuthenticator.login(name, password, verificationCode);
+    public void login(String name, String password, String verificationCode) throws Exception {
+        userAuthenticator.login(name, password, verificationCode);
     }
 
     @Override

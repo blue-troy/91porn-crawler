@@ -22,7 +22,7 @@ public class UserController {
     private Crawler crawler;
 
     @RequestMapping("/login")
-    public void login(@RequestParam String username, @RequestParam String password, @RequestParam("captcha_input") String captchaInput) {
+    public void login(@RequestParam String username, @RequestParam String password, @RequestParam("captcha_input") String captchaInput) throws Exception {
         crawler.login(username, password, captchaInput);
     }
 }

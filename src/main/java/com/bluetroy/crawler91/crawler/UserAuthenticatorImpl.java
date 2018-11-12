@@ -19,15 +19,13 @@ class UserAuthenticatorImpl implements UserAuthenticator {
     ScannerTool scannerTool;
 
     @Override
-    public boolean login(String name, String password, String verificationCode) {
+    public void login(String name, String password, String verificationCode) throws Exception {
         String loginResult = "";
-        try {
-            //todo host统一问题
-            loginResult = HttpClient.post("http://91porn.com/login.php", getLoginParams(name, password, verificationCode));
-        } catch (Exception e) {
-            e.printStackTrace();
+        //todo host统一问题
+        loginResult = HttpClient.post("http://91porn.com/login.php", getLoginParams(name, password, verificationCode));
+        if (!verifyLogin(loginResult, name)) {
+            throw new Exception("登陆失败");
         }
-        return verifyLogin(loginResult, name);
     }
 
     private boolean verifyLogin(String loginResult, String name) {

@@ -15,7 +15,7 @@ interface UserAuthenticator {
      * @param name             账户名
      * @param password         密码
      * @param verificationCode 验证码
-     * @return 登陆是否成功
+     * @throws Exception 登陆失败则抛出异常
      */
-    boolean login(String name, String password, String verificationCode);
+    void login(String name, String password, String verificationCode) throws Exception;
 }

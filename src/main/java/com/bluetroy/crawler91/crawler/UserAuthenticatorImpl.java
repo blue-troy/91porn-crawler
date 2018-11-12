@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.tools.HttpClient;
 import com.bluetroy.crawler91.crawler.tools.ScannerTool;
+import com.bluetroy.crawler91.crawler.tools.XpathTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 @Service("userAuthenticator")
 class UserAuthenticatorImpl implements UserAuthenticator {
     @Autowired
-    ScannerTool scannerTool;
+    private ScannerTool scannerTool;
+    @Autowired
+    private XpathTool xpathTool;
 
     @Override
     public void login(String name, String password, String verificationCode) throws Exception {
@@ -24,7 +27,8 @@ class UserAuthenticatorImpl implements UserAuthenticator {
         //todo host统一问题
         loginResult = HttpClient.post("http://91porn.com/login.php", getLoginParams(name, password, verificationCode));
         if (!verifyLogin(loginResult, name)) {
-            throw new Exception("登陆失败");
+            String loginError = xpathTool.getLoginError(loginResult);
+            throw new Exception();
         }
     }
 

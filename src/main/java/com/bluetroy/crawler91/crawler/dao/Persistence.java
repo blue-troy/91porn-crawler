@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.io.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -43,9 +44,14 @@ class Persistence implements Persistability, CommandLineRunner {
         }
     }
 
+    @PreDestroy
+    public void save() {
+        dao.save(dao);
+    }
+
     @Override
     public void run(String... args) throws Exception {
-        dao.init();
+        dao.init(dao);
     }
 
     private void init(PersistentDao persistentDao) {

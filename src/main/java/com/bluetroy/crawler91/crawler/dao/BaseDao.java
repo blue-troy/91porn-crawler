@@ -32,8 +32,6 @@ public interface BaseDao {
      */
     ConcurrentHashMap<String, Movie> getMovies(MovieStatus movieStatus);
 
-    void init();
-
     Movie getMovie(String key);
 
     void addDownloadUrl(String key, String downloadUrl);

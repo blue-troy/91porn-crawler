@@ -91,16 +91,6 @@ class PersistentDao implements BaseDao, Persistability {
     }
 
     @Override
-    public void init() {
-        init(this);
-    }
-
-    @PreDestroy
-    public void save() {
-        save(this);
-    }
-
-    @Override
     public Movie getMovie(String key) {
         return movieData.get(key);
     }

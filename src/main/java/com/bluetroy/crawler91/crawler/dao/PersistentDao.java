@@ -156,7 +156,7 @@ class PersistentDao implements BaseDao, Persistability {
     }
 
     @Override
-    public void setDownloadedMovies(String key) {
+    public void addDownloadedMovies(String key) {
         downloadedMovies.putIfAbsent(key, TimeUtils.getDate());
     }
 

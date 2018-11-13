@@ -52,7 +52,7 @@ class DownloaderImpl implements Downloader {
         return DOWNLOAD_SERVICE.submit(() -> {
             try {
                 SegmentDownloader.download(getDownloadUrl(key), getFileName(key));
-                dao.setDownloadedMovies(key);
+                dao.addDownloadedMovies(key);
             } catch (Exception e) {
                 dao.addDownloadError(key);
                 log.info("下载失败", e);

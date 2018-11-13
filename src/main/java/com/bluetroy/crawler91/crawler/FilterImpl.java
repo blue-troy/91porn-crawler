@@ -1,6 +1,8 @@
 package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.dao.BaseDao;
+import com.bluetroy.crawler91.crawler.dao.MovieStatus;
+import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import com.bluetroy.crawler91.crawler.filter.FilterUpdateListener;
 import com.bluetroy.crawler91.crawler.filter.MovieFilterChain;
 import com.bluetroy.crawler91.crawler.filter.impl.FilterChainFactory;
@@ -9,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,12 +29,14 @@ class FilterImpl implements Filter {
     @Override
     public void doFilter() {
         log.info("doing filterr. filterChain : " + getFilterInfo());
-        ConcurrentHashMap<String, Boolean> tobeFilter = dao.getTobeFilter();
-        getFilterChain().doFilter(tobeFilter);
-        tobeFilter.forEachKey(1, k -> {
-            log.info(dao.getMovieData().get(k).toString());
+        ConcurrentHashMap<String, Movie> scannedMovies = dao.getMovies(MovieStatus.SCANNED_MOVIES);
+        getFilterChain().doFilter(scannedMovies);
+        LinkedList<String> filteredMovies = new LinkedList<>();
+        scannedMovies.forEachEntry(1, entry -> {
+            filteredMovies.add(entry.getKey());
+            log.info("过滤出了 ： ", entry.getValue());
         });
-        dao.addFilteredMovies(tobeFilter);
+        dao.addFilteredMovies(filteredMovies);
     }
 
     @Override

@@ -54,17 +54,17 @@ class DownloaderImpl implements Downloader {
                 SegmentDownloader.download(getDownloadUrl(key), getFileName(key));
                 dao.setDownloadedMovies(key);
             } catch (Exception e) {
-                dao.setDownloadError(key);
+                dao.addDownloadError(key);
                 log.info("下载失败", e);
             }
         });
     }
 
     private String getDownloadUrl(String key) {
-        return dao.getMovieData(key).getDownloadURL();
+        return dao.getMovie(key).getDownloadURL();
     }
 
     private String getFileName(String key) {
-        return dao.getMovieData(key).getFileName();
+        return dao.getMovie(key).getFileName();
     }
 }

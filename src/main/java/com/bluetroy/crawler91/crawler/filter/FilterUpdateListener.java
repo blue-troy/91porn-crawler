@@ -19,6 +19,6 @@ public class FilterUpdateListener {
     private BaseDao dao;
 
     public void update(FilterVO filterVO) {
-        dao.getScannedMovies().entrySet().forEach(entry -> entry.setValue(false));
+        dao.resetFilteredStatus();
     }
 }

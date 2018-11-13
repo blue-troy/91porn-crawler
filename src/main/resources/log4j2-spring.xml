@@ -18,7 +18,7 @@
         <Logger name="com.bluetroy.crawler91" level="info"/>
         <root level="warn">
             <appenderref ref="CONSOLE"/>
-            <appenderRef ref="FILE" />
+            <appenderRef ref="FILE"/>
         </root>
     </loggers>
 </configuration>

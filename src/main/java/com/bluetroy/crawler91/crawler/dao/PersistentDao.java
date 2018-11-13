@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PreDestroy;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -53,33 +53,31 @@ class PersistentDao implements BaseDao, Persistability {
     private Persistence persistence;
 
     @Override
-    public void addFilteredMovies(ConcurrentHashMap<String, Boolean> filteredMovies) {
-        this.filteredMovies.putAll(filteredMovies);
+    public void addFilteredMovies(Queue<String> filteredMovies) {
+        filteredMovies.forEach(key -> this.filteredMovies.put(key, false));
     }
 
-    @Override
-    public void addToDownloadMoviesByKey(String k) {
-        toDownloadMovies.offer(k);
-        filteredMovies.replace(k, true);
-    }
 
-    //todo 完成功能
     @Override
-    public HashMap<String, Movie> getMoviesData(MovieStatus movieStatus) {
-        HashMap<String, Movie> hashMap = new HashMap<>();
+    public ConcurrentHashMap<String, Movie> getMovies(MovieStatus movieStatus) {
         switch (movieStatus) {
             case TO_DOWNLOAD_MOVIES:
+                ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
                 toDownloadMovies.forEach(k -> {
-                    hashMap.put(k, movieData.get(k));
+                    data.put(k, movieData.get(k));
                 });
-                break;
+                return data;
+            case SCANNED_MOVIES:
+                return getScannedMovies();
+            case FILTERED_MOVIES:
+                return getFilteredMovies();
+            case DOWNLOAD_ERROR:
+                return getDownloadErrorMovies();
+            case DOWNLOADED_MOVIES:
+                return getDownloadedMovies();
             default:
-                getMap(movieStatus).forEachKey(1, k -> {
-                    hashMap.put((String) k, movieData.get((String) k));
-                });
+                return (ConcurrentHashMap<String, Movie>) Collections.EMPTY_MAP;
         }
-
-        return hashMap;
     }
 
     @Override
@@ -103,17 +101,19 @@ class PersistentDao implements BaseDao, Persistability {
     }
 
     @Override
-    public Movie getMovieData(String key) {
-        return getMovieData().get(key);
+    public Movie getMovie(String key) {
+        return movieData.get(key);
     }
 
     @Override
     public void addDownloadUrl(String key, String downloadUrl) {
-        getMovieData(key).setDownloadURL(downloadUrl);
+        getMovie(key).setDownloadURL(downloadUrl);
+        toDownloadMovies.offer(key);
+        filteredMovies.replace(key, true);
     }
 
     @Override
-    public void addScannedMovie(List<Movie> movies) {
+    public void addScannedMovies(List<Movie> movies) {
         for (Movie movie : movies) {
             addScannedMovie(movie);
         }
@@ -133,7 +133,6 @@ class PersistentDao implements BaseDao, Persistability {
             if (movie.compareTo(movieData.get(movie.getKey())) != 0) {
                 movieData.get(movie.getKey()).update(movie);
                 scannedMovies.replace(movie.getKey(), false);
-                movieData.get(movie.getKey()).update(movie);
             }
         } else {
             scannedMovies.putIfAbsent(movie.getKey(), false);
@@ -141,24 +140,50 @@ class PersistentDao implements BaseDao, Persistability {
         }
     }
 
-    private ConcurrentHashMap getMap(MovieStatus movieStatus) {
-        switch (movieStatus) {
-            case SCANNED_MOVIES:
-                return scannedMovies;
-            case FILTERED_MOVIES:
-                return getFilteredMovies();
-            case DOWNLOAD_ERROR:
-                return downloadError;
-            case DOWNLOADED_MOVIES:
-                return downloadedMovies;
-            default:
-        }
-        return (ConcurrentHashMap) Collections.EMPTY_MAP;
+    @Override
+    public void resetFilteredStatus() {
+        scannedMovies.entrySet().forEach(entry -> entry.setValue(false));
     }
 
     @Override
-    public ConcurrentHashMap<String, Boolean> getScannedMovies() {
-        return scannedMovies;
+    public int scannedMovieCount() {
+        return scannedMovies.size();
+    }
+
+    @Override
+    public void addDownloadError(String key) {
+        if (downloadError.containsKey(key)) {
+            downloadError.get(key).update();
+        } else {
+            downloadError.putIfAbsent(key, new DownloadErrorInfo(key));
+        }
+    }
+
+    private ConcurrentHashMap<String, Movie> getDownloadedMovies() {
+        ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
+        downloadedMovies.forEachKey(1, key -> data.put(key, getMovie(key)));
+        return data;
+    }
+
+    @Override
+    public void setDownloadedMovies(String key) {
+        downloadedMovies.putIfAbsent(key, TimeUtils.getDate());
+    }
+
+    private ConcurrentHashMap<String, Movie> getDownloadErrorMovies() {
+        ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
+        downloadError.forEachKey(1, key -> data.put(key, getMovie(key)));
+        return data;
+    }
+
+    private ConcurrentHashMap<String, Movie> getScannedMovies() {
+        ConcurrentHashMap<String, Movie> tobeFilter = new ConcurrentHashMap<>(16);
+        scannedMovies.forEach(1, (k, v) -> {
+            if (!v) {
+                tobeFilter.put(k, getMovie(k));
+            }
+        });
+        return tobeFilter;
     }
 
     @Override
@@ -170,61 +195,14 @@ class PersistentDao implements BaseDao, Persistability {
         ConcurrentHashMap<String, Movie> concurrentHashMap = new ConcurrentHashMap<>();
         filteredMovies.forEachEntry(1, entry -> {
             if (!entry.getValue()) {
-                concurrentHashMap.put(entry.getKey(), getMovieData(entry.getKey()));
+                concurrentHashMap.put(entry.getKey(), getMovie(entry.getKey()));
             }
         });
         return concurrentHashMap;
     }
 
     @Override
-    public ConcurrentHashMap<String, Movie> getMovieData() {
-        return movieData;
-    }
-
-    @Override
-    public ConcurrentHashMap<String, String> getDownloadedMovies() {
-        return downloadedMovies;
-    }
-
-    @Override
-    public void setDownloadedMovies(String key) {
-        downloadedMovies.putIfAbsent(key, TimeUtils.getDate());
-    }
-
-    @Override
     public ConcurrentHashMap<String, DownloadErrorInfo> getDownloadError() {
         return downloadError;
-    }
-
-    @Override
-    public void setDownloadError(String key) {
-        if (downloadError.containsKey(key)) {
-            downloadError.get(key).update();
-        } else {
-            downloadError.putIfAbsent(key, new DownloadErrorInfo(key));
-        }
-    }
-
-    @Override
-    public ConcurrentHashMap<String, Boolean> getTobeFilter() {
-        //todo 根据 scannedMovies 设置初始值
-        ConcurrentHashMap<String, Boolean> tobeFilter = new ConcurrentHashMap<>(16);
-        getScannedMovies().forEach(5, (k, v) -> {
-            if (v) {
-                return;
-            }
-            tobeFilter.put(k, false);
-            scannedMovies.replace(k, true);
-        });
-        return tobeFilter;
-    }
-
-    @Override
-    public HashMap<String, Movie> getFilteredMoviesMap() {
-        HashMap<String, Movie> hashMap = new HashMap<>();
-        filteredMovies.forEachKey(1, k -> {
-            hashMap.put(k, movieData.get(k));
-        });
-        return hashMap;
     }
 }

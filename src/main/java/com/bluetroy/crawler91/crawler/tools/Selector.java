@@ -1,21 +1,16 @@
 package com.bluetroy.crawler91.crawler.tools;
 
-import com.bluetroy.crawler91.crawler.dao.BaseDao;
-import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * Created with IntelliJ IDEA.

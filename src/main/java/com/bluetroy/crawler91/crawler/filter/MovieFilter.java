@@ -1,5 +1,7 @@
 package com.bluetroy.crawler91.crawler.filter;
 
+import com.bluetroy.crawler91.crawler.dao.entity.Movie;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -11,7 +13,7 @@ public interface MovieFilter {
      *
      * @param tobeFilter 传入一个要被过滤的map
      */
-    void doFilter(ConcurrentHashMap<String, Boolean> tobeFilter);
+    void doFilter(ConcurrentHashMap<String, Movie> tobeFilter);
 
     /**
      * 显示过滤器的内容

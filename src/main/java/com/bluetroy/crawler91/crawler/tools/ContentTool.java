@@ -1,16 +1,14 @@
 package com.bluetroy.crawler91.crawler.tools;
 
-import com.bluetroy.crawler91.crawler.Crawler;
-import com.bluetroy.crawler91.crawler.dao.BaseDao;
 import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,7 +35,7 @@ public class ContentTool {
      * @param moviesData
      * @return 返回拥有详细视频信息的对象队列
      */
-    public Queue<KeyContent> getDetailContent(HashMap<String, Movie> moviesData) {
+    public Queue<KeyContent> getDetailContent(ConcurrentHashMap<String, Movie> moviesData) {
         Queue<KeyContent> contentQueue = new LinkedList<>();
         moviesData.forEach((key, movie) -> contentQueue.offer(new KeyContent(key, HttpClient.getInFuture(movie.getDetailURL()))));
         return contentQueue;

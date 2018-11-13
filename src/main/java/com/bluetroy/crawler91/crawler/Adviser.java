@@ -1,7 +1,5 @@
 package com.bluetroy.crawler91.crawler;
 
-import java.io.IOException;
-
 /**
  * Created with IntelliJ IDEA.
  * Description:

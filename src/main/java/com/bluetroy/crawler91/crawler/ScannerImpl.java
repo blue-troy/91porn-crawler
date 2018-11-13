@@ -51,7 +51,7 @@ class ScannerImpl implements Scanner {
     }
 
     private void scanFilteredMovieDownloadUrl() {
-        Queue<KeyContent> keyContents = contentTool.getDetailContent(dao.getMoviesData(MovieStatus.FILTERED_MOVIES));
+        Queue<KeyContent> keyContents = contentTool.getDetailContent(dao.getMovies(MovieStatus.FILTERED_MOVIES));
         scannerTool.scanDownloadUrls(keyContents);
     }
 

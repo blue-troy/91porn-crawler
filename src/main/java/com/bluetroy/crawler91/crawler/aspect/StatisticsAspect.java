@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 
 /**
@@ -44,7 +45,7 @@ public class StatisticsAspect {
      */
     @After("execution(void com.bluetroy.crawler91.crawler.Crawler.scanMovies())")
     public void gatherScannedMoviesCount() throws Exception {
-        adviser.message("/scannedMovies/count", dao.getScannedMovies().size());
+        adviser.message("/scannedMovies/count", dao.scannedMovieCount());
     }
 
     @After("execution(void com.bluetroy.crawler91.crawler.Crawler.doFilter())")
@@ -52,7 +53,7 @@ public class StatisticsAspect {
         adviser.message("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }
 
-    @After("execution(void com.bluetroy.crawler91.crawler.tools.Selector.scanDownloadUrl(*))")
+    @After("execution(void com.bluetroy.crawler91.crawler.tools.Selector.getDownloadUrl(*))")
     public void gatherToDownloadMovies() throws Exception {
         sendToDownloadMovies();
     }
@@ -93,7 +94,7 @@ public class StatisticsAspect {
     }
 
     private void addDownloadingMovie(String key) throws Exception {
-        downloadingMovies.put(key, dao.getMovieData(key));
+        downloadingMovies.put(key, dao.getMovie(key));
         sendDownloadingMovies();
     }
 
@@ -102,8 +103,8 @@ public class StatisticsAspect {
         sendDownloadingMovies();
     }
 
-    private HashMap<String, Movie> getData(MovieStatus movieStatus) {
-        return dao.getMoviesData(movieStatus);
+    private ConcurrentHashMap<String, Movie> getData(MovieStatus movieStatus) {
+        return dao.getMovies(movieStatus);
     }
 
 }

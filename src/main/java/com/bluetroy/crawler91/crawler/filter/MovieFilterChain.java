@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.crawler.filter;
 
+import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
@@ -21,7 +22,7 @@ public class MovieFilterChain implements MovieFilter {
     }
 
     @Override
-    public void doFilter(ConcurrentHashMap<String, Boolean> tobeFilter) {
+    public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
         log.info("当前责任链为：{}", this::toString);
         for (MovieFilter movieFilter : movieFilterList) {
             movieFilter.doFilter(tobeFilter);

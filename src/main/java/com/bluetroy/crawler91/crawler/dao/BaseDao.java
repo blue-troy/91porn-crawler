@@ -3,8 +3,8 @@ package com.bluetroy.crawler91.crawler.dao;
 import com.bluetroy.crawler91.crawler.dao.entity.DownloadErrorInfo;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -17,37 +17,43 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Time: 5:05 PM
  */
 public interface BaseDao {
-    void addFilteredMovies(ConcurrentHashMap<String, Boolean> filteredMovies);
+    /**
+     * 通知dao处理这部分通过过滤的视频
+     *
+     * @param filteredMovies 通过过滤的视频key队列
+     */
+    void addFilteredMovies(Queue<String> filteredMovies);
 
-    void addToDownloadMoviesByKey(String k);
 
-    HashMap<String, Movie> getMoviesData(MovieStatus movieStatus);
+    /**
+     * 获取某个状态的视频的哈希表形式
+     * @param movieStatus 视频状态
+     * @return 该视频状态的视频表
+     */
+    ConcurrentHashMap<String, Movie> getMovies(MovieStatus movieStatus);
 
     void init();
 
-    Movie getMovieData(String key);
+    Movie getMovie(String key);
 
     void addDownloadUrl(String key, String downloadUrl);
 
-    void addScannedMovie(List<Movie> movies);
+    void addScannedMovies(List<Movie> movies);
 
-    ConcurrentHashMap<String, Boolean> getScannedMovies();
+    void addScannedMovie(Movie movie);
+
+    /**
+     * 当过滤器被重制时应当调用这个方法
+     */
+    void resetFilteredStatus();
+
+    int scannedMovieCount();
+
+    void addDownloadError(String key);
 
     LinkedBlockingDeque<String> getToDownloadMovies();
 
-    ConcurrentHashMap<String, Movie> getMovieData();
-
-    ConcurrentHashMap<String, String> getDownloadedMovies();
-
-    void setDownloadedMovies(String key);
-
     ConcurrentHashMap<String, DownloadErrorInfo> getDownloadError();
 
-    void setDownloadError(String key);
-
-    ConcurrentHashMap<String, Boolean> getTobeFilter();
-
-    HashMap<String, Movie> getFilteredMoviesMap();
-
-    void addScannedMovie(Movie movie);
+    void setDownloadedMovies(String key);
 }

@@ -48,24 +48,24 @@ class Persistence implements Persistability, CommandLineRunner {
         dao.init();
     }
 
-    private void init(PersistentDao persistentRepository) {
+    private void init(PersistentDao persistentDao) {
         log.info("初始化repository数据");
         try {
-            initDataFromFile(persistentRepository);
+            initDataFromFile(persistentDao);
         } catch (IOException | ClassNotFoundException e) {
             log.warn("无法从文件中读取repository初始化信息");
-            initDataWithEmpty(persistentRepository);
+            initDataWithEmpty(persistentDao);
         }
     }
 
-    private void initDataWithEmpty(PersistentDao persistentRepository) {
+    private void initDataWithEmpty(PersistentDao persistentDao) {
         log.warn("repository数据初始化为空");
-        persistentRepository.scannedMovies = new ConcurrentHashMap<String, Boolean>();
-        persistentRepository.filteredMovies = new ConcurrentHashMap<String, Boolean>();
-        persistentRepository.toDownloadMovies = new LinkedBlockingDeque<String>();
-        persistentRepository.downloadedMovies = new ConcurrentHashMap<String, String>();
-        persistentRepository.downloadError = new ConcurrentHashMap<String, DownloadErrorInfo>();
-        persistentRepository.movieData = new ConcurrentHashMap<String, Movie>();
+        persistentDao.scannedMovies = new ConcurrentHashMap<String, Boolean>();
+        persistentDao.filteredMovies = new ConcurrentHashMap<String, Boolean>();
+        persistentDao.toDownloadMovies = new LinkedBlockingDeque<String>();
+        persistentDao.downloadedMovies = new ConcurrentHashMap<String, String>();
+        persistentDao.downloadError = new ConcurrentHashMap<String, DownloadErrorInfo>();
+        persistentDao.movieData = new ConcurrentHashMap<String, Movie>();
     }
 
     private void initDataFromFile(PersistentDao persistentRepository) throws IOException, ClassNotFoundException {

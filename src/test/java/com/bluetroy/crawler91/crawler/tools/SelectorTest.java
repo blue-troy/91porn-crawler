@@ -3,7 +3,6 @@ package com.bluetroy.crawler91.crawler.tools;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
@@ -29,6 +28,7 @@ public class SelectorTest {
         String loginError = new Selector().getLoginErrorMessage(loginResult);
         System.out.println(loginError);
     }
+
     @Test
     public void select() throws IOException {
         Document doc = Jsoup.connect("http://en.wikipedia.org/").get();

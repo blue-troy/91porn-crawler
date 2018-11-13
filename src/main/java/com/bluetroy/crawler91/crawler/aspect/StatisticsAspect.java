@@ -52,7 +52,7 @@ public class StatisticsAspect {
         adviser.message("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }
 
-    @After("execution(void com.bluetroy.crawler91.crawler.tools.XpathTool.scanDownloadUrl(*))")
+    @After("execution(void com.bluetroy.crawler91.crawler.tools.Selector.scanDownloadUrl(*))")
     public void gatherToDownloadMovies() throws Exception {
         sendToDownloadMovies();
     }

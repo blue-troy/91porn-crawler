@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.PreDestroy;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -89,6 +90,11 @@ class PersistentDao implements BaseDao, Persistability {
     @Override
     public Movie getMovieData(String key) {
         return getMovieData().get(key);
+    }
+
+    @Override
+    public void addDownloadUrl(String key, String downloadUrl) {
+        getMovieData(key).setDownloadURL(downloadUrl);
     }
 
     private ConcurrentHashMap getMap(MovieStatus movieStatus) {
@@ -173,6 +179,13 @@ class PersistentDao implements BaseDao, Persistability {
         return hashMap;
     }
 
+    @Override
+    public void addScannedMovie(List<Movie> movies) {
+        for (Movie movie : movies) {
+            addScannedMovie(movie);
+        }
+    }
+
     /**
      * 设置扫描到的视频
      * 若视频曾经被扫描过，且有所不同则应该去更新视频的信息
@@ -182,7 +195,7 @@ class PersistentDao implements BaseDao, Persistability {
      * @param movie
      */
     @Override
-    public void setScannedMovie(Movie movie) {
+    public void addScannedMovie(Movie movie) {
         if (scannedMovies.containsKey(movie.getKey())) {
             if (movie.compareTo(movieData.get(movie.getKey())) != 0) {
                 movieData.get(movie.getKey()).update(movie);

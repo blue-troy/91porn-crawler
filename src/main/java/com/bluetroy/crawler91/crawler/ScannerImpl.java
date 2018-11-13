@@ -22,12 +22,10 @@ class ScannerImpl implements Scanner {
     @Autowired
     private ScannerTool scannerTool;
     @Autowired
-    private BaseDao dao;
-    @Autowired
     private ContentTool contentTool;
 
     static {
-        URLS_FOR_SCAN.add("http://94.91p14.space/v.php?category=hot&viewtype=basic");
+        URLS_FOR_SCAN.add("http://91porn.com/v.php?category=hot&viewtype=basic");
     }
 
     @Override
@@ -40,7 +38,8 @@ class ScannerImpl implements Scanner {
      */
     @Override
     public void scanMovies() {
-        scanMoviesByUrlList();
+        LinkedBlockingDeque<Future<String>> movieContents = contentTool.getMovieContents();
+        scannerTool.scanMovies(movieContents);
     }
 
     @Override
@@ -53,10 +52,6 @@ class ScannerImpl implements Scanner {
         scannerTool.scanDownloadUrls(keyContentQueue);
     }
 
-    private void scanMoviesByUrlList() {
-        LinkedBlockingDeque<Future<String>> movieContents = contentTool.getMovieContents();
-        scannerTool.scanMovies(movieContents);
-    }
 
     @Override
     public List<String> getScanUrls() {

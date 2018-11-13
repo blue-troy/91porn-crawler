@@ -8,6 +8,8 @@ import org.jsoup.select.Elements;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +20,15 @@ import java.io.IOException;
  * Time: 7:44 PM
  */
 public class SelectorTest {
+
+    private static final String loginErrorHtmlFile = "/Users/heyixin/IdeaProjects/crawler91/src/main/resources/test/loginError.html";
+
+    @Test
+    public void getLoginError() throws Exception {
+        String loginResult = new String(Files.readAllBytes(Paths.get(loginErrorHtmlFile)));
+        String loginError = new Selector().getLoginErrorMessage(loginResult);
+        System.out.println(loginError);
+    }
     @Test
     public void select() throws IOException {
         Document doc = Jsoup.connect("http://en.wikipedia.org/").get();

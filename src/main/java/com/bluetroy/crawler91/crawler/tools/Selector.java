@@ -12,6 +12,8 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -25,29 +27,26 @@ import java.util.concurrent.Future;
  */
 @Log4j2
 @Component
-public class XpathTool {
-    @Autowired
-    private BaseDao dao;
-
-    public void scanDownloadUrl(KeyContent keyContent) {
-        try {
-            String content = keyContent.getContent().get();
-            Document document = Jsoup.parse(content);
-            Movie movie = dao.getMovieData().get(keyContent.getKey());
-            String downloadURL = document.selectFirst("source").attr("src");
-            movie.setDownloadURL(downloadURL);
-            log.info("扫描到了 {} 的下载链接：{}", movie.getTitle(), movie.getDownloadURL());
-            dao.addToDownloadMoviesByKey(movie.getKey());
-        } catch (InterruptedException | ExecutionException e) {
-            Movie movie = dao.getMovieData().get(keyContent.getKey());
-            log.warn("搜索不到 {} {} 的下载地址，应该是被ban了", movie.getTitle(), movie.getDetailURL(), e);
-            //todo 应该得有被ban的策略
-        }
-    }
+public class Selector {
 
     public String getLoginErrorMessage(String html) {
         return Jsoup.parse(html).select("#container > div.errorbox").text();
 
+    }
+
+    public List<Movie> getMovies(String html) throws ExecutionException, InterruptedException {
+        List<Movie> movieList = new ArrayList<>();
+        Document document = Jsoup.parse(html);
+        Elements movies = document.select("#videobox > table > tbody > tr > td > div.listchannel");
+        for (Element movieElement : movies) {
+            movieList.add(getMovie(movieElement));
+        }
+        return movieList;
+    }
+
+    public String getDownloadUrl(String html) {
+        Document document = Jsoup.parse(html);
+        return document.selectFirst("source").attr("src");
     }
 
     private Movie getMovie(Element elementMovie) {
@@ -63,22 +62,5 @@ public class XpathTool {
                 .setIntegration(elementMovie.childNode(28).toString().replaceAll("\\s*", ""));
         log.info("扫描到了视频：{} ", movie.toString());
         return movie;
-    }
-
-    public void setMovie(Future<String> future) {
-        try {
-            setMovie(future.get());
-        } catch (InterruptedException | ExecutionException e) {
-            log.warn("网络访问错误", e);
-        }
-    }
-
-    private void setMovie(String contentString) {
-        Document document = Jsoup.parse(contentString);
-        Elements movies = document.select("#videobox > table > tbody > tr > td > div.listchannel");
-        for (Element movieElement : movies) {
-            Movie movie = getMovie(movieElement);
-            dao.setScannedMovie(movie);
-        }
     }
 }

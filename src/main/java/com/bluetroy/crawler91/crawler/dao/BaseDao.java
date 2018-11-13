@@ -4,6 +4,7 @@ import com.bluetroy.crawler91.crawler.dao.entity.DownloadErrorInfo;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -26,6 +27,10 @@ public interface BaseDao {
 
     Movie getMovieData(String key);
 
+    void addDownloadUrl(String key, String downloadUrl);
+
+    void addScannedMovie(List<Movie> movies);
+
     ConcurrentHashMap<String, Boolean> getScannedMovies();
 
     LinkedBlockingDeque<String> getToDownloadMovies();
@@ -46,5 +51,5 @@ public interface BaseDao {
 
     HashMap<String, Movie> getFilteredMoviesMap();
 
-    void setScannedMovie(Movie movie);
+    void addScannedMovie(Movie movie);
 }

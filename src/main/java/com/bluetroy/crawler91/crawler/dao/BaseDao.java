@@ -35,8 +35,6 @@ public interface BaseDao {
 
     LinkedBlockingDeque<String> getToDownloadMovies();
 
-    ConcurrentHashMap<String, Boolean> getFilteredMovies();
-
     ConcurrentHashMap<String, Movie> getMovieData();
 
     ConcurrentHashMap<String, String> getDownloadedMovies();

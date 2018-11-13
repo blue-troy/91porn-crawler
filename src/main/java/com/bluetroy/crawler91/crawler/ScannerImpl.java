@@ -1,6 +1,7 @@
 package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.dao.BaseDao;
+import com.bluetroy.crawler91.crawler.dao.MovieStatus;
 import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
 import com.bluetroy.crawler91.crawler.tools.ContentTool;
 import com.bluetroy.crawler91.crawler.tools.ScannerTool;
@@ -9,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
 
 
 /**
@@ -23,6 +24,8 @@ class ScannerImpl implements Scanner {
     private ScannerTool scannerTool;
     @Autowired
     private ContentTool contentTool;
+    @Autowired
+    private BaseDao dao;
 
     static {
         URLS_FOR_SCAN.add("http://91porn.com/v.php?category=hot&viewtype=basic");
@@ -38,8 +41,8 @@ class ScannerImpl implements Scanner {
      */
     @Override
     public void scanMovies() {
-        LinkedBlockingDeque<Future<String>> movieContents = contentTool.getMovieContents();
-        scannerTool.scanMovies(movieContents);
+        Queue<Future<String>> contents = contentTool.getContents(URLS_FOR_SCAN);
+        scannerTool.scanMovies(contents);
     }
 
     @Override
@@ -48,8 +51,8 @@ class ScannerImpl implements Scanner {
     }
 
     private void scanFilteredMovieDownloadUrl() {
-        LinkedBlockingDeque<KeyContent> keyContentQueue = contentTool.getDetailContents();
-        scannerTool.scanDownloadUrls(keyContentQueue);
+        Queue<KeyContent> keyContents = contentTool.getDetailContent(dao.getMoviesData(MovieStatus.FILTERED_MOVIES));
+        scannerTool.scanDownloadUrls(keyContents);
     }
 
 

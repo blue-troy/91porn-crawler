@@ -25,13 +25,28 @@ class PersistentDao implements BaseDao, Persistability {
     /**
      * 扫描下来的 movie 信息
      * key:movie的key
-     * boolean:记录是否被filtered
+     * boolean:记录是否被过滤过了,过滤过了在不修改过滤器的情况下不应该再被过滤
      */
     ConcurrentHashMap<String, Boolean> scannedMovies;
+    /**
+     * 即将要下载的队列，队列内容为视频的key
+     */
     LinkedBlockingDeque<String> toDownloadMovies;
+    /**
+     * 视频被过滤后加载到此，若已经加入下载队列则标记为true，未加入为false
+     */
     ConcurrentHashMap<String, Boolean> filteredMovies;
+    /**
+     * 视频信息档案仓库，key为视频key，value为视频信息对象
+     */
     ConcurrentHashMap<String, Movie> movieData;
+    /**
+     * 已经下载完毕的视频的信息，key为视频key，value为视频成功下载的时间
+     */
     ConcurrentHashMap<String, String> downloadedMovies;
+    /**
+     * 下载错误的视频信息，key为视频key，value为下载错误信息
+     */
     ConcurrentHashMap<String, DownloadErrorInfo> downloadError;
     @Autowired
     transient
@@ -97,12 +112,41 @@ class PersistentDao implements BaseDao, Persistability {
         getMovieData(key).setDownloadURL(downloadUrl);
     }
 
+    @Override
+    public void addScannedMovie(List<Movie> movies) {
+        for (Movie movie : movies) {
+            addScannedMovie(movie);
+        }
+    }
+
+    /**
+     * 设置扫描到的视频
+     * 若视频曾经被扫描过，且有所不同则应该去更新视频的信息
+     * 没有不同就算了。
+     * 若不被扫描过，则应当去增加视频的信息。
+     *
+     * @param movie
+     */
+    @Override
+    public void addScannedMovie(Movie movie) {
+        if (scannedMovies.containsKey(movie.getKey())) {
+            if (movie.compareTo(movieData.get(movie.getKey())) != 0) {
+                movieData.get(movie.getKey()).update(movie);
+                scannedMovies.replace(movie.getKey(), false);
+                movieData.get(movie.getKey()).update(movie);
+            }
+        } else {
+            scannedMovies.putIfAbsent(movie.getKey(), false);
+            movieData.put(movie.getKey(), movie);
+        }
+    }
+
     private ConcurrentHashMap getMap(MovieStatus movieStatus) {
         switch (movieStatus) {
             case SCANNED_MOVIES:
                 return scannedMovies;
             case FILTERED_MOVIES:
-                return filteredMovies;
+                return getFilteredMovies();
             case DOWNLOAD_ERROR:
                 return downloadError;
             case DOWNLOADED_MOVIES:
@@ -122,9 +166,14 @@ class PersistentDao implements BaseDao, Persistability {
         return toDownloadMovies;
     }
 
-    @Override
-    public ConcurrentHashMap<String, Boolean> getFilteredMovies() {
-        return filteredMovies;
+    private ConcurrentHashMap<String, Movie> getFilteredMovies() {
+        ConcurrentHashMap<String, Movie> concurrentHashMap = new ConcurrentHashMap<>();
+        filteredMovies.forEachEntry(1, entry -> {
+            if (!entry.getValue()) {
+                concurrentHashMap.put(entry.getKey(), getMovieData(entry.getKey()));
+            }
+        });
+        return concurrentHashMap;
     }
 
     @Override
@@ -177,34 +226,5 @@ class PersistentDao implements BaseDao, Persistability {
             hashMap.put(k, movieData.get(k));
         });
         return hashMap;
-    }
-
-    @Override
-    public void addScannedMovie(List<Movie> movies) {
-        for (Movie movie : movies) {
-            addScannedMovie(movie);
-        }
-    }
-
-    /**
-     * 设置扫描到的视频
-     * 若视频曾经被扫描过，且有所不同则应该去更新视频的信息
-     * 没有不同就算了。
-     * 若不被扫描过，则应当去增加视频的信息。
-     *
-     * @param movie
-     */
-    @Override
-    public void addScannedMovie(Movie movie) {
-        if (scannedMovies.containsKey(movie.getKey())) {
-            if (movie.compareTo(movieData.get(movie.getKey())) != 0) {
-                movieData.get(movie.getKey()).update(movie);
-                scannedMovies.replace(movie.getKey(), false);
-                movieData.get(movie.getKey()).update(movie);
-            }
-        } else {
-            scannedMovies.putIfAbsent(movie.getKey(), false);
-            movieData.put(movie.getKey(), movie);
-        }
     }
 }

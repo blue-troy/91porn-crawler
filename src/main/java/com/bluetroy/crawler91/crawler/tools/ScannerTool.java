@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,9 +28,9 @@ public class ScannerTool {
     @Autowired
     private BaseDao dao;
 
-    public void scanDownloadUrls(LinkedBlockingDeque<KeyContent> keyContentQueue) {
+    public void scanDownloadUrls(Queue<KeyContent> keyContents) {
         KeyContent keyContent;
-        while ((keyContent = keyContentQueue.poll()) != null) {
+        while ((keyContent = keyContents.poll()) != null) {
             if (keyContent.getContent().isDone()) {
                 try {
                     String downloadUrl = selector.getDownloadUrl(keyContent.getContent().get());
@@ -40,12 +40,12 @@ public class ScannerTool {
                     e.printStackTrace();
                 }
             } else {
-                keyContentQueue.offer(keyContent);
+                keyContents.offer(keyContent);
             }
         }
     }
 
-    public void scanMovies(LinkedBlockingDeque<Future<String>> movieContents) {
+    public void scanMovies(Queue<Future<String>> movieContents) {
         Future<String> html;
         while ((html = movieContents.poll()) != null) {
             if (html.isDone()) {

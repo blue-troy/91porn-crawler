@@ -4,39 +4,77 @@ $(function () {
 });
 
 function start() {
-    patch("/start")
-        .then(response => response.text())
-        .then(data => alert(data))
+    fetch("/start", {method: 'PATCH'})
+        .then(response => {
+            if (response.ok) {
+                alert("成功开启服务器")
+            } else {
+                alert("服务器开启失败")
+            }
+        })
 }
 
 function shutdown() {
-    patch("/shutdown").then((response) => alert(response.text()));
+    fetch("/shutdown", {method: 'PATCH'}).then(response => {
+        if (response.ok) {
+            alert("服务器关闭成功");
+        } else {
+            alert("服务器关闭失败");
+        }
+    });
 }
 
 function showFilterEditor() {
     document.getElementById("FilterEditor").style.visibility = "";
 }
 
+function toJSONString(form) {
+    let obj = {};
+    let elements = form.querySelectorAll("input, select, textarea");
+    for (let i = 0; i < elements.length; ++i) {
+        const element = elements[i];
+        const name = element.name;
+        const value = element.value;
+        if (name) {
+            obj[name] = value;
+        }
+    }
+    return JSON.stringify(obj);
+}
+
 function setProxy() {
-    const form = new FormData(document.getElementById('set-proxy-form'));
     fetch("/proxy", {
         method: 'PATCH',
-        body: form,
+        body: toJSONString(document.getElementById('set-proxy-form')),
+        headers: {
+            'content-type': 'application/json'
+        },
     }).then(response => {
         if (response.ok) {
             alert("代理设置成功");
-            $('#setProxyModal').modal('hide');
+        } else {
+            alert("代理设置失败,请输入正确的代理信息");
         }
-    })
+    }).finally($('#setProxyModal').modal('hide'));
 
 }
 
 function setFilter() {
-    $.post("/filter", $('#FilterEditor').serialize(), function (data) {
-        alert(data);
-        showFilter();
-        document.getElementById("FilterEditor").style.visibility = "hidden";
-    });
+    const filerEditor = document.getElementById("FilterEditor");
+    fetch("/filter", {
+        method: 'POST',
+        body: toJSONString(filerEditor),
+        headers: {
+            'content-type': 'application/json'
+        },
+    }).then(response => {
+        if (response.ok) {
+            alert("filter设置成功");
+            showFilter();
+        } else {
+            alert("filter设置失败");
+        }
+    }).finally(() => filerEditor.style.visibility = "hidden");
 }
 
 function showFilter() {
@@ -64,7 +102,6 @@ function handleTable(response) {
     }
 }
 
-//todo 下面两个方法可以改成一个方法
 class Movie {
     constructor(data, method) {
         this.title = data.title;
@@ -113,12 +150,4 @@ function login() {
 function initTable() {
     $("#info-table-body").empty();
     $.get("/info");
-}
-
-function patch(path) {
-    return fetch(path, {method: 'PATCH'});
-}
-
-function put(path) {
-    return fetch(path, {method: 'PUT'})
 }

@@ -59,4 +59,5 @@ class FilterImpl implements Filter {
             filterUpdateListener.update(filterVO);
         }
     }
+    
 }

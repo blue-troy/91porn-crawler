@@ -1,5 +1,7 @@
 package com.bluetroy.crawler91.service;
 
+import com.bluetroy.crawler91.vo.ProxyInfo;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
  * Date: 2018-11-07
  * Time: 5:32 PM
  */
+@Log4j2
 @Component
 public class ProxyService {
     static {
@@ -17,8 +20,9 @@ public class ProxyService {
         System.setProperty("http.proxyPort", "1087");
     }
 
-    public void setProxy(String proxyHost, String proxyPort) {
-        System.setProperty("http.proxyHost", proxyHost);
-        System.setProperty("http.proxyPort", proxyPort);
+    public void setProxy(ProxyInfo proxyInfo) {
+        System.setProperty("http.proxyHost", proxyInfo.getProxyHost());
+        System.setProperty("http.proxyPort", proxyInfo.getProxyPort());
+        log.info("set proxy {}:{}", proxyInfo.getProxyHost(), proxyInfo.getProxyPort());
     }
 }

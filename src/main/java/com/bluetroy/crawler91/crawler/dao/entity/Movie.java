@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.crawler.dao.entity;
 
+import com.bluetroy.crawler91.crawler.utils.TimeUtils;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -88,8 +89,8 @@ public class Movie implements Serializable, Comparable<Movie> {
         return this;
     }
 
-    public Movie setAddTime(String addTime) {
-        this.addTime = addTime;
+    public Movie setAddTime(String addTime) throws Exception {
+        this.addTime = TimeUtils.getDate(addTime);
         return this;
     }
 

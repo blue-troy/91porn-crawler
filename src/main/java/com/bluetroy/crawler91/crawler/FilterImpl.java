@@ -46,7 +46,7 @@ class FilterImpl implements Filter {
 
     private MovieFilterChain getFilterChain() {
         if (filterChain == null) {
-            filterChain = FilterChainFactory.getShowFaceCollectFilterChain(200);
+            filterChain = FilterChainFactory.getDefaultFilter();
         }
         return this.filterChain;
     }
@@ -59,5 +59,5 @@ class FilterImpl implements Filter {
             filterUpdateListener.update(filterVO);
         }
     }
-    
+
 }

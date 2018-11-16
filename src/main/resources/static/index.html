@@ -5,65 +5,124 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>91 crawler</title>
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="shortcut icon" href="//cdn.jandan.net/static/img/favicon.ico"/>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-<div class="container">
-    <h2 class="text-center" id="page-title">91 爬虫</h2>
-    <div id="info-panel" class="row">
-        <div id="filter-info" class="col-md-8"></div>
-        <div id="scan-count" class="col-md-4"></div>
-    </div>
-    <button onclick="echo()" class="btn btn-default">echo</button>
-    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#loginModal">登陆</button>
-    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#setProxyModal">设置代理</button>
-    <button onclick="start()" class="btn btn-default">开始</button>
-    <button onclick="shutdown()" class="btn btn-default">关闭程序</button>
-    <button onclick="showFilterEditor()" class="btn btn-default">设置过滤器</button>
-    <form id="FilterEditor" style="visibility: hidden">
-        <label>
-            标题
-            <input type="text" name="title">
-        </label>
-        <label>
-            收藏量
-            <input type="text" name="collect">
-        </label>
-        <button type="button" onclick="setFilter()" class="btn btn-default">设置</button>
-    </form>
-    <div>
-        <table id="info-table" class="table table-bordered">
-            <caption>详情：</caption>
-            <thead>
-            <tr>
-                <th>标题</th>
-                <th>收藏数量</th>
-                <th>作者名称</th>
-                <th>状态</th>
-            </tr>
-            </thead>
-            <tbody id="info-table-body-filtered">
-            </tbody>
-            <tbody id="info-table-body-toDownload">
-            </tbody>
-            <tbody id="info-table-body-downloading">
-            </tbody>
-            <tbody id="info-table-body-downloaded">
-            </tbody>
-            <tbody id="info-table-body-downloadError">
-            </tbody>
-        </table>
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">91爬虫</a>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">登陆</a>
+        </li>
+    </ul>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="start()">
+                            开始
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="shutdown()">
+                            关闭程序
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#setProxyModal">
+                            设置代理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#filterModal">
+                            设置过滤器
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">爬虫详情</h1>
+                <div id="info-panel" class="row">
+                    <div id="filter-info" class="col-md-8"></div>
+                    <div id="scan-count" class="col-md-4"></div>
+                </div>
+            </div>
+            <h2>爬取结果</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm" id="info-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">标题</th>
+                        <th scope="col">时常</th>
+                        <th scope="col">发布时间</th>
+                        <th scope="col">作者</th>
+                        <th scope="col">观看次数</th>
+                        <th scope="col">收藏数</th>
+                        <th scope="col">留言数</th>
+                        <th scope="col">积分</th>
+                        <th scope="col">页面地址</th>
+                        <th scope="col">下载地址</th>
+                        <th scope="col">状态</th>
+                    </tr>
+                    </thead>
+                    <tbody id="info-table-body-filtered">
+                    </tbody>
+                    <tbody id="info-table-body-toDownload">
+                    </tbody>
+                    <tbody id="info-table-body-downloading">
+                    </tbody>
+                    <tbody id="info-table-body-downloaded">
+                    </tbody>
+                    <tbody id="info-table-body-downloadError">
+                    </tbody>
+                </table>
+            </div>
+        </main>
     </div>
 </div>
 <!-- Modal -->
+
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">过滤器设置</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="FilterEditor">
+                    <input type="text" name="title" placeholder="标题">
+                    <input type="text" name="collect" placeholder="收藏量">
+                    <input type="text" name="addTimeBefore" placeholder="在某个时间前 格式：一天前">
+                    <input type="text" name="addTimeAfter" placeholder="在某个时间后 格式：一天前">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="setFilter()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">登陆</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="loginModalLabel">登陆</h4>
             </div>
             <div class="modal-body">
                 <form id="login-form">
@@ -74,7 +133,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="login()">Save changes</button>
             </div>
         </div>
@@ -85,9 +144,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="setProxyModalLabel">设置代理</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="setProxyModalLabel">设置代理</h4>
             </div>
             <div class="modal-body">
                 <form id="set-proxy-form">
@@ -96,14 +155,20 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="setProxy()">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 <script src="js/websocket.js"></script>
 <script src="js/default.js"></script>
 </body>

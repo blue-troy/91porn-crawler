@@ -10,10 +10,8 @@ import java.time.LocalDateTime;
  * @author heyixin
  */
 public class FilterChainFactory {
-    public static MovieFilterChain getShowFaceCollectFilterChain(Integer collectNum) {
-        return new MovieFilterChain()
-                .addFilter(new TitleMovieFilter("露脸"))
-                .addFilter(new CollectMovieFilter(collectNum));
+    public static MovieFilterChain getDefaultFilter() {
+        return getHotShowFaceFilter();
     }
 
     //todo 其他的Filter
@@ -55,10 +53,17 @@ public class FilterChainFactory {
         }
     }
 
-
     private static void handleTitleFilter(FilterVO filterVO, MovieFilterChain chain) {
         if (null != filterVO.getTitle() && !filterVO.getTitle().isEmpty()) {
             chain.addFilter(new TitleMovieFilter(filterVO.getTitle()));
         }
+    }
+
+    private static MovieFilterChain getHotShowFaceFilter() {
+        FilterVO filterVO = new FilterVO();
+        filterVO.setTitle("露脸");
+        filterVO.setCollect(200);
+        filterVO.setAddTimeAfter("1天前");
+        return getFilter(filterVO);
     }
 }

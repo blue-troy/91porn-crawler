@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.crawler.dao.entity;
 
 import com.bluetroy.crawler91.crawler.utils.TimeUtils;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @author heyixin
  */
 @Data
+@NoArgsConstructor
 public class Movie implements Serializable, Comparable<Movie> {
     String title;
     String length;
@@ -21,15 +23,21 @@ public class Movie implements Serializable, Comparable<Movie> {
     Integer integration;
     String detailURL;
     String downloadURL;
-    String fileName;
+    private String fileName;
+    private String key;
 
-    private static Integer stringToInteger(String s) {
-        int index = s.indexOf("&");
-        if (index != -1) {
-            s = s.substring(0, index);
-        }
-        s = s.trim();
-        return Integer.valueOf(s);
+    public Movie(String title, String length, String addTime, String author, Integer view, Integer collect, Integer messageNumber, Integer integration, String detailURL) {
+        this.title = title;
+        this.length = length;
+        this.addTime = addTime;
+        this.author = author;
+        this.view = view;
+        this.collect = collect;
+        this.messageNumber = messageNumber;
+        this.integration = integration;
+        this.detailURL = detailURL;
+        this.key = detailURL.substring(detailURL.indexOf("=") + 1, detailURL.indexOf("&"));
+        this.fileName = title + ".mp4";
     }
 
     public void update(Movie movie) {
@@ -44,83 +52,5 @@ public class Movie implements Serializable, Comparable<Movie> {
             return 0;
         }
         return 1;
-    }
-
-
-    public String getKey() {
-        Integer index = detailURL.indexOf("viewkey=");
-        return detailURL.substring(index);
-    }
-
-    public String getFileName() {
-        if (fileName == null || "".equals(fileName)) {
-            fileName = title + ".mp4";
-        }
-        return fileName;
-    }
-
-    public Movie setCollect(@NonNull String collect) {
-        this.collect = stringToInteger(collect);
-        return this;
-    }
-
-    public Movie setMessageNumber(String messageNumber) {
-        this.messageNumber = stringToInteger(messageNumber);
-        return this;
-    }
-
-    public Movie setIntegration(String integration) {
-        this.integration = stringToInteger(integration);
-        return this;
-    }
-
-    public Movie setView(String view) {
-        this.view = stringToInteger(view);
-        return this;
-    }
-
-    public Movie setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public Movie setLength(String length) {
-        this.length = length;
-        return this;
-    }
-
-    public Movie setAddTime(String addTime) throws Exception {
-        this.addTime = TimeUtils.getDate(addTime);
-        return this;
-    }
-
-    public Movie setAuthor(String author) {
-        this.author = author;
-        return this;
-    }
-
-    public Movie setView(Integer view) {
-        this.view = view;
-        return this;
-    }
-
-    public Movie setCollect(Integer collect) {
-        this.collect = collect;
-        return this;
-    }
-
-    public Movie setMessageNumber(Integer messageNumber) {
-        this.messageNumber = messageNumber;
-        return this;
-    }
-
-    public Movie setIntegration(Integer integration) {
-        this.integration = integration;
-        return this;
-    }
-
-    public Movie setDetailURL(String detailURL) {
-        this.detailURL = detailURL;
-        return this;
     }
 }

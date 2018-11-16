@@ -1,6 +1,7 @@
 package com.bluetroy.crawler91.crawler.tools;
 
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
+import com.bluetroy.crawler91.crawler.utils.TimeUtils;
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -45,17 +46,32 @@ public class Selector {
     }
 
     private Movie getMovie(Element elementMovie) {
-        Movie movie = new Movie();
-        movie.setTitle(elementMovie.select("a").attr("title").replaceAll("\\s*", ""))
-                .setDetailURL(elementMovie.select("a").attr("href").replaceAll("\\s*", ""))
-                .setLength(elementMovie.childNode(8).toString().replaceAll("\\s*", ""))
-                .setAddTime(elementMovie.childNode(12).toString().replaceAll("\\s*", ""))
-                .setAuthor(elementMovie.childNode(16).toString().replaceAll("\\s*", ""))
-                .setView(elementMovie.childNode(20).toString().replaceAll("\\s*", ""))
-                .setCollect(elementMovie.childNode(22).toString().replaceAll("\\s*", ""))
-                .setMessageNumber(elementMovie.childNode(26).toString().replaceAll("\\s*", ""))
-                .setIntegration(elementMovie.childNode(28).toString().replaceAll("\\s*", ""));
+        String title = cleanString(elementMovie.select("a").attr("title"));
+        String detailUrl = cleanString(elementMovie.select("a").attr("href"));
+        String length = cleanString(elementMovie.childNode(8).toString());
+        String addTimeBefore = getdate(cleanString(elementMovie.childNode(12).toString()));
+        String author = cleanString(elementMovie.childNode(16).toString());
+        Integer view = Integer.valueOf(cleanString(elementMovie.childNode(20).toString()));
+        Integer collect = Integer.valueOf(cleanString(elementMovie.childNode(22).toString()));
+        Integer messageNumber = Integer.valueOf(cleanString(elementMovie.childNode(26).toString()));
+        Integer integration = Integer.valueOf(cleanString(elementMovie.childNode(28).toString()));
+        Movie movie = new Movie(title, length, addTimeBefore, author, view, collect, messageNumber, integration, detailUrl);
         log.info("扫描到了视频：{} ", movie.toString());
         return movie;
+    }
+
+    private String cleanString(String dirtyString) {
+        return dirtyString.replaceAll("\\s*", "").replaceAll("&nbsp;", "");
+    }
+
+    private String getdate(String addTimeBefore) {
+        String addTime = "";
+        try {
+            addTime = TimeUtils.getDate(addTimeBefore);
+        } catch (Exception e) {
+            addTime = TimeUtils.getDate();
+            e.printStackTrace();
+        }
+        return addTime;
     }
 }

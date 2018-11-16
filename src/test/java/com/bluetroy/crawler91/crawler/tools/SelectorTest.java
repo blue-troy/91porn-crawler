@@ -57,6 +57,12 @@ public class SelectorTest {
         }
     }
 
+    @Test
+    public void getMovie() {
+        String s = "158921&nbsp;";
+        System.out.println(s.replaceAll("&nbsp;",""));
+    }
+
     public void getMovie(Element movie) {
         String name = movie.select("a").attr("title");
         String url = movie.select("a").attr("href");

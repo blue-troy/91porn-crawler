@@ -15,4 +15,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class FilterVO extends Movie {
+    private String addTimeBefore;
+    private String addTimeAfter;
 }

@@ -2,10 +2,7 @@ package com.bluetroy.crawler91.crawler.utils;
 
 import org.junit.Test;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAmount;
 
 
 /**
@@ -19,7 +16,13 @@ import java.time.temporal.TemporalAmount;
 public class TimeUtilsTest {
 
     @Test
-    public void getDate() {
-
+    public void getDate() throws Exception {
+//        String time = TimeUtils.getDateByTimeBefore("1天前");
+//        System.out.println(time);
+        String time1 = TimeUtils.getDateByTimeBefore("2天前");
+        System.out.println(time1);
+        LocalDateTime parse = TimeUtils.parse(time1);
+        System.out.println(parse);
+        System.out.println(TimeUtils.format(parse));
     }
 }

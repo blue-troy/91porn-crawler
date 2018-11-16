@@ -13,13 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @ToString
 public class TitleMovieFilter implements MovieFilter {
-    @ToString.Exclude
-    private BaseDao dao;
     private String keyword;
 
     public TitleMovieFilter(String keyword) {
         this.keyword = keyword;
-        dao = ApplicationContextProvider.getBean("persistentDao", BaseDao.class);
     }
 
     private TitleMovieFilter() {
@@ -28,7 +25,7 @@ public class TitleMovieFilter implements MovieFilter {
     @Override
     public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
         tobeFilter.forEach(5, (k, v) -> {
-            if (dao.getMovie(k).getTitle().contains(keyword)) {
+            if (v.getTitle().contains(keyword)) {
                 return;
             }
             tobeFilter.remove(k);

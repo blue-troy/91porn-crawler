@@ -67,7 +67,7 @@ public class Selector {
     private String getdate(String addTimeBefore) {
         String addTime = "";
         try {
-            addTime = TimeUtils.getDate(addTimeBefore);
+            addTime = TimeUtils.getDateByTimeBefore(addTimeBefore);
         } catch (Exception e) {
             addTime = TimeUtils.getDate();
             e.printStackTrace();

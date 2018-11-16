@@ -14,19 +14,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @ToString
 public class CollectMovieFilter implements MovieFilter {
     private final Integer collectNum;
-    @ToString.Exclude
-    private BaseDao dao;
-
 
     public CollectMovieFilter(Integer collectNum) {
         this.collectNum = collectNum;
-        dao = ApplicationContextProvider.getBean("persistentDao", BaseDao.class);
     }
 
     @Override
     public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
         tobeFilter.forEach(5, (k, v) -> {
-            if (dao.getMovie(k).getCollect() >= collectNum) {
+            if (v.getCollect() >= collectNum) {
                 return;
             }
             tobeFilter.remove(k);

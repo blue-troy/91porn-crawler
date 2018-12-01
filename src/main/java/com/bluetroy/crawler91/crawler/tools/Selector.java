@@ -49,7 +49,7 @@ public class Selector {
         String title = cleanString(elementMovie.select("a").attr("title"));
         String detailUrl = cleanString(elementMovie.select("a").attr("href"));
         String length = cleanString(elementMovie.childNode(8).toString());
-        String addTimeBefore = getdate(cleanString(elementMovie.childNode(12).toString()));
+        String addTimeBefore = cleanString(elementMovie.childNode(12).toString());
         String author = cleanString(elementMovie.childNode(16).toString());
         Integer view = Integer.valueOf(cleanString(elementMovie.childNode(20).toString()));
         Integer collect = Integer.valueOf(cleanString(elementMovie.childNode(22).toString()));
@@ -62,16 +62,5 @@ public class Selector {
 
     private String cleanString(String dirtyString) {
         return dirtyString.replaceAll("\\s*", "").replaceAll("&nbsp;", "");
-    }
-
-    private String getdate(String addTimeBefore) {
-        String addTime = "";
-        try {
-            addTime = TimeUtils.getDateByTimeBefore(addTimeBefore);
-        } catch (Exception e) {
-            addTime = TimeUtils.getDate();
-            e.printStackTrace();
-        }
-        return addTime;
     }
 }

@@ -1,6 +1,7 @@
 package com.bluetroy.crawler91.vo;
 
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
+import com.bluetroy.crawler91.crawler.utils.TimeUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,4 +18,13 @@ import lombok.EqualsAndHashCode;
 public class FilterVO extends Movie {
     private String addTimeBefore;
     private String addTimeAfter;
+    private Long addTimeDistance;
+
+    public Long getAddTimeDistance() {
+        return addTimeDistance;
+    }
+
+    public void setAddTimeDistance(String addTimeDistance) {
+        this.addTimeDistance = TimeUtils.timeToMinute(addTimeDistance);
+    }
 }

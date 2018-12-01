@@ -2,20 +2,20 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>91 crawler</title>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="shortcut icon" href="//cdn.jandan.net/static/img/favicon.ico"/>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link crossorigin="anonymous" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+    <link href="//cdn.jandan.net/static/img/favicon.ico" rel="shortcut icon"/>
+    <link href="css/dashboard.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">91爬虫</a>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">登陆</a>
+            <a class="nav-link" data-target="#loginModal" data-toggle="modal" href="#">登陆</a>
         </li>
     </ul>
 </nav>
@@ -35,34 +35,29 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#setProxyModal">
+                        <a class="nav-link" data-target="#setProxyModal" data-toggle="modal" href="#">
                             设置代理
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="modal" data-target="#filterModal">
+                        <a class="nav-link" data-target="#filterModal" data-toggle="modal" href="#">
                             设置过滤器
                         </a>
                     </li>
                 </ul>
             </div>
         </nav>
-
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <main class="col-md-9 ml-sm-auto col-lg-10 px-4" role="main">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">爬虫详情</h1>
-                <div id="info-panel" class="row">
-                    <div id="filter-info" class="col-md-8"></div>
-                    <div id="scan-count" class="col-md-4"></div>
-                </div>
+                <h1 class="h2">爬取结果</h1>
+                <div id="scan-count"></div>
             </div>
-            <h2>爬取结果</h2>
             <div class="table-responsive">
                 <table class="table table-striped table-sm" id="info-table">
                     <thead>
                     <tr>
                         <th scope="col">标题</th>
-                        <th scope="col">时常</th>
+                        <th scope="col">时长</th>
                         <th scope="col">发布时间</th>
                         <th scope="col">作者</th>
                         <th scope="col">观看次数</th>
@@ -74,6 +69,8 @@
                         <th scope="col">状态</th>
                     </tr>
                     </thead>
+                    <tbody id="info-table-body-scanned">
+                    </tbody>
                     <tbody id="info-table-body-filtered">
                     </tbody>
                     <tbody id="info-table-body-toDownload">
@@ -90,85 +87,86 @@
     </div>
 </div>
 <!-- Modal -->
-
-<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
-     aria-hidden="true">
+<!--过滤器设置-->
+<div aria-hidden="true" aria-labelledby="filterModalLabel" class="modal fade" id="filterModal" role="dialog"
+     tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="filterModalLabel">过滤器设置</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                <div id="filter-info"></div>
+                <hr>
                 <form id="FilterEditor">
-                    <input type="text" name="title" placeholder="标题">
-                    <input type="text" name="collect" placeholder="收藏量">
-                    <input type="text" name="addTimeBefore" placeholder="在某个时间前 格式：一天前">
-                    <input type="text" name="addTimeAfter" placeholder="在某个时间后 格式：一天前">
+                    <input name="title" placeholder="标题" type="text">
+                    <input name="collect" placeholder="收藏量" type="text">
+                    <input name="addTimeDistance" placeholder="距离发布时间如 格式：1天" type="text">
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="setFilter()">Save changes</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <button class="btn btn-primary" onclick="setFilter()" type="button">Save changes</button>
             </div>
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+<!--登陆-->
+<div aria-labelledby="loginModalLabel" class="modal fade" id="loginModal" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="loginModalLabel">登陆</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="login-form">
-                    <input type="text" name="username" placeholder="用户名">
-                    <input type="password" name="password" placeholder="密码">
-                    <input type="text" name="captcha_input" placeholder="验证码">
+                    <input name="username" placeholder="用户名" type="text">
+                    <input name="password" placeholder="密码" type="password">
+                    <input name="captcha_input" placeholder="验证码" type="text">
                     <img src="http://94.91p30.space/captcha.php">
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="login()">Save changes</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <button class="btn btn-primary" onclick="login()" type="button">Save changes</button>
             </div>
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="setProxyModal" tabindex="-1" role="dialog" aria-labelledby="setProxyModalLabel">
+<!--代理设置-->
+<div aria-labelledby="setProxyModalLabel" class="modal fade" id="setProxyModal" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="setProxyModalLabel">设置代理</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="set-proxy-form">
-                    <input type="text" name="proxyHost" placeholder="代理地址">
-                    <input type="text" name="proxyPort" placeholder="代理端口">
+                    <input name="proxyHost" placeholder="代理地址" type="text">
+                    <input name="proxyPort" placeholder="代理端口" type="text">
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="setProxy()">Save changes</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <button class="btn btn-primary" onclick="setProxy()" type="button">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"
+<script crossorigin="anonymous"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+        src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="js/websocket.js"></script>
 <script src="js/default.js"></script>
 </body>

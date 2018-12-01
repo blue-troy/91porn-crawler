@@ -2,7 +2,9 @@ package com.bluetroy.crawler91.crawler;
 
 import com.bluetroy.crawler91.crawler.dao.BaseDao;
 import com.bluetroy.crawler91.crawler.dao.MovieStatus;
+import com.bluetroy.crawler91.crawler.dao.entity.Category;
 import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
+import com.bluetroy.crawler91.crawler.dao.entity.PornUrl;
 import com.bluetroy.crawler91.crawler.tools.ContentTool;
 import com.bluetroy.crawler91.crawler.tools.ScannerTool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ class ScannerImpl implements Scanner {
     private BaseDao dao;
 
     static {
-        URLS_FOR_SCAN.add("http://91porn.com/v.php?category=hot&viewtype=basic");
+        URLS_FOR_SCAN.add(PornUrl.getUrl(Category.HOT));
     }
 
     @Override

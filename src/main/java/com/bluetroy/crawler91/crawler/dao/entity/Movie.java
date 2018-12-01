@@ -3,9 +3,9 @@ package com.bluetroy.crawler91.crawler.dao.entity;
 import com.bluetroy.crawler91.crawler.utils.TimeUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author heyixin
@@ -13,23 +13,24 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class Movie implements Serializable, Comparable<Movie> {
-    String title;
-    String length;
-    String addTime;
-    String author;
-    Integer view;
-    Integer collect;
-    Integer messageNumber;
-    Integer integration;
-    String detailURL;
-    String downloadURL;
+    private String title;
+    private String length;
+    private String addTime;
+    private String author;
+    private Integer view;
+    private Integer collect;
+    private Integer messageNumber;
+    private Integer integration;
+    private String detailURL;
+    private String downloadURL;
     private String fileName;
     private String key;
+    private LocalDateTime addDateTime;
 
     public Movie(String title, String length, String addTime, String author, Integer view, Integer collect, Integer messageNumber, Integer integration, String detailURL) {
         this.title = title;
         this.length = length;
-        this.addTime = addTime;
+        setAddTime(addTime);
         this.author = author;
         this.view = view;
         this.collect = collect;
@@ -52,5 +53,15 @@ public class Movie implements Serializable, Comparable<Movie> {
             return 0;
         }
         return 1;
+    }
+
+    public void setAddTime(String addTime) {
+        try {
+            this.addDateTime = TimeUtils.getLocalDateTime(addTime);
+        } catch (Exception e) {
+            this.addDateTime = TimeUtils.now();
+            e.printStackTrace();
+        }
+        this.addTime = TimeUtils.format(this.addDateTime);
     }
 }

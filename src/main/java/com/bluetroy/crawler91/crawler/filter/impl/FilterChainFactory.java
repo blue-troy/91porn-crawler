@@ -20,8 +20,16 @@ public class FilterChainFactory {
         handleTitleFilter(filterVO, chain);
         handleCollectFilter(filterVO, chain);
         handleAddTimeFilter(filterVO, chain);
+        handleAddTimeDistanceFilter(filterVO, chain);
         return chain;
     }
+
+    private static void handleAddTimeDistanceFilter(FilterVO filterVO, MovieFilterChain chain) {
+        if (filterVO.getAddTimeDistance() != null) {
+            chain.addFilter(new AddTimeDistanceMovieFilter(filterVO.getAddTimeDistance()));
+        }
+    }
+
 
     private static void handleAddTimeFilter(FilterVO filterVO, MovieFilterChain chain) {
         String addTimeBeforeString = filterVO.getAddTimeBefore();
@@ -31,15 +39,13 @@ public class FilterChainFactory {
         if (addTimeAfterString != null) {
             try {
                 addTimeBefore = TimeUtils.parse(TimeUtils.getDateByTimeBefore(addTimeBeforeString));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         }
         if (addTimeAfterString != null) {
             try {
                 addTimeAfter = TimeUtils.parse(TimeUtils.getDateByTimeBefore(addTimeAfterString));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         }
         if (addTimeAfter != null || addTimeBefore != null) {

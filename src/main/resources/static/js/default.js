@@ -74,29 +74,36 @@ function setFilter() {
         } else {
             alert("filter设置失败");
         }
-    }).finally(() => filerEditor.style.visibility = "hidden");
+    }).finally($('#filterModal').modal('hide'));
 }
 
 function showFilter() {
     $.get("/filter", function (data) {
-        $("#filter-info").html("<h4>当前过滤器为 " + data);
+        $("#filter-info").html("<h6>当前过滤器为 " + data);
     })
 }
 
 function showScannedMovieCount(numberOfScannedMovies) {
-    $("#scan-count").html("<h4>扫描到了 " + numberOfScannedMovies + "个视频");
+    $("#scan-count").html("<h5>当前爬取" + numberOfScannedMovies + "个视频");
 }
 
 function handleTable(response) {
     const data = response.data;
     for (let index in data) {
         const movie = new Movie(data[index], response.method);
-        $("#" + movie.id).remove();
-        movie.tableBody.append(`<tr id=${movie.id}>
-                <th>${movie.title}</th>
-                <th>${movie.collect}</th>
+        $("#" + movie.key).remove();
+        movie.tableBody.append(`<tr id=${movie.key} class="${movie.status}">
+                <th title="${movie.title}" >${movie.title.substring(0, 10)}</th>
+                <th>${movie.length}</th>
+                <th>${movie.addTime}</th>
                 <th>${movie.author}</th>
-                <th>${movie.status}</th>
+                <th>${movie.view}</th>
+                <th>${movie.collect}</th>
+                <th>${movie.messageNumber}</th>
+                <th>${movie.integration}</th>
+                <th><a href="${movie.detailURL}">地址</a></th>
+                <th><a href="${movie.downloadURL}">地址</a> </th>
+                <th>${movie.result}</th>
             </tr>`
         );
     }
@@ -104,29 +111,36 @@ function handleTable(response) {
 
 class Movie {
     constructor(data, method) {
-        this.title = data.title;
-        this.collect = data.collect;
-        this.author = data.author;
-        this.id = Movie.getId(data.key);
+        const that = this;
+        for (let key in data) {
+            that[key] = data[key];
+        }
         switch (method) {
+            case "/scannedMovies":
+                this.result = "扫描";
+                this.tableBody = $("#info-table-body-scanned");
+                break;
             case "/filteredMovies" :
-                this.status = "扫描过滤";
+                this.result = "过滤";
                 this.tableBody = $("#info-table-body-filtered");
                 break;
             case "/toDownloadMovies":
-                this.status = "等待加入下载队列";
+                this.result = "等待加入下载队列";
                 this.tableBody = $("#info-table-body-toDownload");
                 break;
             case "/downloadingMovies" :
-                this.status = "正在下载";
+                this.status = "table-info";
+                this.result = "正在下载";
                 this.tableBody = $("#info-table-body-downloading");
                 break;
             case "/downloadedMovies":
-                this.status = "下载完成";
+                this.status = "table-success";
+                this.result = "下载完成";
                 this.tableBody = $("#info-table-body-downloaded");
                 break;
             case "/downloadErrorMovies":
-                this.status = "下载失败";
+                this.status = "table-warning";
+                this.result = "下载失败";
                 this.tableBody = $("#info-table-body-downloadError");
                 break;
             default:

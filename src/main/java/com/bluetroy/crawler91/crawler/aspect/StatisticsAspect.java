@@ -48,6 +48,11 @@ public class StatisticsAspect {
         adviser.message("/scannedMovies/count", dao.scannedMovieCount());
     }
 
+    @After("execution(void com.bluetroy.crawler91.crawler.Crawler.scanMovies())")
+    public void gatherScannedMovies() throws Exception {
+        adviser.message("/scannedMovies", dao.getMovies(MovieStatus.SCANNED_MOVIES));
+    }
+
     @After("execution(void com.bluetroy.crawler91.crawler.Crawler.doFilter())")
     public void gatherFilteredMovies() throws Exception {
         adviser.message("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
@@ -73,6 +78,7 @@ public class StatisticsAspect {
     }
 
     public void gatherAllMoviesStatistics() throws Exception {
+        gatherScannedMovies();
         gatherScannedMoviesCount();
         gatherFilteredMovies();
         sendToDownloadMovies();

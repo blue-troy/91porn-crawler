@@ -7,7 +7,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PreDestroy;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
@@ -21,7 +20,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 @Log4j2
 @Repository
 class PersistentDao implements BaseDao, Persistability {
-
+    private static final long serialVersionUID = 707378050594103627L;
     /**
      * 扫描下来的 movie 信息
      * key:movie的key
@@ -149,15 +148,15 @@ class PersistentDao implements BaseDao, Persistability {
         }
     }
 
+    @Override
+    public void addDownloadedMovies(String key) {
+        downloadedMovies.putIfAbsent(key, TimeUtils.getDate());
+    }
+
     private ConcurrentHashMap<String, Movie> getDownloadedMovies() {
         ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
         downloadedMovies.forEachKey(1, key -> data.put(key, getMovie(key)));
         return data;
-    }
-
-    @Override
-    public void addDownloadedMovies(String key) {
-        downloadedMovies.putIfAbsent(key, TimeUtils.getDate());
     }
 
     private ConcurrentHashMap<String, Movie> getDownloadErrorMovies() {

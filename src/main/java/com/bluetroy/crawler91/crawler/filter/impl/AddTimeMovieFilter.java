@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created with IntelliJ IDEA.
- * Description:
+ * Description: 过滤出某个时间范围内的视频
  *
  * @author: heyixin
  * Date: 2018-11-16
@@ -18,8 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @ToString
 public class AddTimeMovieFilter implements MovieFilter {
-    private LocalDateTime addTimeBefore = null;
-    private LocalDateTime addTimeAfter = null;
+    private LocalDateTime addTimeBefore;
+    private LocalDateTime addTimeAfter;
 
     AddTimeMovieFilter(LocalDateTime addTimeBefore, LocalDateTime addTimeAfter) {
         this.addTimeBefore = addTimeBefore;

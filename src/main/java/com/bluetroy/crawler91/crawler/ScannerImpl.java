@@ -57,6 +57,13 @@ class ScannerImpl implements Scanner {
         scannerTool.scanDownloadUrls(keyContents);
     }
 
+    @Override
+    public String getDownloadUrl(String key) throws Exception {
+        String html = contentTool.getContent(dao.getMovie(key));
+        String downloadUrl = scannerTool.scanDownloadUrl(html);
+        dao.addDownloadUrl(key, downloadUrl);
+        return downloadUrl;
+    }
 
     @Override
     public List<String> getScanUrls() {

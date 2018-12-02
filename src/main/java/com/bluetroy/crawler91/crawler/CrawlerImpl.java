@@ -52,6 +52,11 @@ class CrawlerImpl implements Crawler {
     }
 
     @Override
+    public String getDownloadUrl(String key) throws Exception {
+        return scanner.getDownloadUrl(key);
+    }
+
+    @Override
     public void addUrl(String url) {
         scanner.addUrl(url);
     }

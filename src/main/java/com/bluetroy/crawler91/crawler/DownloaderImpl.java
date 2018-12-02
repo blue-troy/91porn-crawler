@@ -60,8 +60,12 @@ class DownloaderImpl implements Downloader {
         });
     }
 
-    private String getDownloadUrl(String key) {
-        return dao.getMovie(key).getDownloadURL();
+    private String getDownloadUrl(String key) throws Exception {
+        String downloadUrl = dao.getMovie(key).getDownloadURL();
+        if (downloadUrl == null) {
+            downloadUrl = crawler.getDownloadUrl(key);
+        }
+        return downloadUrl;
     }
 
     private String getFileName(String key) {

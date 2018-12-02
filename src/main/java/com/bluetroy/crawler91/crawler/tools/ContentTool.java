@@ -40,4 +40,8 @@ public class ContentTool {
         moviesData.forEach((key, movie) -> contentQueue.offer(new KeyContent(key, HttpClient.getInFuture(movie.getDetailURL()))));
         return contentQueue;
     }
+
+    public String getContent(Movie movie) throws Exception {
+        return HttpClient.getNow(movie.getDetailURL());
+    }
 }

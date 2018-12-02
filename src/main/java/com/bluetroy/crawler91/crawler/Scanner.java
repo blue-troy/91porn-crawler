@@ -21,6 +21,8 @@ interface Scanner {
      */
     void scanDownloadUrl();
 
+    String getDownloadUrl(String key) throws Exception;
+
     /**
      * 为scanner添加新的要扫描的地址
      *

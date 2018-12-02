@@ -60,4 +60,7 @@ public class ScannerTool {
         }
     }
 
+    public String scanDownloadUrl(String html) {
+        return selector.getDownloadUrl(html);
+    }
 }

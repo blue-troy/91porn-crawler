@@ -3,6 +3,17 @@ $(function () {
     showFilter();
 });
 
+function download(key) {
+    fetch(`/download/${key}`, {method: 'PATCH'})
+        .then(response => {
+            if (response.ok) {
+                //
+            } else {
+                alert("下载失败")
+            }
+        });
+}
+
 function start() {
     fetch("/start", {method: 'PATCH'})
         .then(response => {
@@ -91,8 +102,13 @@ function handleTable(response) {
     const data = response.data;
     for (let index in data) {
         const movie = new Movie(data[index], response.method);
-        $("#" + movie.key).remove();
-        movie.tableBody.append(`<tr id=${movie.key} class="${movie.status}">
+        setTable(movie);
+    }
+}
+
+function setTable(movie) {
+    $("#" + movie.key).remove();
+    movie.tableBody.append(`<tr id=${movie.key} class="${movie.status}">
                 <th title="${movie.title}" >${movie.title.substring(0, 10)}</th>
                 <th>${movie.length}</th>
                 <th>${movie.addTime}</th>
@@ -102,12 +118,13 @@ function handleTable(response) {
                 <th>${movie.messageNumber}</th>
                 <th>${movie.integration}</th>
                 <th><a href="${movie.detailURL}">地址</a></th>
-                <th><a href="${movie.downloadURL}">地址</a> </th>
+                <th>${!movie.downloadURL ? " " : `<a href="${movie.downloadURL}">地址</a>`} </th>
                 <th>${movie.result}</th>
+                <th onclick="download('${movie.key}')">${movie.command}</th>
             </tr>`
-        );
-    }
+    );
 }
+
 
 class Movie {
     constructor(data, method) {
@@ -119,6 +136,7 @@ class Movie {
             case "/scannedMovies":
                 this.result = "扫描";
                 this.tableBody = $("#info-table-body-scanned");
+                this.command = "下载";
                 break;
             case "/filteredMovies" :
                 this.result = "过滤";
@@ -136,11 +154,13 @@ class Movie {
             case "/downloadedMovies":
                 this.status = "table-success";
                 this.result = "下载完成";
+                this.command = "打开";
                 this.tableBody = $("#info-table-body-downloaded");
                 break;
             case "/downloadErrorMovies":
                 this.status = "table-warning";
                 this.result = "下载失败";
+                this.command = "重新下载";
                 this.tableBody = $("#info-table-body-downloadError");
                 break;
             default:

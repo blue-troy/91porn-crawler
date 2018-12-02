@@ -32,11 +32,6 @@ class CrawlerImpl implements Crawler {
     }
 
     @Override
-    public void startContinuousDownload() throws InterruptedException {
-        downloader.startContinuousDownload();
-    }
-
-    @Override
     public Future downloadByKey(String key) {
         return downloader.downloadByKey(key);
     }

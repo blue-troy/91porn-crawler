@@ -106,6 +106,11 @@ function handleTable(response) {
     }
 }
 
+function setDownloadPath() {
+    let path = document.getElementById("filePicker").files[0];
+    console.log(path)
+}
+
 function setTable(movie) {
     $("#" + movie.key).remove();
     movie.tableBody.append(`<tr id=${movie.key} class="${movie.status}">

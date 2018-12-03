@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -40,10 +41,18 @@ public class SegmentDownloader {
         });
     }
 
-    public static void download(String url, String fileName) throws Exception {
-        log.info("下载文件：文件名: {} 下载地址：{}", fileName, url);
+    public static void download(String url) throws Exception {
+        log.info("下载文件：文件名: {} 下载地址：{}", getFileNameByUrl(url), url);
+        download(url, getFileNameByUrl(url), null);
+    }
+
+    private static String getFileNameByUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
+    public static void download(String url, String fileName, Path path) throws Exception {
         HttpURLConnection connection = HttpUtils.getConnection(url);
-        File file = new File(fileName);
+        File file = getFile(fileName, path);
         if (Files.notExists(file.toPath())) {
             if (connection.getResponseCode() == 200) {
                 RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
@@ -60,9 +69,12 @@ public class SegmentDownloader {
         }
     }
 
-    public static void download(String url) throws Exception {
-        log.info("下载文件：文件名: {} 下载地址：{}", getFileNameByUrl(url), url);
-        download(url, getFileNameByUrl(url));
+    private static File getFile(String fileName, Path path) {
+        if (path != null) {
+            return new File(path.toFile() + File.separator+ fileName);
+        } else {
+            return new File(fileName);
+        }
     }
 
     private static void segmentDownload(File file, String url, CountDownLatch latch) {
@@ -87,32 +99,6 @@ public class SegmentDownloader {
         }
     }
 
-
-    private static List<File> getTempFileList(File file) {
-        List<File> tempFileList = new ArrayList<>();
-        for (int i = 0; i < numberOfConcurrentThreads; i++) {
-            tempFileList.add(new File(getTempFileName(file, i)));
-        }
-        return tempFileList;
-    }
-
-    private static void waitUntilSegmentDownloadFinished(CountDownLatch latch) throws InterruptedException {
-        latch.await();
-    }
-
-
-    private static String getFileNameByUrl(String url) {
-        return url.substring(url.lastIndexOf("/") + 1);
-    }
-
-    private static String getTempFileNameByUrl(String url, int threadId) {
-        return getFileNameByUrl(url) + "." + threadId + ".temp";
-    }
-
-    private static String getTempFileName(File file, int threadId) {
-        return file.getName() + "." + threadId + ".temp";
-    }
-
     private static void downloadThread(File file, String url, int threadId, long startPoint, long endPoint, CountDownLatch latch) {
         DOWNLOAD_SERVICE.submit(() -> {
             try {
@@ -124,7 +110,7 @@ public class SegmentDownloader {
                     connection.setRequestProperty("Range", "bytes=" + startPoint + "-" + endPoint);
                     System.out.println(connection.getResponseCode());
                     if (connection.getResponseCode() == 206) {
-                        try (InputStream inputStream = connection.getInputStream();
+                        try (InputStream inputStream = connection.getInputStream()
                         ) {
                             Files.copy(inputStream, tempFile.toPath());
                         }
@@ -137,5 +123,25 @@ public class SegmentDownloader {
                 latch.countDown();
             }
         });
+    }
+
+    private static void waitUntilSegmentDownloadFinished(CountDownLatch latch) throws InterruptedException {
+        latch.await();
+    }
+
+    private static List<File> getTempFileList(File file) {
+        List<File> tempFileList = new ArrayList<>();
+        for (int i = 0; i < numberOfConcurrentThreads; i++) {
+            tempFileList.add(new File(getTempFileName(file, i)));
+        }
+        return tempFileList;
+    }
+
+    private static String getTempFileName(File file, int threadId) {
+        return file.getName() + "." + threadId + ".temp";
+    }
+
+    private static String getTempFileNameByUrl(String url, int threadId) {
+        return getFileNameByUrl(url) + "." + threadId + ".temp";
     }
 }

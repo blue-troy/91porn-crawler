@@ -44,6 +44,11 @@
                             设置过滤器
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-target="#downloadPathModal" data-toggle="modal" href="#">
+                            设置下载位置
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -156,6 +161,25 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
                 <button class="btn btn-primary" onclick="setProxy()" type="button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--下载地址-->
+<div aria-labelledby="loginModalLabel" class="modal fade" id="downloadPathModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="downloadPathModalLabel">登陆</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input id="download-path" name="path" placeholder="用户名" type="file">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <button class="btn btn-primary" onclick="setDownloadPath()" type="button">Save changes</button>
             </div>
         </div>
     </div>

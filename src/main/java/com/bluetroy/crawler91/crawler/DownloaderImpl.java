@@ -8,6 +8,7 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.util.concurrent.*;
 
 /**
@@ -51,7 +52,7 @@ class DownloaderImpl implements Downloader {
     public Future downloadByKey(String key) {
         return DOWNLOAD_SERVICE.submit(() -> {
             try {
-                SegmentDownloader.download(getDownloadUrl(key), getFileName(key));
+                SegmentDownloader.download(getDownloadUrl(key), getFileName(key), path);
                 dao.addDownloadedMovies(key);
             } catch (Exception e) {
                 dao.addDownloadError(key);
@@ -70,5 +71,10 @@ class DownloaderImpl implements Downloader {
 
     private String getFileName(String key) {
         return dao.getMovie(key).getFileName();
+    }
+
+    @Override
+    public void setResource(Path path) {
+        this.path = path;
     }
 }

@@ -1,5 +1,6 @@
 package com.bluetroy.crawler91.crawler;
 
+import java.nio.file.Path;
 import java.util.concurrent.Future;
 
 /**
@@ -16,14 +17,6 @@ interface Downloader {
      */
     void downloadNow();
 
-
-    /**
-     * 开始进行持续下载，一旦有需要下载的视频即刻下载
-     *
-     * @throws InterruptedException 当获取需要下载的视频被打断时抛出异常
-     */
-    void startContinuousDownload() throws InterruptedException;
-
     /**
      * 下载对应key的视频文件
      *
@@ -31,4 +24,11 @@ interface Downloader {
      * @return 下载结果为空，可用于判断是否下载完毕
      */
     Future downloadByKey(String key);
+
+    /**
+     * 设置下载位置
+     *
+     * @param path 下载位置
+     */
+    void setResource(Path path);
 }

@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.crawler.tools;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +32,7 @@ public class HttpClient {
     }
 
     public static String getNow(String url) throws Exception {
-        log.info("getNow  " + url.toString());
+        log.info("getNow  " + url);
         HttpURLConnection httpURLConnection = getConnection(url);
         //todo 用代理访问？ httpURLConnection.usingProxy()
         if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
@@ -39,6 +40,16 @@ public class HttpClient {
         }
         //todo 用buffer
         return getInputString(httpURLConnection);
+    }
+
+    private static String getInputString(HttpURLConnection connection) throws IOException {
+        return new String(getInputBytes(connection), StandardCharsets.UTF_8);
+    }
+
+    private static byte[] getInputBytes(HttpURLConnection connection) throws IOException {
+        try (InputStream inputStream = connection.getInputStream()) {
+            return StreamUtils.copyToByteArray(inputStream);
+        }
     }
 
     public static String post(String url, String params) throws Exception {
@@ -52,16 +63,6 @@ public class HttpClient {
             throw new Exception("HTTP Request is not success, Response code is " + connection.getResponseCode());
         }
         return getInputString(connection);
-    }
-
-    private static String getInputString(HttpURLConnection connection) throws IOException {
-        return new String(getInputBytes(connection), StandardCharsets.UTF_8);
-    }
-
-    private static byte[] getInputBytes(HttpURLConnection connection) throws IOException {
-        try (InputStream inputStream = connection.getInputStream()) {
-            return inputStream.readAllBytes();
-        }
     }
 }
 

@@ -4,6 +4,7 @@ import com.bluetroy.crawler91.vo.FilterVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -34,6 +35,11 @@ class CrawlerImpl implements Crawler {
     @Override
     public Future downloadByKey(String key) {
         return downloader.downloadByKey(key);
+    }
+
+    @Override
+    public void setResource(Path path) {
+        downloader.setResource(path);
     }
 
     @Override

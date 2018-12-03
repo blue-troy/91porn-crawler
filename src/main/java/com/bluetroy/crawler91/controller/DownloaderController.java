@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -26,5 +27,10 @@ public class DownloaderController {
     @PatchMapping("/{key}")
     public Object download(@PathVariable String key) throws ExecutionException, InterruptedException {
         return crawler.downloadByKey(key).get();
+    }
+
+    @PatchMapping("/path")
+    public void setPath(String path) {
+        crawler.setResource(Paths.get(path));
     }
 }

@@ -52,7 +52,7 @@ class DownloaderImpl implements Downloader {
     public Future downloadByKey(String key) {
         return DOWNLOAD_SERVICE.submit(() -> {
             try {
-                SegmentDownloader.download(getDownloadUrl(key), getFileName(key), path);
+                SegmentDownloader.download(getDownloadUrl(key), getFileName(key));
                 dao.addDownloadedMovies(key);
             } catch (Exception e) {
                 dao.addDownloadError(key);
@@ -75,6 +75,6 @@ class DownloaderImpl implements Downloader {
 
     @Override
     public void setResource(Path path) {
-        this.path = path;
+        SegmentDownloader.setResourceFolder(path);
     }
 }

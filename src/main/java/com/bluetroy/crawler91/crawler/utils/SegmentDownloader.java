@@ -10,6 +10,7 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -28,6 +29,11 @@ import java.util.concurrent.*;
 public class SegmentDownloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
     private static int numberOfConcurrentThreads = 4;
+    private static Path resourceFolder;
+
+    static {
+        resourceFolder = Paths.get(System.getProperty("user.dir"));
+    }
 
     static {
         DOWNLOAD_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
@@ -71,7 +77,7 @@ public class SegmentDownloader {
 
     private static File getFile(String fileName, Path path) {
         if (path != null) {
-            return new File(path.toFile() + File.separator+ fileName);
+            return new File(path.toFile() + File.separator + fileName);
         } else {
             return new File(fileName);
         }
@@ -139,6 +145,18 @@ public class SegmentDownloader {
 
     private static String getTempFileName(File file, int threadId) {
         return file.getName() + "." + threadId + ".temp";
+    }
+
+    public static void download(String url, String fileName) throws Exception {
+        download(url, fileName, resourceFolder);
+    }
+
+    public static Path getResourceFolder() {
+        return resourceFolder;
+    }
+
+    public static void setResourceFolder(Path resourceFolder) {
+        SegmentDownloader.resourceFolder = resourceFolder;
     }
 
     private static String getTempFileNameByUrl(String url, int threadId) {

@@ -28,7 +28,6 @@ import java.util.concurrent.Future;
 
 @Aspect
 @Component
-@Log4j2
 public class StatisticsAspect {
     @Autowired
     private BaseDao dao;

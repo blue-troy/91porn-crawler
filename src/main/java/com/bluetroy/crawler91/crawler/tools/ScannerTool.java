@@ -4,6 +4,7 @@ import com.bluetroy.crawler91.crawler.dao.BaseDao;
 import com.bluetroy.crawler91.crawler.dao.entity.KeyContent;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ import java.util.concurrent.Future;
  * Date: 2018-07-11
  * Time: 下午3:49
  */
-@Log4j2
+@Slf4j
 @Component
 public class ScannerTool {
     @Autowired

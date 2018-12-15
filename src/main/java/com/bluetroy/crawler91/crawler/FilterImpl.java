@@ -3,7 +3,6 @@ package com.bluetroy.crawler91.crawler;
 import com.bluetroy.crawler91.crawler.dao.BaseDao;
 import com.bluetroy.crawler91.crawler.dao.MovieStatus;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
-import com.bluetroy.crawler91.crawler.filter.FilterUpdateListener;
 import com.bluetroy.crawler91.crawler.filter.MovieFilterChain;
 import com.bluetroy.crawler91.crawler.filter.impl.FilterChainFactory;
 import com.bluetroy.crawler91.vo.FilterVO;
@@ -20,8 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Log4j2
 @Service("filter")
 class FilterImpl implements Filter {
-    @Autowired
-    private FilterUpdateListener filterUpdateListener;
     @Autowired
     private BaseDao dao;
     private MovieFilterChain filterChain;
@@ -56,7 +53,6 @@ class FilterImpl implements Filter {
         MovieFilterChain newFilter = FilterChainFactory.getFilter(filterVO);
         if (!newFilter.equals(this.filterChain)) {
             this.filterChain = newFilter;
-            filterUpdateListener.update(filterVO);
         }
     }
 

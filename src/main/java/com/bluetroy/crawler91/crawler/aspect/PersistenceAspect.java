@@ -1,6 +1,7 @@
 package com.bluetroy.crawler91.crawler.aspect;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,7 @@ import java.util.Objects;
  */
 @Aspect
 @Component
-@Log4j2
+@Slf4j
 class PersistenceAspect {
 
     private static final String DATA_FILE = "crawler91.dat";

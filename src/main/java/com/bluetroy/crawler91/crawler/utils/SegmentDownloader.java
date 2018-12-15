@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.crawler.utils;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,19 +26,51 @@ import java.util.concurrent.*;
  */
 // todo 下载失败时的处理
 
-@Log4j2
+@Slf4j
 public class SegmentDownloader {
-    private static final ExecutorService DOWNLOAD_SERVICE;
-    private static int numberOfConcurrentThreads = 4;
+    private static ExecutorService DOWNLOAD_SERVICE;
+    private static int concurrentThreads = 4;
+    private static int parallelTask = 1;
     private static Path resourceFolder;
 
     static {
+        DOWNLOAD_SERVICE = getTheadPool(concurrentThreads * parallelTask);
         resourceFolder = Paths.get(System.getProperty("user.dir"));
     }
 
-    static {
-        DOWNLOAD_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
-                .setNameFormat("DOWNLOAD-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
+    public static void setParallelTaskAndConcurrentThreads(int parallelTask, int concurrentThreads) {
+        setThreadPool(parallelTask * concurrentThreads);
+        SegmentDownloader.parallelTask = parallelTask;
+        SegmentDownloader.concurrentThreads = concurrentThreads;
+    }
+
+    private static void setThreadPool(Integer maximumPoolSize) {
+        DOWNLOAD_SERVICE.shutdown();
+        DOWNLOAD_SERVICE = getTheadPool(maximumPoolSize);
+    }
+
+    private static ThreadPoolExecutor getTheadPool(Integer maximumPoolSize) {
+        return new ThreadPoolExecutor(0, concurrentThreads * parallelTask, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
+                .setNameFormat("SEGMENT-DOWNLOAD-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
+    }
+
+    public static int getParallelTask() {
+        return parallelTask;
+    }
+
+    public static void setParallelTask(int parallelTask) {
+        setThreadPool(parallelTask);
+        SegmentDownloader.parallelTask = parallelTask;
+    }
+
+    public static int getConcurrentThreads() {
+        return concurrentThreads;
+    }
+
+    public static void setConcurrentThreads(int concurrentThreads) {
+        setThreadPool(concurrentThreads);
+        SegmentDownloader.concurrentThreads = concurrentThreads;
+
     }
 
     public static Future<String> downloadInFuture(String url) {
@@ -63,7 +96,7 @@ public class SegmentDownloader {
             if (connection.getResponseCode() == 200) {
                 RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
                 randomAccessFile.setLength(connection.getContentLength());
-                CountDownLatch latch = new CountDownLatch(numberOfConcurrentThreads);
+                CountDownLatch latch = new CountDownLatch(concurrentThreads);
                 segmentDownload(file, url, latch);
                 merge(file, latch);
                 log.info("下载成功 : {}", file);
@@ -85,11 +118,11 @@ public class SegmentDownloader {
 
     private static void segmentDownload(File file, String url, CountDownLatch latch) {
         long fileSize = file.length();
-        long segmentFileSize = fileSize / numberOfConcurrentThreads;
-        for (int i = 0; i < numberOfConcurrentThreads; i++) {
+        long segmentFileSize = fileSize / concurrentThreads;
+        for (int i = 0; i < concurrentThreads; i++) {
             long startPoint = i * segmentFileSize;
             long endPoint = (i + 1) * segmentFileSize - 1;
-            if (i == numberOfConcurrentThreads - 1) {
+            if (i == concurrentThreads - 1) {
                 endPoint = fileSize - 1;
             }
             downloadThread(file, url, i, startPoint, endPoint, latch);
@@ -137,7 +170,7 @@ public class SegmentDownloader {
 
     private static List<File> getTempFileList(File file) {
         List<File> tempFileList = new ArrayList<>();
-        for (int i = 0; i < numberOfConcurrentThreads; i++) {
+        for (int i = 0; i < concurrentThreads; i++) {
             tempFileList.add(new File(getTempFileName(file, i)));
         }
         return tempFileList;

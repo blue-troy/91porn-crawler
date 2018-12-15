@@ -36,7 +36,7 @@ class Persistence implements Persistability, CommandLineRunner {
     @Override
     public void save(Persistability persistability) {
         log.info("马上要被销毁了 要把数据存下来");
-        try (ObjectOutputStream outPutStream = new ObjectOutputStream(new FileOutputStream("crawler91.dat"));
+        try (ObjectOutputStream outPutStream = new ObjectOutputStream(new FileOutputStream("crawler91.dat"))
         ) {
             outPutStream.writeObject(persistability);
         } catch (IOException e) {

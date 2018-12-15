@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.crawler.tools;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import static com.bluetroy.crawler91.crawler.utils.HttpUtils.getConnection;
 /**
  * @author heyixin
  */
-@Log4j2
+@Slf4j
 public class HttpClient {
     private static final ExecutorService HTTP_GET_SERVICE;
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;

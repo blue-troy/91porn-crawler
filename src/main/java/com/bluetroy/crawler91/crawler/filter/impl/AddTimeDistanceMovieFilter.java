@@ -3,6 +3,7 @@ package com.bluetroy.crawler91.crawler.filter.impl;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import com.bluetroy.crawler91.crawler.filter.MovieFilter;
 import com.bluetroy.crawler91.crawler.utils.TimeUtils;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 2018-11-30
  * Time: 23:34
  */
+@ToString
 public class AddTimeDistanceMovieFilter implements MovieFilter {
     /**
      * 以分钟为单位的时间

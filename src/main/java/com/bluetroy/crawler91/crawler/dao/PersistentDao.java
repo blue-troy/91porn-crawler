@@ -4,6 +4,7 @@ import com.bluetroy.crawler91.crawler.dao.entity.DownloadErrorInfo;
 import com.bluetroy.crawler91.crawler.dao.entity.Movie;
 import com.bluetroy.crawler91.crawler.utils.TimeUtils;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * @author heyixin
  * todo 闭包
  */
-@Log4j2
+@Slf4j
 @Repository
 class PersistentDao implements BaseDao, Persistability {
     private static final long serialVersionUID = 707378050594103627L;

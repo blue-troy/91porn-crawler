@@ -38,8 +38,8 @@ class CrawlerImpl implements Crawler {
     }
 
     @Override
-    public void setResource(Path path) {
-        downloader.setResource(path);
+    public void setParallelTaskAndConcurrentThreads(Integer parallelTask, Integer concurrentThreads) {
+        downloader.setParallelTaskAndConcurrentThreads(parallelTask, concurrentThreads);
     }
 
     @Override
@@ -80,6 +80,11 @@ class CrawlerImpl implements Crawler {
     @Override
     public String getFilterInfo() {
         return filter.getFilterInfo();
+    }
+
+    @Override
+    public void setResource(Path path) {
+        downloader.setResource(path);
     }
 
     @Override

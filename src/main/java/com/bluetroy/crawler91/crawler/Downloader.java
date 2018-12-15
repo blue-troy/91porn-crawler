@@ -25,6 +25,8 @@ interface Downloader {
      */
     Future downloadByKey(String key);
 
+    void setParallelTaskAndConcurrentThreads(Integer parallelTask, Integer concurrentThreads);
+
     /**
      * 设置下载位置
      *

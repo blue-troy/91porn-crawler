@@ -3,7 +3,7 @@ package com.bluetroy.crawler91.crawler;
 import com.bluetroy.crawler91.crawler.dao.BaseDao;
 import com.bluetroy.crawler91.crawler.utils.SegmentDownloader;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,14 @@ import java.util.concurrent.*;
  * description : downloadNow采用多线程下载，一次把ToDownloadMovies下载完毕并验证
  * ContinuousDownload 持续下载，单线程发出下载指令，监听ToDownloadMovies，一旦有需要下载的视频即刻下载，下载完成后验证
  */
-@Log4j2
+@Slf4j
 @Service("downloader")
 class DownloaderImpl implements Downloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
     @Autowired
     private BaseDao dao;
-    private volatile boolean isContinuousDownloadStart = false;
+    @Autowired
+    private Crawler crawler;
 
     static {
         DOWNLOAD_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
@@ -32,21 +33,11 @@ class DownloaderImpl implements Downloader {
     @Override
     public void downloadNow() {
         String key;
-        while ((!isContinuousDownloadStart) && ((key = dao.getToDownloadMovies().poll()) != null)) {
+        while (((key = dao.getToDownloadMovies().poll()) != null)) {
             ((Downloader) AopContext.currentProxy()).downloadByKey(key);
         }
     }
 
-    @Override
-    public synchronized void startContinuousDownload() throws InterruptedException {
-        if (!isContinuousDownloadStart) {
-            isContinuousDownloadStart = true;
-            while (isContinuousDownloadStart) {
-                String key = dao.getToDownloadMovies().take();
-                ((Downloader) AopContext.currentProxy()).downloadByKey(key);
-            }
-        }
-    }
 
     @Override
     public Future downloadByKey(String key) {
@@ -74,7 +65,26 @@ class DownloaderImpl implements Downloader {
     }
 
     @Override
+    public void setParallelTaskAndConcurrentThreads(Integer parallelTask, Integer concurrentThreads) {
+        if (parallelTask != null) {
+            if (concurrentThreads != null) {
+                SegmentDownloader.setParallelTaskAndConcurrentThreads(parallelTask, concurrentThreads);
+            } else {
+                SegmentDownloader.setParallelTask(parallelTask);
+            }
+        } else {
+            if (concurrentThreads != null) {
+                SegmentDownloader.setConcurrentThreads(concurrentThreads);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+        log.info("setParallelTask: {} ; ConcurrentThreads :{}", SegmentDownloader.getParallelTask(), SegmentDownloader.getConcurrentThreads());
+    }
+
+    @Override
     public void setResource(Path path) {
         SegmentDownloader.setResourceFolder(path);
+        log.info("setResourceFolder : {}", SegmentDownloader.getResourceFolder());
     }
 }

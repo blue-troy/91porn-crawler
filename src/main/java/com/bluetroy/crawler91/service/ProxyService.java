@@ -2,6 +2,7 @@ package com.bluetroy.crawler91.service;
 
 import com.bluetroy.crawler91.vo.ProxyInfo;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
  * Date: 2018-11-07
  * Time: 5:32 PM
  */
-@Log4j2
+@Slf4j
 @Component
 public class ProxyService {
     static {

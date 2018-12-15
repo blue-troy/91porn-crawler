@@ -46,7 +46,7 @@ public enum Category {
 
     private String category;
 
-    private Category(String category) {
+    Category(String category) {
         this.category = category;
     }
 

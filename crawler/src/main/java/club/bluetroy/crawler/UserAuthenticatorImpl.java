@@ -1,6 +1,7 @@
 package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.tools.HttpClient;
+import club.bluetroy.crawler.tools.PornUrl;
 import club.bluetroy.crawler.tools.Selector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,7 @@ class UserAuthenticatorImpl implements UserAuthenticator {
 
     @Override
     public void login(String name, String password, String verificationCode) throws Exception {
-        //todo host统一问题
-        String loginResult = HttpClient.post("http://91porn.com/login.php", getLoginParams(name, password, verificationCode));
+        String loginResult = HttpClient.post(PornUrl.getLoginUrl(), PornUrl.getLoginParams(name, password, verificationCode));
         if (!verifyLogin(loginResult, name)) {
             throw new Exception(selector.getLoginErrorMessage(loginResult));
         }
@@ -29,10 +29,6 @@ class UserAuthenticatorImpl implements UserAuthenticator {
 
     private boolean verifyLogin(String loginResult, String name) {
         return loginResult.contains(name);
-    }
-
-    private String getLoginParams(String name, String password, String verificationCode) {
-        return "action_login=Log+In&captcha_input=" + verificationCode + "&fingerprint=&fingerprint2=&password=" + password + "&username=" + name + "&x=40&y=6";
     }
 
 }

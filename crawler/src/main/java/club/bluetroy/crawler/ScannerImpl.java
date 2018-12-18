@@ -6,7 +6,7 @@ import club.bluetroy.crawler.dao.entity.KeyContent;
 import club.bluetroy.crawler.tools.ContentTool;
 import club.bluetroy.crawler.tools.ScannerTool;
 import club.bluetroy.crawler.dao.entity.Category;
-import club.bluetroy.crawler.dao.entity.PornUrl;
+import club.bluetroy.crawler.tools.PornUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

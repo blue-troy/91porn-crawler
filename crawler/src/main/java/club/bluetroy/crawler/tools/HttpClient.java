@@ -34,11 +34,9 @@ public class HttpClient {
     public static String getNow(String url) throws Exception {
         log.info("getNow  " + url);
         HttpURLConnection httpURLConnection = getConnection(url);
-        //todo 用代理访问？ httpURLConnection.usingProxy()
         if (httpURLConnection.getResponseCode() >= NOT_SUCCESS_RESPONSE_CODE) {
             throw new Exception("HTTP Request is not success, Response code is " + httpURLConnection.getResponseCode());
         }
-        //todo 用buffer
         return getInputString(httpURLConnection);
     }
 

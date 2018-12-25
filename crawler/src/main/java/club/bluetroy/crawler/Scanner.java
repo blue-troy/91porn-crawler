@@ -21,6 +21,13 @@ interface Scanner {
      */
     void scanDownloadUrl();
 
+    /**
+     * 获取视频下载地址
+     *
+     * @param key 视频key
+     * @return 视频的下载地址
+     * @throws Exception 获取视频下载地址失败
+     */
     String getDownloadUrl(String key) throws Exception;
 
     /**

@@ -89,7 +89,17 @@ public interface BaseDao {
      */
     void addDownloadedMovies(String key);
 
+    /**
+     * 获取需要被下载视频列表
+     *
+     * @return 需要被下载的视频表
+     */
     LinkedBlockingDeque<String> getToDownloadMovies();
 
+    /**
+     * 获取下载错误视频信息表
+     *
+     * @return 下载错误视频信息表
+     */
     ConcurrentHashMap<String, DownloadErrorInfo> getDownloadError();
 }

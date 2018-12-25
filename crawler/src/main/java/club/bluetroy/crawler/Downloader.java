@@ -25,6 +25,12 @@ interface Downloader {
      */
     Future downloadByKey(String key);
 
+    /**
+     * 设置下载的并行任务及任务并发线程数
+     *
+     * @param parallelTask      同时下载的任务数量
+     * @param concurrentThreads 任务的并发线程数
+     */
     void setParallelTaskAndConcurrentThreads(Integer parallelTask, Integer concurrentThreads);
 
     /**

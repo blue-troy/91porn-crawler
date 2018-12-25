@@ -29,12 +29,12 @@ class Persistence implements Persistability, CommandLineRunner {
     private PersistentDao dao;
 
     @Override
-    public void init(Persistability persistability) {
+    public void initialize(Persistability persistability) {
         init((PersistentDao) persistability);
     }
 
     @Override
-    public void save(Persistability persistability) {
+    public void persistence(Persistability persistability) {
         log.info("马上要被销毁了 要把数据存下来");
         try (ObjectOutputStream outPutStream = new ObjectOutputStream(new FileOutputStream("crawler91.dat"))
         ) {
@@ -46,12 +46,12 @@ class Persistence implements Persistability, CommandLineRunner {
 
     @PreDestroy
     public void save() {
-        dao.save(dao);
+        dao.persistence(dao);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        dao.init(dao);
+        dao.initialize(dao);
     }
 
     private void init(PersistentDao persistentDao) {

@@ -80,13 +80,13 @@ class PersistentDao implements BaseDao, Persistability {
     }
 
     @Override
-    public void init(Persistability persistentDao) {
-        persistence.init(this);
+    public void initialize(Persistability persistentDao) {
+        persistence.initialize(this);
     }
 
     @Override
-    public void save(Persistability persistentDao) {
-        persistence.save(this);
+    public void persistence(Persistability persistentDao) {
+        persistence.persistence(this);
     }
 
     @Override

@@ -11,8 +11,18 @@ import java.io.Serializable;
  * Time: 下午7:23
  */
 public interface Persistability extends Serializable {
-    void init(Persistability persistability);
+    /**
+     * 初始化对象
+     *
+     * @param persistability 具有可持久化性质的对象
+     */
+    void initialize(Persistability persistability);
 
-    void save(Persistability persistability);
+    /**
+     * 对对象进行持久化
+     *
+     * @param persistability 具有可持久化性质的对象
+     */
+    void persistence(Persistability persistability);
 }
 

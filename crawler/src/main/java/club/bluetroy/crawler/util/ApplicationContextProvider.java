@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.utils;
+package club.bluetroy.crawler.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

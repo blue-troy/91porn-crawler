@@ -58,7 +58,7 @@ public class StatisticsAspect {
         adviser.message("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }
 
-    @After("execution(void club.bluetroy.crawler.tools.Selector.getDownloadUrl(*))")
+    @After("execution(void club.bluetroy.crawler.tool.Selector.getDownloadUrl(*))")
     public void gatherToDownloadMovies() throws Exception {
         sendToDownloadMovies();
     }

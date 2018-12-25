@@ -1,6 +1,6 @@
 package club.bluetroy.crawler.dao.entity;
 
-import club.bluetroy.crawler.utils.TimeUtils;
+import club.bluetroy.crawler.util.TimeUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

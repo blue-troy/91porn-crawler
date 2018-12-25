@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.tools;
+package club.bluetroy.crawler.tool;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

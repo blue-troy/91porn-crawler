@@ -1,7 +1,7 @@
 package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
-import club.bluetroy.crawler.utils.SegmentDownloader;
+import club.bluetroy.crawler.util.SegmentDownloader;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;

@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.utils;
+package club.bluetroy.crawler.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

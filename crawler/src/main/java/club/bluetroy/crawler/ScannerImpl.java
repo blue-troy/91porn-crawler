@@ -3,10 +3,10 @@ package club.bluetroy.crawler;
 import club.bluetroy.crawler.dao.BaseDao;
 import club.bluetroy.crawler.dao.MovieStatus;
 import club.bluetroy.crawler.dao.entity.KeyContent;
-import club.bluetroy.crawler.tools.ContentTool;
-import club.bluetroy.crawler.tools.ScannerTool;
+import club.bluetroy.crawler.tool.ContentTool;
+import club.bluetroy.crawler.tool.ScannerTool;
 import club.bluetroy.crawler.dao.entity.Category;
-import club.bluetroy.crawler.tools.PornUrl;
+import club.bluetroy.crawler.tool.PornUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

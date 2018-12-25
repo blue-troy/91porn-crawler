@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.tools;
+package club.bluetroy.crawler.tool;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 
-import static club.bluetroy.crawler.utils.HttpUtils.getConnection;
+import static club.bluetroy.crawler.util.HttpUtils.getConnection;
 
 /**
  * @author heyixin

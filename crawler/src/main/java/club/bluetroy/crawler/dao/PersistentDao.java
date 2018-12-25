@@ -2,7 +2,7 @@ package club.bluetroy.crawler.dao;
 
 import club.bluetroy.crawler.dao.entity.Movie;
 import club.bluetroy.crawler.dao.entity.DownloadErrorInfo;
-import club.bluetroy.crawler.utils.TimeUtils;
+import club.bluetroy.crawler.util.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

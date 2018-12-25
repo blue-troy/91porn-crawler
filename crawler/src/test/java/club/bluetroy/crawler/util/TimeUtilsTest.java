@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.utils;
+package club.bluetroy.crawler.util;
 
 import org.junit.Test;
 

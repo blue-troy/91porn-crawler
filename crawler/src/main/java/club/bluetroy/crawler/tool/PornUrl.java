@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.tools;
+package club.bluetroy.crawler.tool;
 
 import club.bluetroy.crawler.dao.entity.Category;
 

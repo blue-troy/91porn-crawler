@@ -2,7 +2,7 @@ package club.bluetroy.crawler.filter.impl;
 
 import club.bluetroy.crawler.dao.entity.Movie;
 import club.bluetroy.crawler.filter.MovieFilter;
-import club.bluetroy.crawler.utils.TimeUtils;
+import club.bluetroy.crawler.util.TimeUtils;
 import lombok.ToString;
 
 import java.time.LocalDateTime;

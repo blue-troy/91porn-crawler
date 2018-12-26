@@ -73,13 +73,6 @@ public class SegmentDownloader {
 
     }
 
-    public static Future<String> downloadInFuture(String url) {
-        return DOWNLOAD_SERVICE.submit(() -> {
-            download(url);
-            return "success";
-        });
-    }
-
     public static void download(String url) throws Exception {
         log.info("下载文件：文件名: {} 下载地址：{}", getFileNameByUrl(url), url);
         download(url, getFileNameByUrl(url), null);

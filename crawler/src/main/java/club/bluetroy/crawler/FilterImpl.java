@@ -31,7 +31,7 @@ class FilterImpl implements Filter {
         LinkedList<String> filteredMovies = new LinkedList<>();
         scannedMovies.forEachEntry(1, entry -> {
             filteredMovies.add(entry.getKey());
-            log.info("过滤出了 ： ", entry.getValue());
+            log.info("过滤出了 ：{}", entry.getValue());
         });
         dao.addFilteredMovies(filteredMovies);
     }

@@ -1,7 +1,7 @@
-package club.bluetroy.web.controller;
+package club.bluetroy.controller;
 
 import club.bluetroy.crawler.vo.ProxyInfo;
-import club.bluetroy.web.service.ProxyService;
+import club.bluetroy.service.ProxyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,4 @@
-package club.bluetroy.web.vo;
+package club.bluetroy.vo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

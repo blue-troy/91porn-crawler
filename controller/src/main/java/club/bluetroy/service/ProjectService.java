@@ -1,4 +1,4 @@
-package club.bluetroy.web.service;
+package club.bluetroy.service;
 
 import club.bluetroy.crawler.Downloader;
 import club.bluetroy.crawler.Filter;

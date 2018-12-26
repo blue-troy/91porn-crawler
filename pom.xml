@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>crawler</module>
-        <module>web</module>
+        <module>controller</module>
     </modules>
     <packaging>pom</packaging>
 

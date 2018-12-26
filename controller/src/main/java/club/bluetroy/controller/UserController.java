@@ -1,4 +1,4 @@
-package club.bluetroy.web.controller;
+package club.bluetroy.controller;
 
 import club.bluetroy.crawler.UserAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;

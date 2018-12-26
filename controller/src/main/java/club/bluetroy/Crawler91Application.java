@@ -1,4 +1,4 @@
-package club.bluetroy.web;
+package club.bluetroy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
-@SpringBootApplication(scanBasePackages = "club")
+@SpringBootApplication
 public class Crawler91Application {
 
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package club.bluetroy.web.config;
+package club.bluetroy.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

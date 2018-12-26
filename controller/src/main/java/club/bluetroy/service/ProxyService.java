@@ -1,4 +1,4 @@
-package club.bluetroy.web.service;
+package club.bluetroy.service;
 
 import club.bluetroy.crawler.vo.ProxyInfo;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
-package club.bluetroy.web.controller;
+package club.bluetroy.controller;
 
-import club.bluetroy.web.service.ProjectService;
+import club.bluetroy.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RestController;

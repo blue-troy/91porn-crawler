@@ -1,4 +1,4 @@
-package club.bluetroy.web.ui;
+package club.bluetroy.ui;
 
 import javafx.application.Application;
 import javafx.stage.DirectoryChooser;

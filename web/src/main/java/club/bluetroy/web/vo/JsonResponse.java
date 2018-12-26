@@ -1,4 +1,4 @@
-package club.bluetroy.crawler91.web.vo;
+package club.bluetroy.web.vo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

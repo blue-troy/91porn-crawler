@@ -23,7 +23,7 @@ class DownloaderImpl implements Downloader {
     @Autowired
     private BaseDao dao;
     @Autowired
-    private Crawler crawler;
+    private Scanner scanner;
 
     static {
         DOWNLOAD_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
@@ -55,7 +55,7 @@ class DownloaderImpl implements Downloader {
     private String getDownloadUrl(String key) throws Exception {
         String downloadUrl = dao.getMovie(key).getDownloadURL();
         if (downloadUrl == null) {
-            downloadUrl = crawler.getDownloadUrl(key);
+            downloadUrl = scanner.getDownloadUrl(key);
         }
         return downloadUrl;
     }

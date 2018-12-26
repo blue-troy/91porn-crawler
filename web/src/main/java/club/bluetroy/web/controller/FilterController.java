@@ -1,6 +1,6 @@
-package club.bluetroy.crawler91.web.controller;
+package club.bluetroy.web.controller;
 
-import club.bluetroy.crawler.Crawler;
+import club.bluetroy.crawler.Filter;
 import club.bluetroy.crawler.vo.FilterVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/filter")
 public class FilterController {
     @Autowired
-    private Crawler crawler;
+    private Filter filter;
 
     @GetMapping
     String getFilterInfo() {
-        return crawler.getFilterInfo();
+        return filter.getFilterInfo();
     }
 
     @PostMapping
     void setFilter(@RequestBody FilterVO crawlerVO) {
-        crawler.setFilter(crawlerVO);
+        filter.setFilter(crawlerVO);
     }
 
 }

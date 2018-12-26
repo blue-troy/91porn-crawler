@@ -1,6 +1,6 @@
-package club.bluetroy.crawler91.web.controller;
+package club.bluetroy.web.controller;
 
-import club.bluetroy.crawler.Crawler;
+import club.bluetroy.crawler.UserAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,10 +21,10 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private Crawler crawler;
+    private UserAuthenticator authenticator;
 
     @RequestMapping("/login")
     public void login(@NotNull String username, @NotNull String password, @RequestParam("captcha_input") @NotNull String captchaInput) throws Exception {
-        crawler.login(username, password, captchaInput);
+        authenticator.login(username, password, captchaInput);
     }
 }

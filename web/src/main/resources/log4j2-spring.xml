@@ -15,7 +15,7 @@
     </appenders>
 
     <loggers>
-        <Logger name="club.bluetroy.crawler91" level="info"/>
+        <Logger name="club.bluetroy" level="info"/>
         <root level="warn">
             <appenderref ref="CONSOLE"/>
             <appenderRef ref="FILE"/>

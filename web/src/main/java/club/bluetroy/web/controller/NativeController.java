@@ -1,6 +1,6 @@
-package club.bluetroy.crawler91.web.controller;
+package club.bluetroy.web.controller;
 
-import club.bluetroy.crawler91.web.ui.NativeUi;
+import club.bluetroy.web.ui.NativeUi;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

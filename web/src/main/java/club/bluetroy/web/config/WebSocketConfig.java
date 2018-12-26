@@ -1,4 +1,4 @@
-package club.bluetroy.crawler91.web.config;
+package club.bluetroy.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

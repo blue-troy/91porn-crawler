@@ -1,6 +1,6 @@
-package club.bluetroy.crawler91.web.controller;
+package club.bluetroy.web.controller;
 
-import club.bluetroy.crawler91.web.service.ProjectService;
+import club.bluetroy.web.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,6 +1,8 @@
-package club.bluetroy.crawler91.web.service;
+package club.bluetroy.web.service;
 
-import club.bluetroy.crawler.Crawler;
+import club.bluetroy.crawler.Downloader;
+import club.bluetroy.crawler.Filter;
+import club.bluetroy.crawler.Scanner;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -29,7 +31,11 @@ public class ProjectService implements CommandLineRunner {
 
 
     @Autowired
-    private Crawler crawler;
+    private Scanner scanner;
+    @Autowired
+    private Filter filter;
+    @Autowired
+    private Downloader downloader;
 
     public void shutdown() {
         singleThreadPool.shutdown();
@@ -43,10 +49,10 @@ public class ProjectService implements CommandLineRunner {
 
     private void run() {
         System.out.println("开始执行操作");
-        crawler.scanMovies();
-        crawler.doFilter();
-        crawler.scanDownloadUrl();
-        crawler.downloadNow();
+        scanner.scanMovies();
+        filter.doFilter();
+        scanner.scanDownloadUrl();
+        downloader.downloadNow();
     }
 
     @Override

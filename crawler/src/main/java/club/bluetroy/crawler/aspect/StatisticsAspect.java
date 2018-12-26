@@ -1,6 +1,7 @@
 package club.bluetroy.crawler.aspect;
 
 import club.bluetroy.crawler.Adviser;
+import club.bluetroy.crawler.Statistics;
 import club.bluetroy.crawler.dao.BaseDao;
 import club.bluetroy.crawler.dao.MovieStatus;
 import club.bluetroy.crawler.dao.entity.Movie;
@@ -28,7 +29,7 @@ import java.util.concurrent.Future;
 
 @Aspect
 @Component
-public class StatisticsAspect {
+public class StatisticsAspect implements Statistics {
     @Autowired
     private BaseDao dao;
     @Autowired
@@ -36,31 +37,21 @@ public class StatisticsAspect {
 
     private HashMap<String, Movie> downloadingMovies = new HashMap<>();
 
-    @Pointcut("execution(java.util.concurrent.Future club.bluetroy.crawler.Crawler.downloadByKey(String)) && args(key)")
+    @Pointcut("execution(java.util.concurrent.Future club.bluetroy.crawler.Downloader.downloadByKey(String)) && args(key)")
     public void downloadPerformance(String key) {
-    }
-
-    /**
-     * 特例测试：统计扫描视频的数量并通知webSocket通知前端
-     */
-    @After("execution(void club.bluetroy.crawler.Crawler.scanMovies())")
-    public void gatherScannedMoviesCount() throws Exception {
-        adviser.message("/scannedMovies/count", dao.scannedMovieCount());
-    }
-
-    @After("execution(void club.bluetroy.crawler.Crawler.scanMovies())")
-    public void gatherScannedMovies() throws Exception {
-        adviser.message("/scannedMovies", dao.getMovies(MovieStatus.SCANNED_MOVIES));
-    }
-
-    @After("execution(void club.bluetroy.crawler.Crawler.doFilter())")
-    public void gatherFilteredMovies() throws Exception {
-        adviser.message("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }
 
     @After("execution(void club.bluetroy.crawler.tool.Selector.getDownloadUrl(*))")
     public void gatherToDownloadMovies() throws Exception {
         sendToDownloadMovies();
+    }
+
+    private void sendToDownloadMovies() throws Exception {
+        adviser.message("/toDownloadMovies", getData(MovieStatus.TO_DOWNLOAD_MOVIES));
+    }
+
+    private ConcurrentHashMap<String, Movie> getData(MovieStatus movieStatus) {
+        return dao.getMovies(movieStatus);
     }
 
     @Around(value = "downloadPerformance(key)", argNames = "proceedingJoinPoint,key")
@@ -70,33 +61,6 @@ public class StatisticsAspect {
         returnObject.get();
         removeDownloadingMovie(key);
         return returnObject;
-    }
-
-    @After(value = "downloadPerformance(key))", argNames = "key")
-    public void gatherDownloadResult(String key) throws Exception {
-        sendDownloadResult();
-    }
-
-    public void gatherAllMoviesStatistics() throws Exception {
-        gatherScannedMovies();
-        gatherScannedMoviesCount();
-        gatherFilteredMovies();
-        sendToDownloadMovies();
-        sendDownloadingMovies();
-        sendDownloadResult();
-    }
-
-    private void sendDownloadResult() throws Exception {
-        adviser.message("/downloadedMovies", getData(MovieStatus.DOWNLOADED_MOVIES));
-        adviser.message("/downloadErrorMovies", getData(MovieStatus.DOWNLOAD_ERROR));
-    }
-
-    private void sendToDownloadMovies() throws Exception {
-        adviser.message("/toDownloadMovies", getData(MovieStatus.TO_DOWNLOAD_MOVIES));
-    }
-
-    private void sendDownloadingMovies() throws Exception {
-        adviser.message("/downloadingMovies", downloadingMovies);
     }
 
     private void addDownloadingMovie(String key) throws Exception {
@@ -109,8 +73,46 @@ public class StatisticsAspect {
         sendDownloadingMovies();
     }
 
-    private ConcurrentHashMap<String, Movie> getData(MovieStatus movieStatus) {
-        return dao.getMovies(movieStatus);
+    private void sendDownloadingMovies() throws Exception {
+        adviser.message("/downloadingMovies", downloadingMovies);
+    }
+
+    @After(value = "downloadPerformance(key))", argNames = "key")
+    public void gatherDownloadResult(String key) throws Exception {
+        sendDownloadResult();
+    }
+
+    private void sendDownloadResult() throws Exception {
+        adviser.message("/downloadedMovies", getData(MovieStatus.DOWNLOADED_MOVIES));
+        adviser.message("/downloadErrorMovies", getData(MovieStatus.DOWNLOAD_ERROR));
+    }
+
+    @Override
+    public void gatherAllMoviesStatistics() throws Exception {
+        gatherScannedMovies();
+        gatherScannedMoviesCount();
+        gatherFilteredMovies();
+        sendToDownloadMovies();
+        sendDownloadingMovies();
+        sendDownloadResult();
+    }
+
+    @After("execution(void club.bluetroy.crawler.Scanner.scanMovies())")
+    public void gatherScannedMovies() throws Exception {
+        adviser.message("/scannedMovies", dao.getMovies(MovieStatus.SCANNED_MOVIES));
+    }
+
+    /**
+     * 特例测试：统计扫描视频的数量并通知webSocket通知前端
+     */
+    @After("execution(void club.bluetroy.crawler.Scanner.scanMovies())")
+    public void gatherScannedMoviesCount() throws Exception {
+        adviser.message("/scannedMovies/count", dao.scannedMovieCount());
+    }
+
+    @After("execution(void club.bluetroy.crawler.Filter.doFilter())")
+    public void gatherFilteredMovies() throws Exception {
+        adviser.message("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
     }
 
 }

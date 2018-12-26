@@ -10,7 +10,7 @@ import java.util.List;
  * Date: 2018-11-09
  * Time: 3:03 PM
  */
-interface Scanner {
+public interface Scanner {
     /**
      * 扫描视频，不包括视频下载地址
      */

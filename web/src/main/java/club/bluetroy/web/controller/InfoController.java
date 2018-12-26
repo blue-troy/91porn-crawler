@@ -1,6 +1,6 @@
-package club.bluetroy.crawler91.web.controller;
+package club.bluetroy.web.controller;
 
-import club.bluetroy.crawler.aspect.StatisticsAspect;
+import club.bluetroy.crawler.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/info")
 public class InfoController {
     @Autowired
-    private StatisticsAspect statisticsAspect;
+    private Statistics statistics;
 
 
     @GetMapping
     public void getInfo() throws Exception {
-        statisticsAspect.gatherAllMoviesStatistics();
+        statistics.gatherAllMoviesStatistics();
     }
 }

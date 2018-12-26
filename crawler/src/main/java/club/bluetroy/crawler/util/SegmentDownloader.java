@@ -43,6 +43,7 @@ public class SegmentDownloader {
         SegmentDownloader.concurrentThreads = concurrentThreads;
     }
 
+    //  todo 过多的业务逻辑
     private static void setThreadPool(Integer maximumPoolSize) {
         DOWNLOAD_SERVICE.shutdown();
         DOWNLOAD_SERVICE = getTheadPool(maximumPoolSize);
@@ -92,7 +93,7 @@ public class SegmentDownloader {
         HttpURLConnection connection = HttpUtils.getConnection(url);
         File file = getFile(fileName, path);
         if (Files.notExists(file.toPath())) {
-            if (isConnectionSuccess(connection)) {
+            if (HttpUtils.isConnectionSuccess(connection)) {
                 RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
                 randomAccessFile.setLength(connection.getContentLength());
                 CountDownLatch latch = new CountDownLatch(concurrentThreads);
@@ -113,10 +114,6 @@ public class SegmentDownloader {
         } else {
             return new File(fileName);
         }
-    }
-
-    private static boolean isConnectionSuccess(HttpURLConnection connection) throws IOException {
-        return connection.getResponseCode() == 200;
     }
 
     private static void segmentDownload(File file, String url, CountDownLatch latch) {
@@ -151,7 +148,7 @@ public class SegmentDownloader {
                     HttpURLConnection connection = HttpUtils.getDownloadConnection(url);
                     connection.setRequestProperty("Range", "bytes=" + startPoint + "-" + endPoint);
                     System.out.println(connection.getResponseCode());
-                    if (isPartialContentConnection(connection)) {
+                    if (HttpUtils.isPartialContentConnection(connection)) {
                         try (InputStream inputStream = connection.getInputStream()
                         ) {
                             Files.copy(inputStream, tempFile.toPath());
@@ -181,10 +178,6 @@ public class SegmentDownloader {
 
     private static String getTempFileName(File file, int threadId) {
         return file.getName() + "." + threadId + ".temp";
-    }
-
-    private static boolean isPartialContentConnection(HttpURLConnection connection) throws IOException {
-        return connection.getResponseCode() == 206;
     }
 
     public static void download(String url, String fileName) throws Exception {

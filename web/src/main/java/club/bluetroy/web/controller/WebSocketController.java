@@ -1,7 +1,7 @@
-package club.bluetroy.crawler91.web.controller;
+package club.bluetroy.web.controller;
 
 import club.bluetroy.crawler.Adviser;
-import club.bluetroy.crawler91.web.vo.JsonResponse;
+import club.bluetroy.web.vo.JsonResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 

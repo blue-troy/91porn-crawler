@@ -1,4 +1,4 @@
-package club.bluetroy.crawler91.web.ui;
+package club.bluetroy.web.ui;
 
 import javafx.application.Application;
 import javafx.stage.DirectoryChooser;

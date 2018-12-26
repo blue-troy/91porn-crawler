@@ -20,6 +20,12 @@ public class HttpUtils {
         CookieUtils.init();
     }
 
+    public static HttpURLConnection getDownloadConnection(String url) throws IOException {
+        HttpURLConnection httpURLConnection = getConnection(url);
+        httpURLConnection.setReadTimeout(TEN_MINUTE);
+        httpURLConnection.setConnectTimeout(TEN_MINUTE);
+        return httpURLConnection;
+    }
 
     public static HttpURLConnection getConnection(String url) throws IOException {
         HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
@@ -32,10 +38,11 @@ public class HttpUtils {
         return httpURLConnection;
     }
 
-    public static HttpURLConnection getDownloadConnection(String url) throws IOException {
-        HttpURLConnection httpURLConnection = getConnection(url);
-        httpURLConnection.setReadTimeout(TEN_MINUTE);
-        httpURLConnection.setConnectTimeout(TEN_MINUTE);
-        return httpURLConnection;
+    public static boolean isPartialContentConnection(HttpURLConnection connection) throws IOException {
+        return connection.getResponseCode() == 206;
+    }
+
+    public static boolean isConnectionSuccess(HttpURLConnection connection) throws IOException {
+        return connection.getResponseCode() == 200;
     }
 }

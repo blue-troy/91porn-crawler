@@ -10,7 +10,7 @@ import club.bluetroy.crawler.vo.FilterVO;
  * Date: 2018-11-09
  * Time: 2:44 PM
  */
-interface Filter {
+public interface Filter {
     /**
      * 令过滤器过滤扫描到的视频信息，并将结果存入数据仓库
      */

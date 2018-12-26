@@ -1,6 +1,6 @@
-package club.bluetroy.crawler91.web.controller;
+package club.bluetroy.web.controller;
 
-import club.bluetroy.crawler.Crawler;
+import club.bluetroy.crawler.Downloader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,15 +22,15 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/download")
 public class DownloaderController {
     @Autowired
-    private Crawler crawler;
+    private Downloader downloader;
 
     @PatchMapping("/{key}")
     public Object download(@PathVariable String key) throws ExecutionException, InterruptedException {
-        return crawler.downloadByKey(key).get();
+        return downloader.downloadByKey(key).get();
     }
 
     @PatchMapping("/path")
     public void setPath(String path) {
-        crawler.setResource(Paths.get(path));
+        downloader.setResource(Paths.get(path));
     }
 }

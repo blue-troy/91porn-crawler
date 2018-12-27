@@ -1,6 +1,7 @@
 package club.bluetroy.crawler.tool;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StreamUtils;
 
@@ -17,6 +18,7 @@ import static club.bluetroy.crawler.util.HttpUtils.getConnection;
  * @author heyixin
  */
 @Slf4j
+@UtilityClass
 public class HttpClient {
     private static final ExecutorService HTTP_GET_SERVICE;
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;

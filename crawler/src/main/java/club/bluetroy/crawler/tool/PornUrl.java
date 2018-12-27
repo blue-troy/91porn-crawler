@@ -1,6 +1,7 @@
 package club.bluetroy.crawler.tool;
 
 import club.bluetroy.crawler.dao.entity.Category;
+import lombok.experimental.UtilityClass;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,6 +11,7 @@ import club.bluetroy.crawler.dao.entity.Category;
  * Date: 2018-11-30
  * Time: 18:16
  */
+@UtilityClass
 public class PornUrl {
     private static String host = "http://91porn.com";
 

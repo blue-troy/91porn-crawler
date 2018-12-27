@@ -1,6 +1,7 @@
 package club.bluetroy.crawler.util;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import java.util.concurrent.*;
 // todo 下载失败时的处理
 
 @Slf4j
+@UtilityClass
 public class SegmentDownloader {
     private static ExecutorService DOWNLOAD_SERVICE;
     private static int concurrentThreads = 4;

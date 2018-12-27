@@ -1,11 +1,14 @@
 package club.bluetroy.crawler.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
  * @author heyixin
  */
+@UtilityClass
 public class TimeUtils {
     private static final String FORMAT = "y年M月d日H时";
 

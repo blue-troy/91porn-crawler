@@ -1,5 +1,7 @@
 package club.bluetroy.crawler.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,6 +14,7 @@ import java.net.URL;
  * Date: 2018-10-29
  * Time: 10:20 AM
  */
+@UtilityClass
 public class HttpUtils {
     private static final int THIRTY_SECONDS = 30 * 1000;
     private static final int TEN_MINUTE = 10 * 60 * 1000;

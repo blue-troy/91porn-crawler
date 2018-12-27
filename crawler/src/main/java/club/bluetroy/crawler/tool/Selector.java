@@ -1,7 +1,7 @@
 package club.bluetroy.crawler.tool;
 
 import club.bluetroy.crawler.dao.entity.Movie;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
  * Date: 2018-07-11
  * Time: 下午2:06
  */
-@Log4j2
+@Slf4j
 @Component
 public class Selector {
 
@@ -37,11 +37,6 @@ public class Selector {
             movieList.add(getMovie(movieElement));
         }
         return movieList;
-    }
-
-    public String getDownloadUrl(String html) {
-        Document document = Jsoup.parse(html);
-        return document.selectFirst("source").attr("src");
     }
 
     private Movie getMovie(Element elementMovie) {
@@ -61,5 +56,10 @@ public class Selector {
 
     private String cleanString(String dirtyString) {
         return dirtyString.replaceAll("\\s*", "").replaceAll("&nbsp;", "");
+    }
+
+    public String getDownloadUrl(String html) {
+        Document document = Jsoup.parse(html);
+        return document.selectFirst("source").attr("src");
     }
 }

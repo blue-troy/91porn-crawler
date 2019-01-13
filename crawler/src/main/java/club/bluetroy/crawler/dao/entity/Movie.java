@@ -41,6 +41,16 @@ public class Movie implements Serializable, Comparable<Movie> {
         this.fileName = title + ".mp4";
     }
 
+    public void setAddTime(String addTime) {
+        try {
+            this.addDateTime = TimeUtils.getLocalDateTime(addTime);
+        } catch (Exception e) {
+            this.addDateTime = TimeUtils.now();
+            e.printStackTrace();
+        }
+        this.addTime = TimeUtils.format(this.addDateTime);
+    }
+
     public void update(Movie movie) {
         this.view = movie.getView();
         this.collect = movie.collect;
@@ -53,15 +63,5 @@ public class Movie implements Serializable, Comparable<Movie> {
             return 0;
         }
         return 1;
-    }
-
-    public void setAddTime(String addTime) {
-        try {
-            this.addDateTime = TimeUtils.getLocalDateTime(addTime);
-        } catch (Exception e) {
-            this.addDateTime = TimeUtils.now();
-            e.printStackTrace();
-        }
-        this.addTime = TimeUtils.format(this.addDateTime);
     }
 }

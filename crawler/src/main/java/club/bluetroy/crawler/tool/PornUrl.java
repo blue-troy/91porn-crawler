@@ -36,6 +36,6 @@ public class PornUrl {
     }
 
     public static String getLoginParams(String name, String password, String verificationCode) {
-        return "action_login=Log+In&captcha_input=" + verificationCode + "&fingerprint=&fingerprint2=&password=" + password + "&username=" + name + "&x=40&y=6";
+        return "action_login=Log+In&captcha_input=" + verificationCode + "&fingerprint=&fingerprint2=&password=" + password + "&username=" + name + "&x=49&y=9";
     }
 }

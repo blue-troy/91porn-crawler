@@ -1,6 +1,5 @@
 package club.bluetroy.crawler.vo;
 
-import club.bluetroy.crawler.dao.entity.Movie;
 import club.bluetroy.crawler.util.TimeUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

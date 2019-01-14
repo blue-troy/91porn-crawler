@@ -1,6 +1,7 @@
 $(function () {
     initTable();
     showFilter();
+    setCaptchaImg();
 });
 
 function download(key) {
@@ -189,4 +190,12 @@ function login() {
 function initTable() {
     $("#info-table-body").empty();
     $.get("/info");
+}
+
+function setCaptchaImg() {
+    $.get("/user/captcha/url").done(
+        function (res) {
+            $('#captcha-img').attr('src', res);
+        }
+    );
 }

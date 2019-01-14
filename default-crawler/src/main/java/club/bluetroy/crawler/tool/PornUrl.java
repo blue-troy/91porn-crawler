@@ -27,6 +27,10 @@ public class PornUrl {
         return host + "/v.php" + getCategoryQueryParam(category);
     }
 
+    public static String getCaptchaUrl() {
+        return host + "/captcha.php";
+    }
+
     private static String getCategoryQueryParam(Category category) {
         return "?category=" + category.getCategory();
     }

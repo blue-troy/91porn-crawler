@@ -1,6 +1,7 @@
 package club.bluetroy.controller;
 
 import club.bluetroy.crawler.UserAuthenticator;
+import club.bluetroy.crawler.tool.PornUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,5 +27,10 @@ public class UserController {
     @RequestMapping("/login")
     public void login(@NotNull String username, @NotNull String password, @RequestParam("captcha_input") @NotNull String captchaInput) throws Exception {
         authenticator.login(username, password, captchaInput);
+    }
+
+    @RequestMapping("/captcha/url")
+    public String getCaptchaUrl() {
+        return PornUrl.getCaptchaUrl();
     }
 }

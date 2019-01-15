@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.tool;
+package club.bluetroy.crawler.util;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.experimental.UtilityClass;
@@ -12,7 +12,7 @@ import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 
-import static club.bluetroy.crawler.util.HttpUtils.getConnection;
+import static club.bluetroy.crawler.util.HttpConnectionUtils.getConnection;
 
 /**
  * @author heyixin
@@ -26,7 +26,6 @@ public class HttpClient {
     static {
         HTTP_GET_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
                 .setNameFormat("HTTP-GET-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
-        String host = "http://91porn.com/";
     }
 
     public static Future<String> getInFuture(String url) {

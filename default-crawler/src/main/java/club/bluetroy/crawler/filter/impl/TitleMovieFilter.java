@@ -1,6 +1,6 @@
 package club.bluetroy.crawler.filter.impl;
 
-import club.bluetroy.crawler.vo.Movie;
+import club.bluetroy.crawler.domain.Movie;
 import club.bluetroy.crawler.filter.MovieFilter;
 import lombok.ToString;
 

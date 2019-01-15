@@ -2,7 +2,7 @@ package club.bluetroy.crawler.tool;
 
 import club.bluetroy.crawler.dao.BaseDao;
 import club.bluetroy.crawler.dao.entity.KeyContent;
-import club.bluetroy.crawler.vo.Movie;
+import club.bluetroy.crawler.domain.Movie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

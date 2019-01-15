@@ -2,11 +2,10 @@ package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
 import club.bluetroy.crawler.dao.MovieStatus;
-import club.bluetroy.crawler.vo.Movie;
+import club.bluetroy.crawler.domain.Movie;
 import club.bluetroy.crawler.filter.impl.FilterChainFactory;
-import club.bluetroy.crawler.vo.FilterVO;
+import club.bluetroy.crawler.domain.FilterConfig;
 import club.bluetroy.crawler.filter.MovieFilterChain;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @Service
-class FilterImpl implements Filter {
+class DefaultFilter implements Filter {
     @Autowired
     private BaseDao dao;
     private MovieFilterChain filterChain;
@@ -50,8 +49,8 @@ class FilterImpl implements Filter {
     }
 
     @Override
-    public void setFilter(FilterVO filterVO) {
-        MovieFilterChain newFilter = FilterChainFactory.getFilter(filterVO);
+    public void setFilter(FilterConfig filterConfig) {
+        MovieFilterChain newFilter = FilterChainFactory.getFilter(filterConfig);
         if (!newFilter.equals(this.filterChain)) {
             this.filterChain = newFilter;
         }

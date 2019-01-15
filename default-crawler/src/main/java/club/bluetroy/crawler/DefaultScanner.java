@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
  * @author heyixin
  */
 @Service
-class ScannerImpl implements Scanner {
+class DefaultScanner implements Scanner {
     private static final List<String> URLS_FOR_SCAN = new ArrayList<>();
     @Autowired
     private ScannerTool scannerTool;

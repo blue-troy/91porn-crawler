@@ -18,7 +18,7 @@ import java.util.concurrent.*;
  */
 @Slf4j
 @Service
-class DownloaderImpl implements Downloader {
+class DefaultDownloader implements Downloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
     @Autowired
     private BaseDao dao;

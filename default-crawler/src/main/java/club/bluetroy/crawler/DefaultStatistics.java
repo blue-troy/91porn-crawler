@@ -1,10 +1,8 @@
-package club.bluetroy.crawler.aspect;
+package club.bluetroy.crawler;
 
-import club.bluetroy.crawler.Adviser;
-import club.bluetroy.crawler.Statistics;
 import club.bluetroy.crawler.dao.BaseDao;
 import club.bluetroy.crawler.dao.MovieStatus;
-import club.bluetroy.crawler.vo.Movie;
+import club.bluetroy.crawler.domain.Movie;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
@@ -29,7 +27,7 @@ import java.util.concurrent.Future;
 
 @Aspect
 @Component
-public class StatisticsAspect implements Statistics {
+public class DefaultStatistics implements Statistics {
     @Autowired
     private BaseDao dao;
     @Autowired

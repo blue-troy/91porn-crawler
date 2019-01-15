@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.aspect;
+package club.bluetroy.crawler.persistence;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.After;

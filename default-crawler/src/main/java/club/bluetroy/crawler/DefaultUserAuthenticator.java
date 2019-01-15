@@ -1,6 +1,6 @@
 package club.bluetroy.crawler;
 
-import club.bluetroy.crawler.tool.HttpClient;
+import club.bluetroy.crawler.util.HttpClient;
 import club.bluetroy.crawler.tool.PornUrl;
 import club.bluetroy.crawler.tool.Selector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * Time: 下午8:12
  */
 @Service
-class UserAuthenticatorImpl implements UserAuthenticator {
+class DefaultUserAuthenticator implements UserAuthenticator {
     @Autowired
     private Selector selector;
 

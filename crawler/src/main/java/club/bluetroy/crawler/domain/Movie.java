@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.vo;
+package club.bluetroy.crawler.domain;
 
 import club.bluetroy.crawler.util.TimeUtils;
 import lombok.Data;

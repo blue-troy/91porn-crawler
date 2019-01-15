@@ -1,6 +1,6 @@
 package club.bluetroy.crawler;
 
-import club.bluetroy.crawler.vo.FilterVO;
+import club.bluetroy.crawler.domain.FilterConfig;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,5 +28,5 @@ public interface Filter {
      *
      * @param filter 过滤器的值类
      */
-    void setFilter(FilterVO filter);
+    void setFilter(FilterConfig filter);
 }

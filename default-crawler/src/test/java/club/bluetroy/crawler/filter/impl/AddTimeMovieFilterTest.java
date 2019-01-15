@@ -1,7 +1,7 @@
 package club.bluetroy.crawler.filter.impl;
 
 import club.bluetroy.crawler.util.TimeUtils;
-import club.bluetroy.crawler.vo.Movie;
+import club.bluetroy.crawler.domain.Movie;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

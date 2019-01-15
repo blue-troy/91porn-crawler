@@ -85,10 +85,10 @@ public class SegmentDownloader {
     }
 
     public static void download(String url, String fileName, Path path) throws Exception {
-        HttpURLConnection connection = HttpUtils.getConnection(url);
+        HttpURLConnection connection = HttpConnectionUtils.getConnection(url);
         File file = getFile(fileName, path);
         if (Files.notExists(file.toPath())) {
-            if (HttpUtils.isConnectionSuccess(connection)) {
+            if (HttpConnectionUtils.isConnectionSuccess(connection)) {
                 RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
                 randomAccessFile.setLength(connection.getContentLength());
                 CountDownLatch latch = new CountDownLatch(concurrentThreads);
@@ -140,10 +140,10 @@ public class SegmentDownloader {
                 if (Files.exists(tempFile.toPath()) && tempFile.length() == endPoint - startPoint) {
                     latch.countDown();
                 } else {
-                    HttpURLConnection connection = HttpUtils.getDownloadConnection(url);
+                    HttpURLConnection connection = HttpConnectionUtils.getDownloadConnection(url);
                     connection.setRequestProperty("Range", "bytes=" + startPoint + "-" + endPoint);
                     System.out.println(connection.getResponseCode());
-                    if (HttpUtils.isPartialContentConnection(connection)) {
+                    if (HttpConnectionUtils.isPartialContentConnection(connection)) {
                         try (InputStream inputStream = connection.getInputStream()
                         ) {
                             Files.copy(inputStream, tempFile.toPath());

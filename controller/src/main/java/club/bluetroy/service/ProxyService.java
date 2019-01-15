@@ -1,6 +1,6 @@
 package club.bluetroy.service;
 
-import club.bluetroy.crawler.vo.ProxyInfo;
+import club.bluetroy.crawler.domain.ProxyConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +20,9 @@ public class ProxyService {
         System.setProperty("http.proxyPort", "1087");
     }
 
-    public void setProxy(ProxyInfo proxyInfo) {
-        System.setProperty("http.proxyHost", proxyInfo.getProxyHost());
-        System.setProperty("http.proxyPort", proxyInfo.getProxyPort());
-        log.info("set proxy {}:{}", proxyInfo.getProxyHost(), proxyInfo.getProxyPort());
+    public void setProxy(ProxyConfig proxyConfig) {
+        System.setProperty("http.proxyHost", proxyConfig.getProxyHost());
+        System.setProperty("http.proxyPort", proxyConfig.getProxyPort());
+        log.info("set proxy {}:{}", proxyConfig.getProxyHost(), proxyConfig.getProxyPort());
     }
 }

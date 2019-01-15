@@ -1,7 +1,8 @@
 package club.bluetroy.crawler.tool;
 
 import club.bluetroy.crawler.dao.entity.KeyContent;
-import club.bluetroy.crawler.vo.Movie;
+import club.bluetroy.crawler.util.HttpClient;
+import club.bluetroy.crawler.domain.Movie;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;

@@ -1,6 +1,6 @@
 package club.bluetroy.controller;
 
-import club.bluetroy.crawler.vo.ProxyInfo;
+import club.bluetroy.crawler.domain.ProxyConfig;
 import club.bluetroy.service.ProxyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,7 +25,7 @@ public class ProxyController {
     private ProxyService proxyService;
 
     @PatchMapping
-    public void setProxy(@RequestBody @Valid ProxyInfo proxyInfo) {
-        proxyService.setProxy(proxyInfo);
+    public void setProxy(@RequestBody @Valid ProxyConfig proxyConfig) {
+        proxyService.setProxy(proxyConfig);
     }
 }

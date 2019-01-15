@@ -2,7 +2,7 @@ package club.bluetroy.crawler.filter.impl;
 
 import club.bluetroy.crawler.filter.MovieFilterChain;
 import club.bluetroy.crawler.util.TimeUtils;
-import club.bluetroy.crawler.vo.FilterVO;
+import club.bluetroy.crawler.domain.FilterConfig;
 
 import java.time.LocalDateTime;
 
@@ -16,25 +16,25 @@ public class FilterChainFactory {
 
     //todo 其他的Filter
 
-    public static MovieFilterChain getFilter(FilterVO filterVO) {
+    public static MovieFilterChain getFilter(FilterConfig filterConfig) {
         MovieFilterChain chain = new MovieFilterChain();
-        handleTitleFilter(filterVO, chain);
-        handleCollectFilter(filterVO, chain);
-        handleAddTimeFilter(filterVO, chain);
-        handleAddTimeDistanceFilter(filterVO, chain);
+        handleTitleFilter(filterConfig, chain);
+        handleCollectFilter(filterConfig, chain);
+        handleAddTimeFilter(filterConfig, chain);
+        handleAddTimeDistanceFilter(filterConfig, chain);
         return chain;
     }
 
-    private static void handleAddTimeDistanceFilter(FilterVO filterVO, MovieFilterChain chain) {
-        if (filterVO.getAddTimeDistance() != null) {
-            chain.addFilter(new AddTimeDistanceMovieFilter(filterVO.getAddTimeDistance()));
+    private static void handleAddTimeDistanceFilter(FilterConfig filterConfig, MovieFilterChain chain) {
+        if (filterConfig.getAddTimeDistance() != null) {
+            chain.addFilter(new AddTimeDistanceMovieFilter(filterConfig.getAddTimeDistance()));
         }
     }
 
 
-    private static void handleAddTimeFilter(FilterVO filterVO, MovieFilterChain chain) {
-        String addTimeBeforeString = filterVO.getAddTimeBefore();
-        String addTimeAfterString = filterVO.getAddTimeAfter();
+    private static void handleAddTimeFilter(FilterConfig filterConfig, MovieFilterChain chain) {
+        String addTimeBeforeString = filterConfig.getAddTimeBefore();
+        String addTimeAfterString = filterConfig.getAddTimeAfter();
         LocalDateTime addTimeBefore = null;
         LocalDateTime addTimeAfter = null;
         if (addTimeAfterString != null) {
@@ -54,23 +54,23 @@ public class FilterChainFactory {
         }
     }
 
-    private static void handleCollectFilter(FilterVO filterVO, MovieFilterChain chain) {
-        if (null != filterVO.getCollect()) {
-            chain.addFilter(new CollectMovieFilter(filterVO.getCollect()));
+    private static void handleCollectFilter(FilterConfig filterConfig, MovieFilterChain chain) {
+        if (null != filterConfig.getCollect()) {
+            chain.addFilter(new CollectMovieFilter(filterConfig.getCollect()));
         }
     }
 
-    private static void handleTitleFilter(FilterVO filterVO, MovieFilterChain chain) {
-        if (null != filterVO.getTitle() && !filterVO.getTitle().isEmpty()) {
-            chain.addFilter(new TitleMovieFilter(filterVO.getTitle()));
+    private static void handleTitleFilter(FilterConfig filterConfig, MovieFilterChain chain) {
+        if (null != filterConfig.getTitle() && !filterConfig.getTitle().isEmpty()) {
+            chain.addFilter(new TitleMovieFilter(filterConfig.getTitle()));
         }
     }
 
     private static MovieFilterChain getHotShowFaceFilter() {
-        FilterVO filterVO = new FilterVO();
-        filterVO.setTitle("露脸");
-        filterVO.setCollect(200);
-        filterVO.setAddTimeAfter("1天前");
-        return getFilter(filterVO);
+        FilterConfig filterConfig = new FilterConfig();
+        filterConfig.setTitle("露脸");
+        filterConfig.setCollect(200);
+        filterConfig.setAddTimeAfter("1天前");
+        return getFilter(filterConfig);
     }
 }

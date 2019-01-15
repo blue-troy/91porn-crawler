@@ -1,7 +1,7 @@
 package club.bluetroy.controller;
 
 import club.bluetroy.crawler.Filter;
-import club.bluetroy.crawler.vo.FilterVO;
+import club.bluetroy.crawler.domain.FilterConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class FilterController {
     }
 
     @PostMapping
-    void setFilter(@RequestBody FilterVO crawlerVO) {
+    void setFilter(@RequestBody FilterConfig crawlerVO) {
         filter.setFilter(crawlerVO);
     }
 

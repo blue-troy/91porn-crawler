@@ -1,7 +1,7 @@
 package club.bluetroy.crawler.dao;
 
 import club.bluetroy.crawler.dao.entity.DownloadErrorInfo;
-import club.bluetroy.crawler.vo.Movie;
+import club.bluetroy.crawler.domain.Movie;
 
 import java.util.List;
 import java.util.Queue;

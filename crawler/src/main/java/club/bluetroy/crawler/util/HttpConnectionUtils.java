@@ -15,7 +15,7 @@ import java.net.URL;
  * Time: 10:20 AM
  */
 @UtilityClass
-public class HttpUtils {
+public class HttpConnectionUtils {
     private static final int THIRTY_SECONDS = 30 * 1000;
     private static final int TEN_MINUTE = 10 * 60 * 1000;
 

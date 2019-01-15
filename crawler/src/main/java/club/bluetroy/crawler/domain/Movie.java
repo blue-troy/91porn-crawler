@@ -51,10 +51,10 @@ public class Movie implements Serializable, Comparable<Movie> {
         this.addTime = TimeUtils.format(this.addDateTime);
     }
 
-    public void update(Movie movie) {
-        this.view = movie.getView();
-        this.collect = movie.collect;
-        this.messageNumber = movie.getMessageNumber();
+    public void update(Movie newMovie) {
+        this.view = newMovie.getView();
+        this.collect = newMovie.collect;
+        this.messageNumber = newMovie.getMessageNumber();
     }
 
     @Override

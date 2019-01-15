@@ -34,7 +34,7 @@ public class ScannerTool {
             if (keyContent.getContent().isDone()) {
                 try {
                     String downloadUrl = selector.getDownloadUrl(keyContent.getContent().get());
-                    dao.addDownloadUrl(keyContent.getKey(), downloadUrl);
+                    dao.saveDownloadUrl(keyContent.getKey(), downloadUrl);
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -50,7 +50,7 @@ public class ScannerTool {
             if (html.isDone()) {
                 try {
                     List<Movie> movies = selector.getMovies(html.get());
-                    dao.addScannedMovies(movies);
+                    dao.saveScannedMovies(movies);
                 } catch (ExecutionException | InterruptedException e) {
                     log.info("读取视频信息失败", e);
                 }

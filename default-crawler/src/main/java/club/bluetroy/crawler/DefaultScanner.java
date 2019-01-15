@@ -53,7 +53,7 @@ class DefaultScanner implements Scanner {
     }
 
     private void scanFilteredMovieDownloadUrl() {
-        Queue<KeyContent> keyContents = contentTool.getDetailContent(dao.getMovies(MovieStatus.FILTERED_MOVIES));
+        Queue<KeyContent> keyContents = contentTool.getDetailContent(dao.listMovies(MovieStatus.FILTERED_MOVIES));
         scannerTool.scanDownloadUrls(keyContents);
     }
 
@@ -61,7 +61,7 @@ class DefaultScanner implements Scanner {
     public String getDownloadUrl(String key) throws Exception {
         String html = contentTool.getContent(dao.getMovie(key));
         String downloadUrl = scannerTool.scanDownloadUrl(html);
-        dao.addDownloadUrl(key, downloadUrl);
+        dao.saveDownloadUrl(key, downloadUrl);
         return downloadUrl;
     }
 

@@ -26,7 +26,7 @@ public interface Filter {
     /**
      * 设置过滤器
      *
-     * @param filter 过滤器的值类
+     * @param filterConfig 过滤器的值类
      */
-    void setFilter(FilterConfig filter);
+    void setFilter(FilterConfig filterConfig);
 }

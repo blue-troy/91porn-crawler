@@ -49,7 +49,7 @@ public class DefaultStatistics implements Statistics {
     }
 
     private ConcurrentHashMap<String, Movie> getData(MovieStatus movieStatus) {
-        return dao.getMovies(movieStatus);
+        return dao.listMovies(movieStatus);
     }
 
     @Around(value = "downloadPerformance(key)", argNames = "proceedingJoinPoint,key")
@@ -97,7 +97,7 @@ public class DefaultStatistics implements Statistics {
 
     @After("execution(void club.bluetroy.crawler.Scanner.scanMovies())")
     public void gatherScannedMovies() throws Exception {
-        adviser.message("/scannedMovies", dao.getMovies(MovieStatus.SCANNED_MOVIES));
+        adviser.message("/scannedMovies", dao.listMovies(MovieStatus.SCANNED_MOVIES));
     }
 
     /**
@@ -105,7 +105,7 @@ public class DefaultStatistics implements Statistics {
      */
     @After("execution(void club.bluetroy.crawler.Scanner.scanMovies())")
     public void gatherScannedMoviesCount() throws Exception {
-        adviser.message("/scannedMovies/count", dao.scannedMovieCount());
+        adviser.message("/scannedMovies/count", dao.countScannedMovies());
     }
 
     @After("execution(void club.bluetroy.crawler.Filter.doFilter())")

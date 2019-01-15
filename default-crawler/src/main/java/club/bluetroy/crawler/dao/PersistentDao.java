@@ -24,17 +24,16 @@ class PersistentDao implements BaseDao, Persistability {
     /**
      * 扫描下来的 movie 信息
      * key:movie的key
-     * boolean:记录是否被过滤过了,过滤过了在不修改过滤器的情况下不应该再被过滤
      */
-    ConcurrentHashMap<String, Boolean> scannedMovies;
+    ConcurrentHashMap<String, Movie> scannedMovies;
     /**
      * 即将要下载的队列，队列内容为视频的key
      */
     LinkedBlockingDeque<String> toDownloadMovies;
     /**
-     * 视频被过滤后加载到此，若已经加入下载队列则标记为true，未加入为false
+     * 视频被过滤后加载到此
      */
-    ConcurrentHashMap<String, Boolean> filteredMovies;
+    ConcurrentHashMap<String, Movie> filteredMovies;
     /**
      * 视频信息档案仓库，key为视频key，value为视频信息对象
      */
@@ -52,13 +51,15 @@ class PersistentDao implements BaseDao, Persistability {
     private Persistence persistence;
 
     @Override
-    public void addFilteredMovies(Queue<String> filteredMovies) {
-        filteredMovies.forEach(key -> this.filteredMovies.put(key, false));
+    public void saveFilteredMoviesByKeys(Queue<String> filteredMovies) {
+        filteredMovies.forEach(key -> {
+            this.filteredMovies.put(key, movieData.get(key));
+            this.scannedMovies.remove(key);
+        });
     }
 
-
     @Override
-    public ConcurrentHashMap<String, Movie> getMovies(MovieStatus movieStatus) {
+    public ConcurrentHashMap<String, Movie> listMovies(MovieStatus movieStatus) {
         switch (movieStatus) {
             case TO_DOWNLOAD_MOVIES:
                 ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
@@ -79,14 +80,24 @@ class PersistentDao implements BaseDao, Persistability {
         }
     }
 
-    @Override
-    public void initialize(Persistability persistentDao) {
-        persistence.initialize(this);
+    private ConcurrentHashMap<String, Movie> getScannedMovies() {
+        return new ConcurrentHashMap<>(scannedMovies);
     }
 
-    @Override
-    public void persistence(Persistability persistentDao) {
-        persistence.persistence(this);
+    private ConcurrentHashMap<String, Movie> getFilteredMovies() {
+        return new ConcurrentHashMap<>(filteredMovies);
+    }
+
+    private ConcurrentHashMap<String, Movie> getDownloadErrorMovies() {
+        ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
+        downloadError.forEachKey(1, key -> data.put(key, getMovie(key)));
+        return data;
+    }
+
+    private ConcurrentHashMap<String, Movie> getDownloadedMovies() {
+        ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
+        downloadedMovies.forEachKey(1, key -> data.put(key, getMovie(key)));
+        return data;
     }
 
     @Override
@@ -95,16 +106,16 @@ class PersistentDao implements BaseDao, Persistability {
     }
 
     @Override
-    public void addDownloadUrl(String key, String downloadUrl) {
+    public void saveDownloadUrl(String key, String downloadUrl) {
         getMovie(key).setDownloadURL(downloadUrl);
         toDownloadMovies.offer(key);
-        filteredMovies.replace(key, true);
+        filteredMovies.remove(key);
     }
 
     @Override
-    public void addScannedMovies(List<Movie> movies) {
+    public void saveScannedMovies(List<Movie> movies) {
         for (Movie movie : movies) {
-            addScannedMovie(movie);
+            saveScannedMovie(movie);
         }
     }
 
@@ -114,33 +125,34 @@ class PersistentDao implements BaseDao, Persistability {
      * 没有不同就算了。
      * 若不被扫描过，则应当去增加视频的信息。
      *
-     * @param movie
+     * @param newMovie movie
      */
     @Override
-    public void addScannedMovie(Movie movie) {
-        if (scannedMovies.containsKey(movie.getKey())) {
-            if (movie.compareTo(movieData.get(movie.getKey())) != 0) {
-                movieData.get(movie.getKey()).update(movie);
-                scannedMovies.replace(movie.getKey(), false);
+    public void saveScannedMovie(Movie newMovie) {
+        String newMovieKey = newMovie.getKey();
+        if (movieData.containsKey(newMovieKey)) {
+            Movie movie = movieData.get(newMovieKey);
+            if (isMovieUpdate(newMovie, movie)) {
+                movie.update(newMovie);
             }
         } else {
-            scannedMovies.putIfAbsent(movie.getKey(), false);
-            movieData.put(movie.getKey(), movie);
+            scannedMovies.put(newMovieKey, newMovie);
+            movieData.put(newMovieKey, newMovie);
         }
     }
 
-    @Override
-    public void resetFilteredStatus() {
-        scannedMovies.entrySet().forEach(entry -> entry.setValue(false));
+    private boolean isMovieUpdate(Movie newMovie, Movie movie) {
+        return newMovie.compareTo(movie) != 0;
     }
 
     @Override
-    public int scannedMovieCount() {
-        return scannedMovies.size();
+    public int countScannedMovies() {
+        return movieData.size();
     }
 
     @Override
-    public void addDownloadError(String key) {
+    public void saveDownloadError(String key) {
+        toDownloadMovies.remove(key);
         if (downloadError.containsKey(key)) {
             downloadError.get(key).update();
         } else {
@@ -149,45 +161,19 @@ class PersistentDao implements BaseDao, Persistability {
     }
 
     @Override
-    public void addDownloadedMovies(String key) {
-        downloadedMovies.putIfAbsent(key, TimeUtils.getDate());
-    }
-
-    private ConcurrentHashMap<String, Movie> getDownloadedMovies() {
-        ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
-        downloadedMovies.forEachKey(1, key -> data.put(key, getMovie(key)));
-        return data;
-    }
-
-    private ConcurrentHashMap<String, Movie> getDownloadErrorMovies() {
-        ConcurrentHashMap<String, Movie> data = new ConcurrentHashMap<>();
-        downloadError.forEachKey(1, key -> data.put(key, getMovie(key)));
-        return data;
-    }
-
-    private ConcurrentHashMap<String, Movie> getScannedMovies() {
-        ConcurrentHashMap<String, Movie> tobeFilter = new ConcurrentHashMap<>(16);
-        scannedMovies.forEach(1, (k, v) -> {
-            if (!v) {
-                tobeFilter.put(k, getMovie(k));
-            }
-        });
-        return tobeFilter;
+    public void saveDownloadedMovies(String key) {
+        toDownloadMovies.remove(key);
+        downloadedMovies.put(key, TimeUtils.getDate());
     }
 
     @Override
-    public LinkedBlockingDeque<String> getToDownloadMovies() {
-        return toDownloadMovies;
+    public void initialize(Persistability persistentDao) {
+        persistence.initialize(this);
     }
 
-    private ConcurrentHashMap<String, Movie> getFilteredMovies() {
-        ConcurrentHashMap<String, Movie> concurrentHashMap = new ConcurrentHashMap<>();
-        filteredMovies.forEachEntry(1, entry -> {
-            if (!entry.getValue()) {
-                concurrentHashMap.put(entry.getKey(), getMovie(entry.getKey()));
-            }
-        });
-        return concurrentHashMap;
+    @Override
+    public void persistence(Persistability persistentDao) {
+        persistence.persistence(this);
     }
 
     @Override

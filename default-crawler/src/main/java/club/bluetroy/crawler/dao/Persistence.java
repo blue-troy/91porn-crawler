@@ -2,7 +2,7 @@ package club.bluetroy.crawler.dao;
 
 import club.bluetroy.crawler.dao.entity.DownloadErrorInfo;
 import club.bluetroy.crawler.domain.Movie;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -21,7 +21,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Date: 2018-08-23
  * Time: 下午7:25
  */
-@Log4j2
+@Slf4j
 @Order(1)
 @Component
 class Persistence implements Persistability, CommandLineRunner {
@@ -31,6 +31,38 @@ class Persistence implements Persistability, CommandLineRunner {
     @Override
     public void initialize(Persistability persistability) {
         init((PersistentDao) persistability);
+    }
+
+    private void init(PersistentDao persistentDao) {
+        log.info("初始化repository数据");
+        try {
+            initDataFromFile(persistentDao);
+        } catch (IOException | ClassNotFoundException e) {
+            log.warn("无法从文件中读取repository初始化信息");
+            initDataWithEmpty(persistentDao);
+        }
+    }
+
+    private void initDataFromFile(PersistentDao persistentRepository) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("crawler91.dat"))) {
+            PersistentDao persistentRepositoryGet = (PersistentDao) inputStream.readObject();
+            persistentRepository.scannedMovies = persistentRepositoryGet.scannedMovies;
+            persistentRepository.filteredMovies = persistentRepositoryGet.filteredMovies;
+            persistentRepository.toDownloadMovies = persistentRepositoryGet.toDownloadMovies;
+            persistentRepository.downloadedMovies = persistentRepositoryGet.downloadedMovies;
+            persistentRepository.downloadError = persistentRepositoryGet.downloadError;
+            persistentRepository.movieData = persistentRepositoryGet.movieData;
+        }
+    }
+
+    private void initDataWithEmpty(PersistentDao persistentDao) {
+        log.warn("repository数据初始化为空");
+        persistentDao.scannedMovies = new ConcurrentHashMap<String, Movie>();
+        persistentDao.filteredMovies = new ConcurrentHashMap<String, Movie>();
+        persistentDao.toDownloadMovies = new LinkedBlockingDeque<String>();
+        persistentDao.downloadedMovies = new ConcurrentHashMap<String, String>();
+        persistentDao.downloadError = new ConcurrentHashMap<String, DownloadErrorInfo>();
+        persistentDao.movieData = new ConcurrentHashMap<String, Movie>();
     }
 
     @Override
@@ -52,37 +84,5 @@ class Persistence implements Persistability, CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         dao.initialize(dao);
-    }
-
-    private void init(PersistentDao persistentDao) {
-        log.info("初始化repository数据");
-        try {
-            initDataFromFile(persistentDao);
-        } catch (IOException | ClassNotFoundException e) {
-            log.warn("无法从文件中读取repository初始化信息");
-            initDataWithEmpty(persistentDao);
-        }
-    }
-
-    private void initDataWithEmpty(PersistentDao persistentDao) {
-        log.warn("repository数据初始化为空");
-        persistentDao.scannedMovies = new ConcurrentHashMap<String, Boolean>();
-        persistentDao.filteredMovies = new ConcurrentHashMap<String, Boolean>();
-        persistentDao.toDownloadMovies = new LinkedBlockingDeque<String>();
-        persistentDao.downloadedMovies = new ConcurrentHashMap<String, String>();
-        persistentDao.downloadError = new ConcurrentHashMap<String, DownloadErrorInfo>();
-        persistentDao.movieData = new ConcurrentHashMap<String, Movie>();
-    }
-
-    private void initDataFromFile(PersistentDao persistentRepository) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("crawler91.dat"))) {
-            PersistentDao persistentRepositoryGet = (PersistentDao) inputStream.readObject();
-            persistentRepository.scannedMovies = persistentRepositoryGet.scannedMovies;
-            persistentRepository.filteredMovies = persistentRepositoryGet.filteredMovies;
-            persistentRepository.toDownloadMovies = persistentRepositoryGet.toDownloadMovies;
-            persistentRepository.downloadedMovies = persistentRepositoryGet.downloadedMovies;
-            persistentRepository.downloadError = persistentRepositoryGet.downloadError;
-            persistentRepository.movieData = persistentRepositoryGet.movieData;
-        }
     }
 }

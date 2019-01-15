@@ -2,7 +2,7 @@ package club.bluetroy.controller;
 
 import club.bluetroy.crawler.Adviser;
 import club.bluetroy.vo.JsonResponse;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnMessage;
@@ -19,7 +19,7 @@ import java.io.IOException;
  * Date: 2018-08-16
  * Time: 下午3:59
  */
-@Log4j2
+@Slf4j
 @Component
 @ServerEndpoint(value = "/websocket")
 public class WebSocketController implements Adviser {

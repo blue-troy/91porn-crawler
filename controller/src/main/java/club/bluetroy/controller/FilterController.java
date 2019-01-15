@@ -25,8 +25,8 @@ public class FilterController {
     }
 
     @PostMapping
-    void setFilter(@RequestBody FilterConfig crawlerVO) {
-        filter.setFilter(crawlerVO);
+    void setFilter(@RequestBody FilterConfig filterConfig) {
+        filter.setFilter(filterConfig);
     }
 
 }

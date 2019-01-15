@@ -1,6 +1,7 @@
 package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
+import club.bluetroy.crawler.dao.MovieStatus;
 import club.bluetroy.crawler.util.SegmentDownloader;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,9 @@ class DefaultDownloader implements Downloader {
 
     @Override
     public void downloadNow() {
-        String key;
-        while (((key = dao.getToDownloadMovies().poll()) != null)) {
-            ((Downloader) AopContext.currentProxy()).downloadByKey(key);
-        }
+        dao.listMovies(MovieStatus.TO_DOWNLOAD_MOVIES)
+                .forEachKey(1,
+                        key -> ((Downloader) AopContext.currentProxy()).downloadByKey(key));
     }
 
 
@@ -44,9 +44,9 @@ class DefaultDownloader implements Downloader {
         return DOWNLOAD_SERVICE.submit(() -> {
             try {
                 SegmentDownloader.download(getDownloadUrl(key), getFileName(key));
-                dao.addDownloadedMovies(key);
+                dao.saveDownloadedMovies(key);
             } catch (Exception e) {
-                dao.addDownloadError(key);
+                dao.saveDownloadError(key);
                 log.info("下载失败", e);
             }
         });

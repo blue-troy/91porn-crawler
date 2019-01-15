@@ -23,17 +23,20 @@ class DefaultFilter implements Filter {
     private BaseDao dao;
     private MovieFilterChain filterChain;
 
+    /**
+     * 把需要的视频顾虑出来放在filtered-movies里,并没有改变scanned-movies
+     */
     @Override
     public void doFilter() {
         log.info("doing filterr. filterChain : " + getFilterInfo());
-        ConcurrentHashMap<String, Movie> scannedMovies = dao.getMovies(MovieStatus.SCANNED_MOVIES);
+        ConcurrentHashMap<String, Movie> scannedMovies = dao.listMovies(MovieStatus.SCANNED_MOVIES);
         getFilterChain().doFilter(scannedMovies);
         LinkedList<String> filteredMovies = new LinkedList<>();
         scannedMovies.forEachEntry(1, entry -> {
             filteredMovies.add(entry.getKey());
             log.info("过滤出了 ：{}", entry.getValue());
         });
-        dao.addFilteredMovies(filteredMovies);
+        dao.saveFilteredMoviesByKeys(filteredMovies);
     }
 
     @Override

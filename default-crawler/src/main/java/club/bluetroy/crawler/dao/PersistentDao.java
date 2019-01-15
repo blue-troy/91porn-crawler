@@ -25,27 +25,27 @@ class PersistentDao implements BaseDao, Persistability {
      * 扫描下来的 movie 信息
      * key:movie的key
      */
-    ConcurrentHashMap<String, Movie> scannedMovies;
+    ConcurrentHashMap<String, Movie> scannedMovies = new ConcurrentHashMap<>();
     /**
      * 即将要下载的队列，队列内容为视频的key
      */
-    LinkedBlockingDeque<String> toDownloadMovies;
+    LinkedBlockingDeque<String> toDownloadMovies = new LinkedBlockingDeque<>();
     /**
      * 视频被过滤后加载到此
      */
-    ConcurrentHashMap<String, Movie> filteredMovies;
+    ConcurrentHashMap<String, Movie> filteredMovies = new ConcurrentHashMap<>();
     /**
      * 视频信息档案仓库，key为视频key，value为视频信息对象
      */
-    ConcurrentHashMap<String, Movie> movieData;
+    ConcurrentHashMap<String, Movie> movieData = new ConcurrentHashMap<>();
     /**
      * 已经下载完毕的视频的信息，key为视频key，value为视频成功下载的时间
      */
-    ConcurrentHashMap<String, String> downloadedMovies;
+    ConcurrentHashMap<String, String> downloadedMovies = new ConcurrentHashMap<>();
     /**
      * 下载错误的视频信息，key为视频key，value为下载错误信息
      */
-    ConcurrentHashMap<String, DownloadErrorInfo> downloadError;
+    ConcurrentHashMap<String, DownloadErrorInfo> downloadError = new ConcurrentHashMap<>();
     @Autowired
     transient
     private Persistence persistence;

@@ -1,7 +1,5 @@
 package club.bluetroy.crawler.dao;
 
-import club.bluetroy.crawler.dao.entity.DownloadErrorInfo;
-import club.bluetroy.crawler.domain.Movie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.io.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,7 +35,6 @@ class Persistence implements Persistability, CommandLineRunner {
             initDataFromFile(persistentDao);
         } catch (IOException | ClassNotFoundException e) {
             log.warn("无法从文件中读取repository初始化信息");
-            initDataWithEmpty(persistentDao);
         }
     }
 
@@ -53,16 +48,6 @@ class Persistence implements Persistability, CommandLineRunner {
             persistentRepository.downloadError = persistentRepositoryGet.downloadError;
             persistentRepository.movieData = persistentRepositoryGet.movieData;
         }
-    }
-
-    private void initDataWithEmpty(PersistentDao persistentDao) {
-        log.warn("repository数据初始化为空");
-        persistentDao.scannedMovies = new ConcurrentHashMap<String, Movie>();
-        persistentDao.filteredMovies = new ConcurrentHashMap<String, Movie>();
-        persistentDao.toDownloadMovies = new LinkedBlockingDeque<String>();
-        persistentDao.downloadedMovies = new ConcurrentHashMap<String, String>();
-        persistentDao.downloadError = new ConcurrentHashMap<String, DownloadErrorInfo>();
-        persistentDao.movieData = new ConcurrentHashMap<String, Movie>();
     }
 
     @Override

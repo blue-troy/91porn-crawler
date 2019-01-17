@@ -22,7 +22,7 @@ public class TitleMovieFilter implements MovieFilter {
 
     @Override
     public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
-        tobeFilter.forEach(5, (k, v) -> {
+        tobeFilter.forEach(1, (k, v) -> {
             if (v.getTitle().contains(keyword)) {
                 return;
             }

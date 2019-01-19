@@ -70,7 +70,7 @@ public class FilterChainFactory {
         FilterConfig filterConfig = new FilterConfig();
         filterConfig.setTitle("露脸");
         filterConfig.setCollect(200);
-        filterConfig.setAddTimeAfter("1天前");
+        filterConfig.setAddTimeDistance("1天");
         return getFilter(filterConfig);
     }
 }

@@ -9,16 +9,26 @@
         <Console name="CONSOLE" target="system_out">
             <PatternLayout pattern="${PATTERN}"/>
         </Console>
-        <File name="FILE" fileName="crawler.log" append="false">
+        <File name="FILE" fileName="log/crawler.log" append="true">
             <PatternLayout pattern="${PATTERN}"/>
         </File>
+        <File name="ERROR" fileName="log/crawler.error.log" append="true">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${PATTERN}"/>
+        </File>
+
+        <RollingFile name="RollingFile" fileName="logs/app.log"
+                     filePattern="log/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
+        </RollingFile>
     </appenders>
 
     <loggers>
-        <Logger name="club.bluetroy" level="info"/>
-        <root level="warn">
+        <root level="info">
             <appenderref ref="CONSOLE"/>
             <appenderRef ref="FILE"/>
+            <appenderRef ref="ERROR"/>
         </root>
     </loggers>
 </configuration>

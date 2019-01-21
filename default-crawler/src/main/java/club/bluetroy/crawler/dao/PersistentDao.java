@@ -134,7 +134,12 @@ class PersistentDao implements BaseDao, Persistability {
             Movie movie = movieData.get(newMovieKey);
             if (isMovieUpdate(newMovie, movie)) {
                 movie.update(newMovie);
-                scannedMovies.put(movie.getKey(), movie);
+                if(!downloadedMovies.containsKey(movie.getKey())) {
+                    log.info("更新视频信息到scannedMovie:{}",movie);
+                    scannedMovies.put(movie.getKey(), movie);
+                }else {
+                    log.info("更新视频信息到downloadedMovie:{}",movie);
+                }
             }
         } else {
             scannedMovies.put(newMovieKey, newMovie);

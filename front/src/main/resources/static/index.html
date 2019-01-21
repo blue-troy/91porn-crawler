@@ -165,17 +165,19 @@
         </div>
     </div>
 </div>
-<!--下载地址-->
-<div aria-labelledby="loginModalLabel" class="modal fade" id="downloadPathModal" role="dialog" tabindex="-1">
+<!--设置下载地址-->
+<div aria-labelledby="downloadPathModalLabel" class="modal fade" id="downloadPathModal" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="downloadPathModalLabel">登陆</h5>
+                <h5 class="modal-title" id="downloadPathModalLabel">设置下载地址</h5>
                 <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <input id="download-path" name="path" placeholder="用户名" type="file">
+                <form id="download-path-form">
+                <input id="download-path" name="path" placeholder="下载地址" type="button" onclick="getDownloadPath()">
+                </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>

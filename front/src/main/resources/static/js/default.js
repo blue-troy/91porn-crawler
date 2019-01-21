@@ -4,6 +4,14 @@ $(function () {
     setCaptchaImg();
 });
 
+function getDownloadPath() {
+    $.get("/download/path").done(
+        function (res) {
+            $('#download-path').val(res);
+        }
+    );
+}
+
 function download(key) {
     fetch(`/download/${key}`, {method: 'PATCH'})
         .then(response => {
@@ -108,8 +116,22 @@ function handleTable(response) {
 }
 
 function setDownloadPath() {
-    let path = document.getElementById("filePicker").files[0];
-    console.log(path)
+    const downloadPath = document.getElementById("download-path-form");
+    const path = $('#download-path').val();
+    fetch('/download/path',
+        {
+            method: 'PATCH',
+            body: toJSONString(downloadPath),
+            headers: {
+                'content-type': 'application/json'
+            },
+        }).then(response => {
+        if (response.ok) {
+            alert("下载地址成功设置为：" + path);
+        } else {
+            alert("下载地址设置失败");
+        }
+    }).finally($('#downloadPathModal').modal('hide'));
 }
 
 function setTable(movie) {

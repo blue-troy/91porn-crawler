@@ -2,10 +2,8 @@ package club.bluetroy.controller;
 
 import club.bluetroy.crawler.Downloader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
@@ -18,19 +16,26 @@ import java.util.concurrent.ExecutionException;
  * Date: 2018-12-02
  * Time: 13:57
  */
-@RestController
+@Controller
 @RequestMapping("/download")
 public class DownloaderController {
     @Autowired
     private Downloader downloader;
 
     @PatchMapping("/{key}")
-    public Object download(@PathVariable String key) throws ExecutionException, InterruptedException {
+    public @ResponseBody
+    Object download(@PathVariable String key) throws ExecutionException, InterruptedException {
         return downloader.downloadByKey(key).get();
     }
 
+    @GetMapping("/path")
+    public String getPath() {
+        return "forward:/native/dirChooser";
+    }
+
     @PatchMapping("/path")
-    public void setPath(String path) {
+    public @ResponseBody
+    void setPath(@RequestBody String path) {
         downloader.setResource(Paths.get(path));
     }
 }

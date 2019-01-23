@@ -134,11 +134,11 @@ class PersistentDao implements BaseDao, Persistability {
             Movie movie = movieData.get(newMovieKey);
             if (isMovieUpdate(newMovie, movie)) {
                 movie.update(newMovie);
-                if(!downloadedMovies.containsKey(movie.getKey())) {
-                    log.info("更新视频信息到scannedMovie:{}",movie);
+                if (!downloadedMovies.containsKey(movie.getKey())) {
+                    log.info("更新视频信息到scannedMovie:{}", movie);
                     scannedMovies.put(movie.getKey(), movie);
-                }else {
-                    log.info("更新视频信息到downloadedMovie:{}",movie);
+                } else {
+                    log.info("更新视频信息到downloadedMovie:{}", movie);
                 }
             }
         } else {
@@ -168,6 +168,8 @@ class PersistentDao implements BaseDao, Persistability {
 
     @Override
     public void saveDownloadedMovies(String key) {
+        scannedMovies.remove(key);
+        filteredMovies.remove(key);
         toDownloadMovies.remove(key);
         downloadedMovies.put(key, TimeUtils.getDate());
     }

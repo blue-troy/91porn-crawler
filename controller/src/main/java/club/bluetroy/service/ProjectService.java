@@ -42,7 +42,7 @@ public class ProjectService implements CommandLineRunner {
         System.exit(0);
     }
 
-    @Scheduled(cron = "0 0 */4 * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void process() {
         singleThreadPool.submit((Runnable) this::run);
     }

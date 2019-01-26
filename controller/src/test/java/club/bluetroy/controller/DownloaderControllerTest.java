@@ -1,5 +1,6 @@
 package club.bluetroy.controller;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Date: 2019-01-21
  * Time: 18:52
  */
+@Ignore
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)

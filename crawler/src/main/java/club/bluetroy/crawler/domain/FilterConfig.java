@@ -18,6 +18,7 @@ public class FilterConfig extends Movie {
     private String addTimeBefore;
     private String addTimeAfter;
     private Long addTimeDistance;
+    private FilterConfig orFilterConfig;
 
     public Long getAddTimeDistance() {
         return addTimeDistance;

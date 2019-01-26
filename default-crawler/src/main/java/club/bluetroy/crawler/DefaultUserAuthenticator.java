@@ -1,8 +1,8 @@
 package club.bluetroy.crawler;
 
-import club.bluetroy.crawler.util.HttpClient;
 import club.bluetroy.crawler.tool.PornUrl;
 import club.bluetroy.crawler.tool.Selector;
+import club.bluetroy.crawler.util.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

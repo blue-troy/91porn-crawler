@@ -1,8 +1,9 @@
 package club.bluetroy.crawler.filter.impl;
 
 import club.bluetroy.crawler.domain.Movie;
-import club.bluetroy.crawler.filter.MovieFilter;
+import club.bluetroy.crawler.filter.AbstractMovieFilter;
 import club.bluetroy.crawler.util.TimeUtils;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 5:19 PM
  */
 @ToString
-public class AddTimeMovieFilter implements MovieFilter {
+@EqualsAndHashCode(callSuper = false)
+class AddTimeMovieFilter extends AbstractMovieFilter {
     private LocalDateTime addTimeBefore;
     private LocalDateTime addTimeAfter;
 

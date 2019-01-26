@@ -2,10 +2,10 @@ package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
 import club.bluetroy.crawler.dao.MovieStatus;
-import club.bluetroy.crawler.domain.Movie;
-import club.bluetroy.crawler.filter.impl.FilterChainFactory;
 import club.bluetroy.crawler.domain.FilterConfig;
-import club.bluetroy.crawler.filter.MovieFilterChain;
+import club.bluetroy.crawler.domain.Movie;
+import club.bluetroy.crawler.filter.AbstractMovieFilter;
+import club.bluetroy.crawler.filter.impl.MovieFilterFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 class DefaultFilter implements Filter {
     @Autowired
     private BaseDao dao;
-    private MovieFilterChain filterChain;
+    private AbstractMovieFilter filter;
 
     /**
      * 把需要的视频顾虑出来放在filtered-movies里,并没有改变scanned-movies
@@ -30,7 +30,7 @@ class DefaultFilter implements Filter {
     public void doFilter() {
         log.info("doing filterr. filterChain : " + getFilterInfo());
         ConcurrentHashMap<String, Movie> scannedMovies = dao.listMovies(MovieStatus.SCANNED_MOVIES);
-        getFilterChain().doFilter(scannedMovies);
+        getMovieFilter().doFilter(scannedMovies);
         LinkedList<String> filteredMovies = new LinkedList<>();
         scannedMovies.forEachEntry(1, entry -> {
             filteredMovies.add(entry.getKey());
@@ -41,22 +41,19 @@ class DefaultFilter implements Filter {
 
     @Override
     public String getFilterInfo() {
-        return getFilterChain().toString();
+        return getMovieFilter().toString();
     }
 
-    private MovieFilterChain getFilterChain() {
-        if (filterChain == null) {
-            filterChain = FilterChainFactory.getDefaultFilter();
+    private AbstractMovieFilter getMovieFilter() {
+        if (filter == null) {
+            filter = MovieFilterFactory.getDefaultFilter();
         }
-        return this.filterChain;
+        return this.filter;
     }
 
     @Override
     public void setFilter(FilterConfig filterConfig) {
-        MovieFilterChain newFilter = FilterChainFactory.getFilter(filterConfig);
-        if (!newFilter.equals(this.filterChain)) {
-            this.filterChain = newFilter;
-        }
+        AbstractMovieFilter newFilter = MovieFilterFactory.getFilter(filterConfig);
     }
 
 }

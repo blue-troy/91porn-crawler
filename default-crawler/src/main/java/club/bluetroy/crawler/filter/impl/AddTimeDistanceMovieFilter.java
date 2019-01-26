@@ -1,8 +1,9 @@
 package club.bluetroy.crawler.filter.impl;
 
 import club.bluetroy.crawler.domain.Movie;
-import club.bluetroy.crawler.filter.MovieFilter;
+import club.bluetroy.crawler.filter.AbstractMovieFilter;
 import club.bluetroy.crawler.util.TimeUtils;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 23:34
  */
 @ToString
-public class AddTimeDistanceMovieFilter implements MovieFilter {
+@EqualsAndHashCode(callSuper = false)
+class AddTimeDistanceMovieFilter extends AbstractMovieFilter {
     /**
      * 以分钟为单位的时间
      */
@@ -26,7 +28,7 @@ public class AddTimeDistanceMovieFilter implements MovieFilter {
     /**
      * @param timeAfter 以秒为单位的时间，距离发布多少分钟
      */
-    public AddTimeDistanceMovieFilter(Long timeAfter) {
+    AddTimeDistanceMovieFilter(Long timeAfter) {
         this.timeAfter = timeAfter;
     }
 
@@ -34,7 +36,7 @@ public class AddTimeDistanceMovieFilter implements MovieFilter {
     public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
         tobeFilter.forEach(1, (k, v) -> {
             LocalDateTime addTime = v.getAddDateTime();
-            if (TimeUtils.now().minusMinutes(timeAfter).isAfter(addTime)) {
+            if (TimeUtils.now().minusMinutes(timeAfter).minusMinutes(1).isAfter(addTime)) {
                 tobeFilter.remove(k);
             }
         });

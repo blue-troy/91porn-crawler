@@ -1,7 +1,8 @@
 package club.bluetroy.crawler.filter.impl;
 
-import club.bluetroy.crawler.filter.MovieFilter;
 import club.bluetroy.crawler.domain.Movie;
+import club.bluetroy.crawler.filter.AbstractMovieFilter;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,10 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author heyixin
  */
 @ToString
-public class CollectMovieFilter implements MovieFilter {
+@EqualsAndHashCode(callSuper = false)
+class CollectMovieFilter extends AbstractMovieFilter {
     private final Integer collectNum;
 
-    public CollectMovieFilter(Integer collectNum) {
+    CollectMovieFilter(Integer collectNum) {
         this.collectNum = collectNum;
     }
 

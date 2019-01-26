@@ -36,11 +36,16 @@ public class TimeUtils {
 
     public static LocalDateTime getLocalDateTime(String addTimeBeforeNow) throws Exception {
         int indexOfYear = addTimeBeforeNow.indexOf("年");
+        int indexOfMonth = addTimeBeforeNow.indexOf("月");
         int indexOfDay = addTimeBeforeNow.indexOf("天");
         int indexOfHour = addTimeBeforeNow.indexOf("小时");
         if (indexOfYear != -1) {
             int year = Integer.parseInt(addTimeBeforeNow.substring(0, indexOfYear));
             return LocalDateTime.now().minusYears(year);
+        }
+        if (indexOfMonth != -1) {
+            int month = Integer.parseInt(addTimeBeforeNow.substring(0, indexOfMonth));
+            return LocalDateTime.now().minusMonths(month);
         }
         if (indexOfDay != -1) {
             int day = Integer.parseInt(addTimeBeforeNow.substring(0, indexOfDay));

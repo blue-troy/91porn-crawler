@@ -17,3 +17,5 @@
 导入IDE里时需要安装lombok插件。
 ### 环境
   ![](https://img.shields.io/badge/JAVA-11%2B-brightgreen.svg) ![](https://img.shields.io/badge/maven-3.0%2B-brightgreen.svg)
+### 问题
+当前项目存在的问题请查看[issue](https://github.com/blue-troy/91porn-crawler/issues).若遇到未知问题请在[issue](https://github.com/blue-troy/91porn-crawler/issues)中指出，谢谢

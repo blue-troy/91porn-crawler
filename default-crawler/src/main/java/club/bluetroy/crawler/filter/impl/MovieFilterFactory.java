@@ -2,7 +2,7 @@ package club.bluetroy.crawler.filter.impl;
 
 import club.bluetroy.crawler.domain.FilterConfig;
 import club.bluetroy.crawler.filter.AbstractMovieFilter;
-import club.bluetroy.crawler.filter.InnerFilterConfig;
+import club.bluetroy.crawler.config.InnerFilterConfig;
 import club.bluetroy.crawler.util.TimeUtils;
 
 import java.time.LocalDateTime;

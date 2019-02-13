@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.filter;
+package club.bluetroy.crawler.config;
 
 import club.bluetroy.crawler.domain.FilterConfig;
 

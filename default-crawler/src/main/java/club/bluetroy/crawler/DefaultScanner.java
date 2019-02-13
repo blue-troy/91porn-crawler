@@ -29,10 +29,6 @@ class DefaultScanner implements Scanner {
     @Autowired
     private BaseDao dao;
 
-    static {
-        URLS_FOR_SCAN.add(PornUrl.getUrl(Category.HOT));
-    }
-
     @Override
     public void addUrl(String url) {
         URLS_FOR_SCAN.add(url);

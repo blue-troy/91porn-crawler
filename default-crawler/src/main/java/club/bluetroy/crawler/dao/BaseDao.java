@@ -37,7 +37,7 @@ public interface BaseDao {
      *
      * @param keys 通过过滤的视频key队列
      */
-    void updateFilteredMoviesByKeys(List<String> keys);
+    int updateFilteredMoviesByKeys(List<String> keys);
 
 
     /**
@@ -46,21 +46,21 @@ public interface BaseDao {
      * @param key         视频key
      * @param downloadUrl 视频下载地址
      */
-    void saveDownloadUrl(String key, String downloadUrl);
+    int  saveDownloadUrl(String key, String downloadUrl);
 
     /**
      * 添加被扫描下的视频信息列表，并维护仓库关系
      *
      * @param movies 扫描到的视频列表
      */
-    void saveScannedMovies(List<Movie> movies);
+    Iterable<Movie> saveScannedMovies(List<Movie> movies);
 
     /**
      * 添加被扫描下的视频信息列表，并维护仓库关系
      *
      * @param movie 扫描到的视频
      */
-    void saveScannedMovie(Movie movie);
+    Movie saveScannedMovie(Movie movie);
 
     /**
      * 添加下载错误信息，并维护仓库关系
@@ -74,14 +74,14 @@ public interface BaseDao {
      *
      * @param key 视频key
      */
-    void saveDownloadedMovies(String key);
+    int saveDownloadedMovies(String key);
 
     /**
      * 获取扫描到的视频数量
      *
      * @return 扫描到的视频数量
      */
-    int countMovies();
+    long countMovies();
 
 
     /**

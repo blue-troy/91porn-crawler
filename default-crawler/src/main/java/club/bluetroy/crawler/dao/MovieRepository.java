@@ -27,4 +27,14 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
     @Modifying
     @Query("update Movie  m set m.status='FILTERED' where m.key in :keys")
     int updateFilteredByKeys(List<String> keys);
+
+    @Transactional
+    @Modifying
+    @Query("update Movie  m set m.downloadUrl= :downloadUrl where m.key = :key")
+    int updateDownloadUrlByKey(String downloadUrl, String key);
+
+    @Transactional
+    @Modifying
+    @Query("update Movie  m set m.status='DOWNLOADED' where m.key = :key")
+    int updateDownloadedMovieByKey(String key);
 }

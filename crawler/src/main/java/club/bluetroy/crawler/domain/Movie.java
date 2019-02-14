@@ -1,18 +1,28 @@
 package club.bluetroy.crawler.domain;
 
 import club.bluetroy.crawler.util.TimeUtils;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author heyixin
  */
+@Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Movie implements Serializable, Comparable<Movie> {
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long docid;
     private String title;
     private String length;
     private String addTime;
@@ -21,13 +31,13 @@ public class Movie implements Serializable, Comparable<Movie> {
     private Integer collect;
     private Integer messageNumber;
     private Integer integration;
-    private String detailURL;
-    private String downloadURL;
+    private String detailUrl;
+    private String downloadUrl;
     private String fileName;
     private String key;
     private LocalDateTime addDateTime;
 
-    public Movie(String title, String length, String addTime, String author, Integer view, Integer collect, Integer messageNumber, Integer integration, String detailURL) {
+    public Movie(String title, String length, String addTime, String author, Integer view, Integer collect, Integer messageNumber, Integer integration, String detailUrl) {
         this.title = title;
         this.length = length;
         setAddTime(addTime);
@@ -36,8 +46,8 @@ public class Movie implements Serializable, Comparable<Movie> {
         this.collect = collect;
         this.messageNumber = messageNumber;
         this.integration = integration;
-        this.detailURL = detailURL;
-        this.key = detailURL.substring(detailURL.indexOf("=") + 1, detailURL.indexOf("&"));
+        this.detailUrl = detailUrl;
+        this.key = detailUrl.substring(detailUrl.indexOf("=") + 1, detailUrl.indexOf("&"));
         this.fileName = title + ".mp4";
     }
 

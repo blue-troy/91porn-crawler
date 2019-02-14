@@ -2,6 +2,7 @@ package club.bluetroy.crawler.dao;
 
 import club.bluetroy.crawler.dao.entity.DownloadErrorInfo;
 import club.bluetroy.crawler.domain.Movie;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Queue;
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 2018-11-09
  * Time: 5:05 PM
  */
-public interface BaseDao {
+public interface BaseDao extends CrudRepository<Movie, Long> {
     /**
      * 获取某个状态的视频的哈希表形式
      *

@@ -38,11 +38,11 @@ public class ContentTool {
      */
     public Queue<KeyContent> getDetailContent(ConcurrentHashMap<String, Movie> moviesData) {
         Queue<KeyContent> contentQueue = new LinkedList<>();
-        moviesData.forEach((key, movie) -> contentQueue.offer(new KeyContent(key, HttpClient.getInFuture(movie.getDetailURL()))));
+        moviesData.forEach((key, movie) -> contentQueue.offer(new KeyContent(key, HttpClient.getInFuture(movie.getDetailUrl()))));
         return contentQueue;
     }
 
     public String getContent(Movie movie) throws Exception {
-        return HttpClient.getNow(movie.getDetailURL());
+        return HttpClient.getNow(movie.getDetailUrl());
     }
 }

@@ -53,7 +53,7 @@ class DefaultDownloader implements Downloader {
     }
 
     private String getDownloadUrl(String key) throws Exception {
-        String downloadUrl = dao.getMovie(key).getDownloadURL();
+        String downloadUrl = dao.getMovie(key).getDownloadUrl();
         if (downloadUrl == null) {
             downloadUrl = scanner.getDownloadUrl(key);
         }

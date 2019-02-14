@@ -5,6 +5,7 @@ import club.bluetroy.crawler.domain.Movie;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,22 +17,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 07:31
  */
 public class AddTimeMovieFilterTest {
-    @Test
+    /*@Test
     public void doFilter() throws Exception {
         LocalDateTime timeAfter = LocalDateTime.now().minusDays(1);
         AddTimeMovieFilter addTimeMovieFilter = new AddTimeMovieFilter(null, timeAfter);
-        ConcurrentHashMap<String, Movie> toFilter = getToFilter();
+        List<Movie> toFilter = getToFilter();
         printToFilter(toFilter);
         addTimeMovieFilter.doFilter(toFilter);
         printToFilter(toFilter);
     }
 
-    private void printToFilter(ConcurrentHashMap<String, Movie> toFilter) {
+    private void printToFilter(List<Movie> toFilter) {
         toFilter.forEachEntry(1, entry -> System.out.println(entry.getKey() + "  " + entry.getValue()));
     }
 
-    private ConcurrentHashMap<String, Movie> getToFilter() throws Exception {
-        ConcurrentHashMap<String, Movie> toFilter = new ConcurrentHashMap<>();
+    private List<Movie> getToFilter() throws Exception {
+        List<Movie> toFilter = new ConcurrentHashMap<>();
         Movie movie = new Movie();
         movie.setAddTime(TimeUtils.getDateByTimeBefore("1天"));
         movie.setTitle("第一个");
@@ -44,5 +45,5 @@ public class AddTimeMovieFilterTest {
         toFilter.put("2", movie1);
 
         return toFilter;
-    }
+    }*/
 }

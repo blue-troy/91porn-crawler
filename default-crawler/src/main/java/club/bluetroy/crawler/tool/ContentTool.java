@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 
 /**
@@ -36,9 +35,9 @@ public class ContentTool {
      * @param moviesData
      * @return 返回拥有详细视频信息的对象队列
      */
-    public Queue<KeyContent> getDetailContent(ConcurrentHashMap<String, Movie> moviesData) {
+    public Queue<KeyContent> getDetailContent(List<Movie> moviesData) {
         Queue<KeyContent> contentQueue = new LinkedList<>();
-        moviesData.forEach((key, movie) -> contentQueue.offer(new KeyContent(key, HttpClient.getInFuture(movie.getDetailUrl()))));
+        moviesData.forEach(movie -> contentQueue.offer(new KeyContent(movie.getKey(), HttpClient.getInFuture(movie.getDetailUrl()))));
         return contentQueue;
     }
 

@@ -1,11 +1,9 @@
 package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
-import club.bluetroy.crawler.dao.MovieStatus;
-import club.bluetroy.crawler.dao.entity.Category;
+import club.bluetroy.crawler.domain.MovieStatus;
 import club.bluetroy.crawler.dao.entity.KeyContent;
 import club.bluetroy.crawler.tool.ContentTool;
-import club.bluetroy.crawler.tool.PornUrl;
 import club.bluetroy.crawler.tool.ScannerTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,13 +47,13 @@ class DefaultScanner implements Scanner {
     }
 
     private void scanFilteredMovieDownloadUrl() {
-        Queue<KeyContent> keyContents = contentTool.getDetailContent(dao.listMovies(MovieStatus.FILTERED_MOVIES));
+        Queue<KeyContent> keyContents = contentTool.getDetailContent(dao.listMoviesByStatus(MovieStatus.FILTERED));
         scannerTool.scanDownloadUrls(keyContents);
     }
 
     @Override
     public String getDownloadUrl(String key) throws Exception {
-        String html = contentTool.getContent(dao.getMovie(key));
+        String html = contentTool.getContent(dao.getByKey(key));
         String downloadUrl = scannerTool.scanDownloadUrl(html);
         dao.saveDownloadUrl(key, downloadUrl);
         return downloadUrl;

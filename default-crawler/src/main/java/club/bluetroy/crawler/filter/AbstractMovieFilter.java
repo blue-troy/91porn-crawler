@@ -2,7 +2,7 @@ package club.bluetroy.crawler.filter;
 
 import club.bluetroy.crawler.domain.Movie;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 /**
  * @author heyixin
@@ -27,5 +27,5 @@ public abstract class AbstractMovieFilter {
      *
      * @param tobeFilter 传入一个要被过滤的map
      */
-    public abstract void doFilter(ConcurrentHashMap<String, Movie> tobeFilter);
+    public abstract void doFilter(List<Movie> tobeFilter);
 }

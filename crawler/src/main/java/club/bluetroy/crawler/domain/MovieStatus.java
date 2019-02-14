@@ -1,4 +1,4 @@
-package club.bluetroy.crawler.dao;
+package club.bluetroy.crawler.domain;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,5 +10,5 @@ package club.bluetroy.crawler.dao;
  */
 public enum MovieStatus {
     //Movies的不同状态
-    SCANNED_MOVIES, TO_DOWNLOAD_MOVIES, FILTERED_MOVIES, DOWNLOADED_MOVIES, DOWNLOAD_ERROR
+    SCANNED, TO_DOWNLOAD, FILTERED, DOWNLOADED, DOWNLOAD_ERROR
 }

@@ -1,13 +1,13 @@
 package club.bluetroy.crawler.tool;
 
 import club.bluetroy.crawler.dao.BaseDao;
-import club.bluetroy.crawler.dao.MovieStatus;
+import club.bluetroy.crawler.domain.MovieStatus;
 import club.bluetroy.crawler.domain.Movie;
 import lombok.experimental.UtilityClass;
 
 import java.sql.*;
 import java.time.ZoneOffset;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 
 /**
@@ -22,17 +22,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PersistenceDaoToDb {
     public static void toDb(BaseDao dao) {
         System.out.println("to db");
-        System.out.println("count = " + dao.countScannedMovies());
-        insertMovies(dao.listMovies(MovieStatus.SCANNED_MOVIES), "scanned");
-        insertMovies(dao.listMovies(MovieStatus.FILTERED_MOVIES), "filtered");
-        insertMovies(dao.listMovies(MovieStatus.TO_DOWNLOAD_MOVIES), "to_download");
-        insertMovies(dao.listMovies(MovieStatus.DOWNLOADED_MOVIES), "downloaded");
-        insertMovies(dao.listMovies(MovieStatus.DOWNLOAD_ERROR), "download_error");
+        System.out.println("count = " + dao.countMovies());
+        insertMovies(dao.listMoviesByStatus(MovieStatus.SCANNED), "scanned");
+        insertMovies(dao.listMoviesByStatus(MovieStatus.FILTERED), "filtered");
+        insertMovies(dao.listMoviesByStatus(MovieStatus.TO_DOWNLOAD), "to_download");
+        insertMovies(dao.listMoviesByStatus(MovieStatus.DOWNLOADED), "downloaded");
+        insertMovies(dao.listMoviesByStatus(MovieStatus.DOWNLOAD_ERROR), "download_error");
     }
 
-    private static void insertMovies(ConcurrentHashMap<String, Movie> movieConcurrentHashMap, String status) {
-        for (Movie value : movieConcurrentHashMap.values()) {
-            insertMovie(value, status);
+    private static void insertMovies(List<Movie> movies, String status) {
+        for (Movie movie : movies) {
+            insertMovie(movie,status);
         }
     }
 

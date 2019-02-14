@@ -2,10 +2,9 @@ package club.bluetroy.crawler.dao;
 
 import club.bluetroy.crawler.dao.entity.DownloadErrorInfo;
 import club.bluetroy.crawler.domain.Movie;
-import org.springframework.data.repository.CrudRepository;
+import club.bluetroy.crawler.domain.MovieStatus;
 
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,14 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 2018-11-09
  * Time: 5:05 PM
  */
-public interface BaseDao extends CrudRepository<Movie, Long> {
+public interface BaseDao {
     /**
      * 获取某个状态的视频的哈希表形式
      *
      * @param movieStatus 视频状态
      * @return 该视频状态的视频表
      */
-    ConcurrentHashMap<String, Movie> listMovies(MovieStatus movieStatus);
+    List<Movie> listMoviesByStatus(MovieStatus movieStatus);
 
     /**
      * 用视频key获取视频对象
@@ -31,14 +30,14 @@ public interface BaseDao extends CrudRepository<Movie, Long> {
      * @param key 视频key
      * @return 视频对象
      */
-    Movie getMovie(String key);
+    Movie getByKey(String key);
 
     /**
      * 添加通过过滤的视频，并维护仓库关系
      *
-     * @param filteredMovies 通过过滤的视频key队列
+     * @param keys 通过过滤的视频key队列
      */
-    void saveFilteredMoviesByKeys(Queue<String> filteredMovies);
+    void updateFilteredMoviesByKeys(List<String> keys);
 
 
     /**
@@ -82,7 +81,7 @@ public interface BaseDao extends CrudRepository<Movie, Long> {
      *
      * @return 扫描到的视频数量
      */
-    int countScannedMovies();
+    int countMovies();
 
 
     /**

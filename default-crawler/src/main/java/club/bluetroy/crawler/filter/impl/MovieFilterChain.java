@@ -7,7 +7,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 /**
  * @author heyixin
@@ -19,7 +19,7 @@ class MovieFilterChain extends AbstractCompositeMovieFilter {
     private final ArrayList<AbstractMovieFilter> movieFilterList = new ArrayList<>();
 
     @Override
-    public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
+    public void doFilter(List<Movie> tobeFilter) {
         for (AbstractMovieFilter movieFilter : movieFilterList) {
             movieFilter.doFilter(tobeFilter);
         }

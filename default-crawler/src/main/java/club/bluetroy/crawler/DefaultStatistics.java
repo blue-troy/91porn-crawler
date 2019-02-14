@@ -1,7 +1,7 @@
 package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
-import club.bluetroy.crawler.dao.MovieStatus;
+import club.bluetroy.crawler.domain.MovieStatus;
 import club.bluetroy.crawler.domain.Movie;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 import java.util.concurrent.Future;
 
 /**
@@ -45,11 +45,11 @@ public class DefaultStatistics implements Statistics {
     }
 
     private void sendToDownloadMovies() throws Exception {
-        adviser.message("/toDownloadMovies", getData(MovieStatus.TO_DOWNLOAD_MOVIES));
+        adviser.message("/toDownloadMovies", getData(MovieStatus.TO_DOWNLOAD));
     }
 
-    private ConcurrentHashMap<String, Movie> getData(MovieStatus movieStatus) {
-        return dao.listMovies(movieStatus);
+    private List<Movie> getData(MovieStatus movieStatus) {
+        return dao.listMoviesByStatus(movieStatus);
     }
 
     @Around(value = "downloadPerformance(key)", argNames = "proceedingJoinPoint,key")
@@ -62,7 +62,7 @@ public class DefaultStatistics implements Statistics {
     }
 
     private void addDownloadingMovie(String key) throws Exception {
-        downloadingMovies.put(key, dao.getMovie(key));
+        downloadingMovies.put(key, dao.getByKey(key));
         sendDownloadingMovies();
     }
 
@@ -81,7 +81,7 @@ public class DefaultStatistics implements Statistics {
     }
 
     private void sendDownloadResult() throws Exception {
-        adviser.message("/downloadedMovies", getData(MovieStatus.DOWNLOADED_MOVIES));
+        adviser.message("/downloadedMovies", getData(MovieStatus.DOWNLOADED));
         adviser.message("/downloadErrorMovies", getData(MovieStatus.DOWNLOAD_ERROR));
     }
 
@@ -97,7 +97,7 @@ public class DefaultStatistics implements Statistics {
 
     @After("execution(void club.bluetroy.crawler.Scanner.scanMovies())")
     public void gatherScannedMovies() throws Exception {
-        adviser.message("/scannedMovies", dao.listMovies(MovieStatus.SCANNED_MOVIES));
+        adviser.message("/scannedMovies", dao.listMoviesByStatus(MovieStatus.SCANNED));
     }
 
     /**
@@ -105,12 +105,12 @@ public class DefaultStatistics implements Statistics {
      */
     @After("execution(void club.bluetroy.crawler.Scanner.scanMovies())")
     public void gatherScannedMoviesCount() throws Exception {
-        adviser.message("/scannedMovies/count", dao.countScannedMovies());
+        adviser.message("/scannedMovies/count", dao.countMovies());
     }
 
     @After("execution(void club.bluetroy.crawler.Filter.doFilter())")
     public void gatherFilteredMovies() throws Exception {
-        adviser.message("/filteredMovies", getData(MovieStatus.FILTERED_MOVIES));
+        adviser.message("/filteredMovies", getData(MovieStatus.FILTERED));
     }
 
 }

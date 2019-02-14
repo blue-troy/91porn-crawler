@@ -5,7 +5,7 @@ import club.bluetroy.crawler.filter.AbstractMovieFilter;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 /**
  * @author heyixin
@@ -20,13 +20,8 @@ class TitleMovieFilter extends AbstractMovieFilter {
     }
 
     @Override
-    public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
-        tobeFilter.forEach(1, (k, v) -> {
-            if (v.getTitle().contains(keyword)) {
-                return;
-            }
-            tobeFilter.remove(k);
-        });
+    public void doFilter(List<Movie> tobeFilter) {
+        tobeFilter.removeIf(movie -> !movie.getTitle().contains(keyword));
     }
 
 }

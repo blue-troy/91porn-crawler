@@ -7,7 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,12 +34,14 @@ class AddTimeDistanceMovieFilter extends AbstractMovieFilter {
     }
 
     @Override
-    public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
-        tobeFilter.forEach(1, (k, v) -> {
-            LocalDateTime addTime = v.getAddDateTime();
+    public void doFilter(List<Movie> tobeFilter) {
+        Iterator<Movie> iterator = tobeFilter.iterator();
+        while (iterator.hasNext()) {
+            Movie movie = iterator.next();
+            LocalDateTime addTime = movie.getAddDateTime();
             if (TimeUtils.now().minusMinutes(timeAfter).minusMinutes(1).isAfter(addTime)) {
-                tobeFilter.remove(k);
+                iterator.remove();
             }
-        });
+        }
     }
 }

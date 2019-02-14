@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -21,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Movie implements Serializable, Comparable<Movie> {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long docid;
     private String title;
     private String length;
@@ -36,6 +33,8 @@ public class Movie implements Serializable, Comparable<Movie> {
     private String fileName;
     private String key;
     private LocalDateTime addDateTime;
+    @Enumerated(EnumType.STRING)
+    private MovieStatus status = MovieStatus.SCANNED;
 
     public Movie(String title, String length, String addTime, String author, Integer view, Integer collect, Integer messageNumber, Integer integration, String detailUrl) {
         this.title = title;

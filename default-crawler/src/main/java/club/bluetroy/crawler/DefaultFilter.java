@@ -1,7 +1,7 @@
 package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
-import club.bluetroy.crawler.dao.MovieStatus;
+import club.bluetroy.crawler.domain.MovieStatus;
 import club.bluetroy.crawler.domain.FilterConfig;
 import club.bluetroy.crawler.domain.Movie;
 import club.bluetroy.crawler.filter.AbstractMovieFilter;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 /**
  * @author heyixin
@@ -29,14 +29,14 @@ class DefaultFilter implements Filter {
     @Override
     public void doFilter() {
         log.info("doing filterr. filterChain : " + getFilterInfo());
-        ConcurrentHashMap<String, Movie> scannedMovies = dao.listMovies(MovieStatus.SCANNED_MOVIES);
+        List<Movie> scannedMovies = dao.listMoviesByStatus(MovieStatus.SCANNED);
         getMovieFilter().doFilter(scannedMovies);
         LinkedList<String> filteredMovies = new LinkedList<>();
-        scannedMovies.forEachEntry(1, entry -> {
-            filteredMovies.add(entry.getKey());
-            log.info("过滤出了 ：{}", entry.getValue());
+        scannedMovies.forEach(movie -> {
+            filteredMovies.add(movie.getKey());
+            log.info("过滤出了 ：{}", movie);
         });
-        dao.saveFilteredMoviesByKeys(filteredMovies);
+        dao.updateFilteredMoviesByKeys(filteredMovies);
     }
 
     @Override

@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,17 +29,17 @@ class OrMovieFilter extends AbstractCompositeMovieFilter {
     }
 
     @Override
-    public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
-        ConcurrentHashMap<String, Movie> tobeFilterTemp = new ConcurrentHashMap<>(tobeFilter);
+    public void doFilter(List<Movie> tobeFilter) {
+        List<Movie> tobeFilterTemp = new LinkedList<>(tobeFilter);
         tobeFilter.clear();
         for (AbstractMovieFilter movieFilter : movieFilters) {
-            ConcurrentHashMap<String, Movie> subFilterResult = subDoFilter(tobeFilterTemp, movieFilter);
-            tobeFilter.putAll(subFilterResult);
+            List<Movie> subFilterResult = subDoFilter(tobeFilterTemp, movieFilter);
+            tobeFilter.addAll(subFilterResult);
         }
     }
 
-    private ConcurrentHashMap<String, Movie> subDoFilter(ConcurrentHashMap<String, Movie> tempTobeFilter, AbstractMovieFilter movieFilter) {
-        ConcurrentHashMap<String, Movie> subTobeFilter = new ConcurrentHashMap<>(tempTobeFilter);
+    private List<Movie> subDoFilter(List<Movie> tempTobeFilter, AbstractMovieFilter movieFilter) {
+        List<Movie> subTobeFilter = new LinkedList<>(tempTobeFilter);
         movieFilter.doFilter(subTobeFilter);
         return subTobeFilter;
     }

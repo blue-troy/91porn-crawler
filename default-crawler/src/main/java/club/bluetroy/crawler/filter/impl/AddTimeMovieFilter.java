@@ -7,7 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,15 +30,18 @@ class AddTimeMovieFilter extends AbstractMovieFilter {
     }
 
     @Override
-    public void doFilter(ConcurrentHashMap<String, Movie> tobeFilter) {
-        tobeFilter.forEach(1, (k, v) -> {
-            LocalDateTime addTime = TimeUtils.parse(v.getAddTime());
+    public void doFilter(List<Movie> tobeFilter) {
+        Iterator<Movie> iterator = tobeFilter.iterator();
+        while (iterator.hasNext()) {
+            Movie movie = iterator.next();
+            LocalDateTime addTime = TimeUtils.parse(movie.getAddTime());
             if (null != addTimeBefore && !addTimeBefore.isBefore(addTime)) {
-                tobeFilter.remove(k);
+                iterator.remove();
+                continue;
             }
             if (null != addTimeAfter && !addTimeAfter.isAfter(addTime)) {
-                tobeFilter.remove(k);
+                iterator.remove();
             }
-        });
+        }
     }
 }

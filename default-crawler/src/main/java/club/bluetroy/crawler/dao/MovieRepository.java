@@ -25,8 +25,23 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
 
     @Transactional
     @Modifying
-    @Query("update Movie  m set m.status='FILTERED' where m.key in :keys")
-    int updateFilteredByKeys(List<String> keys);
+    @Query("update Movie m set m.status = :status where m.key in :keys")
+    int updateStatusByKeys( List<String> keys,MovieStatus status);
+
+    @Transactional
+    @Modifying
+    @Query("update Movie m set m.status = :status where m.key = :key")
+    int updateStatusByKey(String key, MovieStatus status);
+
+    @Transactional
+    @Modifying
+    @Query("update Movie m set m = :movie where m.key = :#{#movie.key}")
+    int updateByKey(Movie movie);
+
+    @Transactional
+    @Modifying
+    @Query("update Movie m set m.collect =:#{#movie.collect} ,m.messageNumber=:#{#movie.messageNumber},m.view = :#{#movie.view},m.integration = :#{#movie.integration}  where m.key = :#{#movie.key}")
+    void updateCollectMessageNumberViewIntegrationByKey(Movie movie);
 
     @Transactional
     @Modifying
@@ -35,6 +50,13 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
 
     @Transactional
     @Modifying
+    @Query("update Movie  m set m.status='FILTERED' where m.key in :keys")
+    int updateFilteredByKeys(List<String> keys);
+
+    @Transactional
+    @Modifying
     @Query("update Movie  m set m.status='DOWNLOADED' where m.key = :key")
     int updateDownloadedMovieByKey(String key);
+
+    boolean existsByKey(String key);
 }

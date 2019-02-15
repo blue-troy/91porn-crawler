@@ -65,5 +65,19 @@ public class MovieRepositoryTest {
         assertEquals(1, updateCount);
     }
 
+    @Test
+    public void testUpdateByKey() {
+        movie.setCollect(1);
+        movie.setStatus(MovieStatus.DOWNLOADED);
+        int update = repository.updateByKey(movie);
+        Movie updateMovie = repository.findByKey(key);
+        assertTrue(update == 1 && updateMovie.getStatus().equals(movie.getStatus()) && updateMovie.getCollect().equals(movie.getCollect()));
+    }
+
+
+    @Test
+    public void testExist() {
+        assertTrue(repository.existsByKey(key));
+    }
 
 }

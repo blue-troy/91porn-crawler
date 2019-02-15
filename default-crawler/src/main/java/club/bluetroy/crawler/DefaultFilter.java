@@ -36,7 +36,7 @@ class DefaultFilter implements Filter {
             filteredMovies.add(movie.getKey());
             log.info("过滤出了 ：{}", movie);
         });
-        dao.updateFilteredMoviesByKeys(filteredMovies);
+        dao.updateStatus(filteredMovies, MovieStatus.FILTERED);
     }
 
     @Override

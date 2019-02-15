@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public interface BaseDao {
     /**
-     * 获取某个状态的视频的哈希表形式
+     * 获取某个状态的视频列表
      *
      * @param movieStatus 视频状态
      * @return 该视频状态的视频表
@@ -32,12 +32,22 @@ public interface BaseDao {
      */
     Movie getByKey(String key);
 
+
     /**
-     * 添加通过过滤的视频，并维护仓库关系
-     *
-     * @param keys 通过过滤的视频key队列
+     * 更新视频对象状态
+     * @param key key
+     * @param movieStatus 视频状态
+     * @return 变动的对象数量
      */
-    int updateFilteredMoviesByKeys(List<String> keys);
+    int updateStatus(String key, MovieStatus movieStatus);
+
+    /**
+     * 更新视频对象状态
+     * @param keys keys
+     * @param movieStatus 视频状态
+     * @return 变动的对象数量
+     */
+    int updateStatus(List<String> keys, MovieStatus movieStatus);
 
 
     /**
@@ -45,6 +55,7 @@ public interface BaseDao {
      *
      * @param key         视频key
      * @param downloadUrl 视频下载地址
+     * @return 变动的对象数量
      */
     int  saveDownloadUrl(String key, String downloadUrl);
 
@@ -53,14 +64,14 @@ public interface BaseDao {
      *
      * @param movies 扫描到的视频列表
      */
-    Iterable<Movie> saveScannedMovies(List<Movie> movies);
+    void saveScannedMovies(List<Movie> movies);
 
     /**
-     * 添加被扫描下的视频信息列表，并维护仓库关系
+     * 添加被扫描下的视频信息列表，若视频原本存在则更新视频的，若不存在则保存视频信息
      *
      * @param movie 扫描到的视频
      */
-    Movie saveScannedMovie(Movie movie);
+    void saveScannedMovie(Movie movie);
 
     /**
      * 添加下载错误信息，并维护仓库关系

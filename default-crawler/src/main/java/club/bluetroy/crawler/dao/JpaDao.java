@@ -35,9 +35,15 @@ public class JpaDao implements BaseDao {
     }
 
     @Override
-    public int updateFilteredMoviesByKeys(List<String> keys) {
-        return repository.updateFilteredByKeys(keys);
+    public int updateStatus(String key, MovieStatus movieStatus) {
+        return repository.updateStatusByKey(key, movieStatus);
     }
+
+    @Override
+    public int updateStatus(List<String> keys, MovieStatus movieStatus) {
+        return repository.updateStatusByKeys(keys, movieStatus);
+    }
+
 
     @Override
     public int saveDownloadUrl(String key, String downloadUrl) {
@@ -45,13 +51,17 @@ public class JpaDao implements BaseDao {
     }
 
     @Override
-    public Iterable<Movie> saveScannedMovies(List<Movie> movies) {
-        return repository.saveAll(movies);
+    public void saveScannedMovies(List<Movie> movies) {
+        movies.forEach(this::saveScannedMovie);
     }
 
     @Override
-    public Movie saveScannedMovie(Movie movie) {
-        return repository.save(movie);
+    public void saveScannedMovie(Movie movie) {
+        if (repository.existsByKey(movie.getKey())) {
+            repository.updateCollectMessageNumberViewIntegrationByKey(movie);
+        } else {
+            repository.save(movie);
+        }
     }
 
     @Override
@@ -59,9 +69,10 @@ public class JpaDao implements BaseDao {
 
     }
 
+    //todo 保存下载成功信息
     @Override
     public int saveDownloadedMovies(String key) {
-        return repository.updateDownloadedMovieByKey(key);
+        return repository.updateStatusByKey(key, MovieStatus.DOWNLOADED);
     }
 
     @Override

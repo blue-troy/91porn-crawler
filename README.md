@@ -19,3 +19,6 @@
   ![](https://img.shields.io/badge/JAVA-11%2B-brightgreen.svg) ![](https://img.shields.io/badge/maven-3.0%2B-brightgreen.svg)
 ### 问题
 当前项目存在的问题请查看[issue](https://github.com/blue-troy/91porn-crawler/issues).若遇到未知问题请在[issue](https://github.com/blue-troy/91porn-crawler/issues)中指出，谢谢
+#### 重大问题
+经反馈当前版本在windows系统无法正确运行，将在下个版本中修复此bug。详情查看[issue](https://github.com/blue-troy/91porn-crawler/issues/25)
+

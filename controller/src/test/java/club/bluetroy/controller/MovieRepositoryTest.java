@@ -4,6 +4,7 @@ import club.bluetroy.crawler.dao.MovieRepository;
 import club.bluetroy.crawler.domain.Movie;
 import club.bluetroy.crawler.domain.MovieStatus;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Date: 2019-02-14
  * Time: 15:37
  */
+@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Transactional
 public class MovieRepositoryTest {

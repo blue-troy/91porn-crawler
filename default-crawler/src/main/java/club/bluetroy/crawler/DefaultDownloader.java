@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.concurrent.*;
 
 /**
- * @author heyixin
+ * author heyixin
  * description : downloadNow采用多线程下载，一次把ToDownloadMovies下载完毕并验证
  * ContinuousDownload 持续下载，单线程发出下载指令，监听ToDownloadMovies，一旦有需要下载的视频即刻下载，下载完成后验证
  */

@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-08-16
  * Time: 下午4:33
  */

@@ -7,10 +7,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-16
  * Time: 2:10 AM
  */

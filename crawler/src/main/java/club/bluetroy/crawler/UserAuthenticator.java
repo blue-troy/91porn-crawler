@@ -1,10 +1,7 @@
 package club.bluetroy.crawler;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-09
  * Time: 3:15 PM
  */

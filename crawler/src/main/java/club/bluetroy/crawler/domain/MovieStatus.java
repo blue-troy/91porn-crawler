@@ -1,10 +1,7 @@
 package club.bluetroy.crawler.domain;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-08-23
  * Time: 下午5:40
  */

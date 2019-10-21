@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * @author heyixin
+ * author heyixin
  */
 @UtilityClass
 public class TimeUtils {

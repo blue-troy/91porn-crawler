@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-09
  * Time: 5:05 PM
  */

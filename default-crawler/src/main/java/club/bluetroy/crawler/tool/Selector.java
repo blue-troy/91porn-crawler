@@ -13,10 +13,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-07-11
  * Time: 下午2:06
  */

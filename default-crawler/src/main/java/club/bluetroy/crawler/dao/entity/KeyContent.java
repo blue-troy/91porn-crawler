@@ -5,10 +5,7 @@ import lombok.Getter;
 import java.util.concurrent.Future;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-07-10
  * Time: 下午4:15
  */

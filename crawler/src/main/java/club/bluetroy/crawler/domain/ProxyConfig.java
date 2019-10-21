@@ -6,10 +6,7 @@ import javax.validation.constraints.Pattern;
 
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-15
  * Time: 5:25 PM
  */

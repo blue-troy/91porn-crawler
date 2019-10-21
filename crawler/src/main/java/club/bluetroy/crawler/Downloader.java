@@ -4,10 +4,7 @@ import java.nio.file.Path;
 import java.util.concurrent.Future;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-09
  * Time: 2:52 PM
  */

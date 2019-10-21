@@ -5,10 +5,7 @@ import lombok.experimental.UtilityClass;
 import java.lang.reflect.Field;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-08-14
  * Time: 下午3:14
  */

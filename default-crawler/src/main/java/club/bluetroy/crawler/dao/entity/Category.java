@@ -1,10 +1,7 @@
 package club.bluetroy.crawler.dao.entity;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-30
  * Time: 19:16
  */

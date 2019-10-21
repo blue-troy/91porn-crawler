@@ -7,10 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-10-29
  * Time: 10:20 AM
  */

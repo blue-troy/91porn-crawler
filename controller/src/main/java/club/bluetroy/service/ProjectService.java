@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.*;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-07-12
  * Time: 下午1:49
  */

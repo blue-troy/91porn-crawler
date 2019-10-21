@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 
 
 /**
- * @author heyixin
+ * author heyixin
  */
 @Service
 class DefaultScanner implements Scanner {

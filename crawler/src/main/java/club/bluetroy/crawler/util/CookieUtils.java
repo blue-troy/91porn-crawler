@@ -8,10 +8,7 @@ import java.net.HttpCookie;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-08
  * Time: 9:09 AM
  */

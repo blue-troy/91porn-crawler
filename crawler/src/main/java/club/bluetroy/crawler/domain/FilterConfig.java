@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-08-12
  * Time: 下午4:11
  */

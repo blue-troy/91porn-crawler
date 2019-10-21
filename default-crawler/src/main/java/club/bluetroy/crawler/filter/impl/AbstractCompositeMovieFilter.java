@@ -3,10 +3,7 @@ package club.bluetroy.crawler.filter.impl;
 import club.bluetroy.crawler.filter.AbstractMovieFilter;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2019-01-26
  * Time: 18:34
  */

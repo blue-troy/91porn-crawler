@@ -12,10 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-12-16
  * Time: 07:32
  */

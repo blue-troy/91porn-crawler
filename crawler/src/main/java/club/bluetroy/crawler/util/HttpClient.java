@@ -15,7 +15,7 @@ import java.util.concurrent.*;
 import static club.bluetroy.crawler.util.HttpConnectionUtils.getConnection;
 
 /**
- * @author heyixin
+ * author heyixin
  */
 @Slf4j
 @UtilityClass

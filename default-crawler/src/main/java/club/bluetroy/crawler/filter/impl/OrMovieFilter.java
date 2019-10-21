@@ -9,10 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2019-01-26
  * Time: 16:39
  */

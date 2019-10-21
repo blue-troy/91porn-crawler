@@ -6,7 +6,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * @author heyixin
+ * author heyixin
  */
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)

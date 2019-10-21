@@ -17,10 +17,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-10-24
  * Time: 6:41 AM
  */

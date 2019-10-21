@@ -4,10 +4,7 @@ import club.bluetroy.crawler.dao.entity.Category;
 import lombok.experimental.UtilityClass;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-30
  * Time: 18:16
  */

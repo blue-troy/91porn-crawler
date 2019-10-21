@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Stack;
 
 /**
- * @author heyixin
+ * author heyixin
  */
 public class MovieFilterFactory {
     private static Stack<AbstractMovieFilter> movieFilterStack = new Stack<>();

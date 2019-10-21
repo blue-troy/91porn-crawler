@@ -10,10 +10,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2019-02-14
  * Time: 15:26
  */

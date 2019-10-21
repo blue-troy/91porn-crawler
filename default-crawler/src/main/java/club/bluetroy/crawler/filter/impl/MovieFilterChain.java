@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author heyixin
+ * author heyixin
  */
 @Slf4j
 @ToString

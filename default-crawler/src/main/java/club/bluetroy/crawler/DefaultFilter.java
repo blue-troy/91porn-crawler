@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author heyixin
+ * author heyixin
  */
 @Slf4j
 @Service

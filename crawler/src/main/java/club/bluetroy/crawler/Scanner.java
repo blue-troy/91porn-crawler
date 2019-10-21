@@ -3,10 +3,7 @@ package club.bluetroy.crawler;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-09
  * Time: 3:03 PM
  */

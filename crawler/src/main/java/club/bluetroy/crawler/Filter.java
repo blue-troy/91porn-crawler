@@ -3,10 +3,7 @@ package club.bluetroy.crawler;
 import club.bluetroy.crawler.domain.FilterConfig;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-09
  * Time: 2:44 PM
  */

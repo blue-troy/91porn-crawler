@@ -12,10 +12,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-08-16
  * Time: 下午3:59
  */

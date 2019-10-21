@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
  * Created with IntelliJ IDEA.
  * Description: content 为网页string
  *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-07-11
  * Time: 下午3:46
  */

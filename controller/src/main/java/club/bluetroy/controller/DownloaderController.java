@@ -9,10 +9,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-12-02
  * Time: 13:57
  */

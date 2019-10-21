@@ -7,10 +7,7 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-11-08
  * Time: 7:51 PM
  */

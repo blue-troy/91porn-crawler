@@ -8,10 +8,7 @@ import javafx.stage.StageStyle;
 import java.io.File;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-12-03
  * Time: 09:56
  */

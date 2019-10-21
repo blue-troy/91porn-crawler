@@ -7,10 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:
- *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-12-04
  * Time: 06:21
  */

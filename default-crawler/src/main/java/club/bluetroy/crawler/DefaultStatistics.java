@@ -19,7 +19,7 @@ import java.util.concurrent.Future;
  * Created with IntelliJ IDEA.
  * Description: 统计包括：扫描视频的数量，filterr 结果，download结果 的数据，并通知webSocket通知前端口
  *
- * @author: heyixin
+ * @author heyixin
  * Date: 2018-10-13
  * Time: 1:41 AM
  */

@@ -4,8 +4,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,19 +19,19 @@ import java.nio.file.Paths;
  * Date: 2018-12-16
  * Time: 07:32
  */
-@Ignore
-public class SelectorTest {
+@Disabled
+class SelectorTest {
     private static final String loginErrorHtmlFile = "/Users/heyixin/IdeaProjects/crawler91/src/main/resources/test/loginError.html";
 
     @Test
-    public void getLoginError() throws Exception {
+    void getLoginError() throws Exception {
         String loginResult = new String(Files.readAllBytes(Paths.get(loginErrorHtmlFile)));
         String loginError = new Selector().getLoginErrorMessage(loginResult);
         System.out.println(loginError);
     }
 
     @Test
-    public void select() throws IOException {
+    void select() throws IOException {
         Document doc = Jsoup.connect("http://en.wikipedia.org/").get();
         System.out.println(doc.title());
         Elements newsHeadlines = doc.select("#mp-itn b a");
@@ -42,14 +42,14 @@ public class SelectorTest {
     }
 
     @Test
-    public void getDownloadUrl() throws IOException {
+    void getDownloadUrl() throws IOException {
         Document document = Jsoup.connect("http://91porn.com/view_video.php?viewkey=6c2ca4fb7e9f4df85f42").get();
         Element element = document.selectFirst("source");
         System.out.println(element.attr("src"));
     }
 
     @Test
-    public void getMovieList() throws IOException {
+    void getMovieList() throws IOException {
         Document document = Jsoup.connect("http://91porn.com/v.php?category=hot&viewtype=basic").get();
         Elements Movies = document.select("#videobox > table > tbody > tr > td > div.listchannel");
         for (Element movie : Movies) {
@@ -59,12 +59,12 @@ public class SelectorTest {
     }
 
     @Test
-    public void getMovie() {
+    void getMovie() {
         String s = "158921&nbsp;";
         System.out.println(s.replaceAll("&nbsp;",""));
     }
 
-    public void getMovie(Element movie) {
+    void getMovie(Element movie) {
         String name = movie.select("a").attr("title");
         String url = movie.select("a").attr("href");
         System.out.println(url);

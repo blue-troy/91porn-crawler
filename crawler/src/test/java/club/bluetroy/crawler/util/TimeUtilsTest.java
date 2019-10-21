@@ -1,6 +1,7 @@
 package club.bluetroy.crawler.util;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
@@ -14,11 +15,11 @@ import java.time.LocalDateTime;
  * Time: 2:10 AM
  */
 public class TimeUtilsTest {
-    Long aLong;
-    long blong;
+    private Long aLong;
+    private long blong;
 
     @Test
-    public void getDate() throws Exception {
+    void getDate() throws Exception {
 //        String time = TimeUtils.getDateByTimeBefore("1天前");
 //        System.out.println(time);
         String time1 = TimeUtils.getDateByTimeBefore("2天前");
@@ -29,12 +30,12 @@ public class TimeUtilsTest {
     }
 
     @Test
-    public void timeToMinute() {
+    void timeToMinute() {
         System.out.println(TimeUtils.timeToMinute("1时1分"));
     }
 
     @Test
-    public void testlong() {
+    void testlong() {
         System.out.println(aLong);
         System.out.println(blong);
     }

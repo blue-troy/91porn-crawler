@@ -1,8 +1,7 @@
 package club.bluetroy.controller;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,17 +20,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Date: 2019-01-21
  * Time: 18:52
  */
-@Ignore
+@Disabled
 @AutoConfigureMockMvc
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class DownloaderControllerTest {
+class DownloaderControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @Test
-    public void getPath() throws Exception {
+    void getPath() throws Exception {
         mvc.perform(get("/download/path"))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/native/dirChooser"));

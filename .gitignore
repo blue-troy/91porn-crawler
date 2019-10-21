@@ -23,3 +23,8 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+*.dat
+*.db
+*/target/*
+*.log

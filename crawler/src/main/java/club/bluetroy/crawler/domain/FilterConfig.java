@@ -25,6 +25,8 @@ public class FilterConfig extends Movie {
     }
 
     public void setAddTimeDistance(String addTimeDistance) {
-        this.addTimeDistance = TimeUtils.timeToMinute(addTimeDistance);
+        if (null != addTimeDistance) {
+            this.addTimeDistance = TimeUtils.timeToMinute(addTimeDistance);
+        }
     }
 }

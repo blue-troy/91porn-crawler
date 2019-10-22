@@ -1,15 +1,15 @@
 package club.bluetroy.crawler.filter.impl;
 
+import club.bluetroy.crawler.config.InnerFilterConfig;
 import club.bluetroy.crawler.domain.FilterConfig;
 import club.bluetroy.crawler.filter.AbstractMovieFilter;
-import club.bluetroy.crawler.config.InnerFilterConfig;
 import club.bluetroy.crawler.util.TimeUtils;
 
 import java.time.LocalDateTime;
 import java.util.Stack;
 
 /**
- * author heyixin
+ * @author heyixin
  */
 public class MovieFilterFactory {
     private static Stack<AbstractMovieFilter> movieFilterStack = new Stack<>();

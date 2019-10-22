@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.concurrent.*;
 
 /**
- * author heyixin
+ * @author heyixin
  * description : downloadNow采用多线程下载，一次把ToDownloadMovies下载完毕并验证
  * ContinuousDownload 持续下载，单线程发出下载指令，监听ToDownloadMovies，一旦有需要下载的视频即刻下载，下载完成后验证
  */
@@ -21,14 +21,18 @@ import java.util.concurrent.*;
 @Service
 class DefaultDownloader implements Downloader {
     private static final ExecutorService DOWNLOAD_SERVICE;
-    @Autowired
-    private BaseDao dao;
-    @Autowired
-    private Scanner scanner;
+    private final BaseDao dao;
+    private final Scanner scanner;
 
     static {
-        DOWNLOAD_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
+        DOWNLOAD_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadFactoryBuilder()
                 .setNameFormat("DOWNLOAD-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
+    }
+
+    @Autowired
+    public DefaultDownloader(BaseDao dao, Scanner scanner) {
+        this.dao = dao;
+        this.scanner = scanner;
     }
 
     @Override

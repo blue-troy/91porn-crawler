@@ -9,7 +9,7 @@ import club.bluetroy.crawler.domain.FilterConfig;
  */
 public class InnerFilterConfig {
     public static FilterConfig getDefaultFilterConfig() {
-        FilterConfig currentShowFaceConfig = getcurrentShowFaceConfig(200);
+        FilterConfig currentShowFaceConfig = getCurrentShowFaceConfig(200);
         FilterConfig currentHotConfig = getCurrentHotConfig(500);
         FilterConfig monthShowFace = getMonthShowFaceConfig(1500);
         FilterConfig monthHot = getMonthHotConfig(2000);
@@ -17,7 +17,7 @@ public class InnerFilterConfig {
         return or(currentShowFaceConfig, currentHotConfig, monthShowFace, monthHot, collectOverFourThousand);
     }
 
-    public static FilterConfig getcurrentShowFaceConfig(int collect) {
+    public static FilterConfig getCurrentShowFaceConfig(int collect) {
         return getFilterConfig("露脸", "1天", collect);
     }
 

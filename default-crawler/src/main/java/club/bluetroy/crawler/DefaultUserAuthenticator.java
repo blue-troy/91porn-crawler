@@ -3,7 +3,6 @@ package club.bluetroy.crawler;
 import club.bluetroy.crawler.tool.PornUrl;
 import club.bluetroy.crawler.tool.Selector;
 import club.bluetroy.crawler.util.HttpClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,8 +12,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 class DefaultUserAuthenticator implements UserAuthenticator {
-    @Autowired
-    private Selector selector;
+    private final Selector selector;
+
+    public DefaultUserAuthenticator(Selector selector) {
+        this.selector = selector;
+    }
 
     @Override
     public void login(String name, String password, String verificationCode) throws Exception {

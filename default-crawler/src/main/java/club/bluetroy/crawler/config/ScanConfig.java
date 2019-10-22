@@ -3,7 +3,6 @@ package club.bluetroy.crawler.config;
 import club.bluetroy.crawler.Scanner;
 import club.bluetroy.crawler.dao.entity.Category;
 import club.bluetroy.crawler.tool.PornUrl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +13,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ScanConfig implements CommandLineRunner {
-    @Autowired
-    private Scanner scanner;
+    private final Scanner scanner;
+
+    public ScanConfig(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
     @Override
     public void run(String... args) throws Exception {

@@ -1,7 +1,6 @@
 package club.bluetroy.controller;
 
 import club.bluetroy.crawler.Downloader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,11 @@ import java.util.concurrent.ExecutionException;
 @Controller
 @RequestMapping("/download")
 public class DownloaderController {
-    @Autowired
-    private Downloader downloader;
+    private final Downloader downloader;
+
+    public DownloaderController(Downloader downloader) {
+        this.downloader = downloader;
+    }
 
     @PatchMapping("/{key}")
     public @ResponseBody

@@ -22,17 +22,19 @@ import java.util.concurrent.*;
 public class ProjectService implements CommandLineRunner {
     private ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
             .setNameFormat("project-pool-%d").build();
+    private final Scanner scanner;
+    private final Filter filter;
+    private final Downloader downloader;
     private ExecutorService singleThreadPool = new ThreadPoolExecutor(1, 1,
             0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+            new LinkedBlockingQueue<>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
 
-
     @Autowired
-    private Scanner scanner;
-    @Autowired
-    private Filter filter;
-    @Autowired
-    private Downloader downloader;
+    public ProjectService(Scanner scanner, Filter filter, Downloader downloader) {
+        this.scanner = scanner;
+        this.filter = filter;
+        this.downloader = downloader;
+    }
 
     public void shutdown() {
         singleThreadPool.shutdown();

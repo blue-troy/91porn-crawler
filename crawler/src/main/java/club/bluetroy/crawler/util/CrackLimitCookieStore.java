@@ -351,7 +351,7 @@ public class CrackLimitCookieStore implements java.net.CookieStore {
      */
     @Override
     public List<URI> getURIs() {
-        List<URI> uris = new ArrayList<>();
+        List<URI> uris;
 
         lock.lock();
         try {
@@ -366,7 +366,7 @@ public class CrackLimitCookieStore implements java.net.CookieStore {
                 }
             }
         } finally {
-            uris.addAll(uriIndex.keySet());
+            uris = new ArrayList<>(uriIndex.keySet());
             lock.unlock();
         }
 

@@ -7,7 +7,7 @@ import club.bluetroy.crawler.filter.AbstractMovieFilter;
  * Date: 2019-01-26
  * Time: 18:34
  */
-public abstract class AbstractCompositeMovieFilter extends AbstractMovieFilter {
+abstract class AbstractCompositeMovieFilter extends AbstractMovieFilter {
     /**
      * 添加movieFilter
      *

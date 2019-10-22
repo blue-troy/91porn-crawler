@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * author heyixin
+ * @author heyixin
  */
 @ToString
 public class DownloadErrorInfo {

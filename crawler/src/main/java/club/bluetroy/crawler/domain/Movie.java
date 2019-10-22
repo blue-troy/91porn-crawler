@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * author heyixin
+ * @author heyixin
  */
 @Entity
 @Data

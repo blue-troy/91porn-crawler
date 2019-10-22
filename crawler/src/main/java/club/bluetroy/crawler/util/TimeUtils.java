@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * author heyixin
+ * @author heyixin
  */
 @UtilityClass
 public class TimeUtils {
@@ -61,18 +61,18 @@ public class TimeUtils {
 
     /**
      * @param addTimeDistance 时间如：1年2月3周4天5分钟
-     * @return
+     * @return minute of add time distance
      */
     public static Long timeToMinute(String addTimeDistance) {
         long minus = 0L;
         String[] timeArray = addTimeDistance.replace("年", " 年 ").replace("月", " 月 ").replace("周", " 周 ").replace("天", " 天 ").replace("时", " 时 ").replace("分", " 分 ").split(" ");
         for (int i = 0; i < timeArray.length; i++) {
-            minus += Long.valueOf(timeArray[i]) * getF(timeArray[++i]);
+            minus += Long.parseLong(timeArray[i]) * getMinute(timeArray[++i]);
         }
         return minus;
     }
 
-    private static Long getF(String s) {
+    private static Long getMinute(String s) {
         switch (s) {
             case "年":
                 return (long) (365 * 24 * 60);
@@ -85,7 +85,6 @@ public class TimeUtils {
             case "时":
                 return (long) (60);
             case "分":
-                return 1L;
             default:
                 return 1L;
         }

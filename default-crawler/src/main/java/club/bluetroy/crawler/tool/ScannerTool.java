@@ -20,10 +20,14 @@ import java.util.concurrent.Future;
 @Slf4j
 @Component
 public class ScannerTool {
-    @Autowired
     private Selector selector;
+    private final BaseDao dao;
+
     @Autowired
-    private BaseDao dao;
+    public ScannerTool(Selector selector, BaseDao dao) {
+        this.selector = selector;
+        this.dao = dao;
+    }
 
     public void scanDownloadUrls(Queue<KeyContent> keyContents) {
         KeyContent keyContent;

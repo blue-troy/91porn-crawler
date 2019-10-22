@@ -1,8 +1,8 @@
 package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
-import club.bluetroy.crawler.domain.MovieStatus;
 import club.bluetroy.crawler.dao.entity.KeyContent;
+import club.bluetroy.crawler.domain.MovieStatus;
 import club.bluetroy.crawler.tool.ContentTool;
 import club.bluetroy.crawler.tool.ScannerTool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,21 @@ import java.util.concurrent.Future;
 
 
 /**
- * author heyixin
+ * @author heyixin
  */
 @Service
 class DefaultScanner implements Scanner {
     private static final List<String> URLS_FOR_SCAN = new ArrayList<>();
+    private final ScannerTool scannerTool;
+    private final ContentTool contentTool;
+    private final BaseDao dao;
+
     @Autowired
-    private ScannerTool scannerTool;
-    @Autowired
-    private ContentTool contentTool;
-    @Autowired
-    private BaseDao dao;
+    public DefaultScanner(ScannerTool scannerTool, ContentTool contentTool, BaseDao dao) {
+        this.scannerTool = scannerTool;
+        this.contentTool = contentTool;
+        this.dao = dao;
+    }
 
     @Override
     public void addUrl(String url) {

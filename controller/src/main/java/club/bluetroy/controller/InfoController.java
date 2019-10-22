@@ -1,7 +1,6 @@
 package club.bluetroy.controller;
 
 import club.bluetroy.crawler.Statistics;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/info")
 public class InfoController {
-    @Autowired
-    private Statistics statistics;
+    private final Statistics statistics;
+
+    public InfoController(Statistics statistics) {
+        this.statistics = statistics;
+    }
 
 
     @GetMapping

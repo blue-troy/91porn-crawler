@@ -3,7 +3,6 @@ package club.bluetroy.crawler.dao;
 import club.bluetroy.crawler.dao.entity.DownloadErrorInfo;
 import club.bluetroy.crawler.domain.Movie;
 import club.bluetroy.crawler.domain.MovieStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Primary
 @Component
 public class JpaDao implements BaseDao {
-    @Autowired
-    private MovieRepository repository;
+    private final MovieRepository repository;
+
+    public JpaDao(MovieRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<Movie> listMoviesByStatus(MovieStatus movieStatus) {

@@ -2,7 +2,6 @@ package club.bluetroy.controller;
 
 import club.bluetroy.crawler.UserAuthenticator;
 import club.bluetroy.crawler.tool.PornUrl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +17,11 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserAuthenticator authenticator;
+    private final UserAuthenticator authenticator;
+
+    public UserController(UserAuthenticator authenticator) {
+        this.authenticator = authenticator;
+    }
 
     @RequestMapping("/login")
     public void login(@NotNull String username, @NotNull String password, @RequestParam("captcha_input") @NotNull String captchaInput) throws Exception {

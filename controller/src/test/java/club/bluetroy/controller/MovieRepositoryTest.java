@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Transactional
-public class MovieRepositoryTest {
+class MovieRepositoryTest {
     @Autowired
     private MovieRepository repository;
     private String key = "2ae67ee3fde76ac11111";

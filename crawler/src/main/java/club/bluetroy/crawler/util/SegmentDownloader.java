@@ -49,7 +49,7 @@ public class SegmentDownloader {
     }
 
     private static ThreadPoolExecutor getTheadPool(Integer maximumPoolSize) {
-        return new ThreadPoolExecutor(0, concurrentThreads * parallelTask, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
+        return new ThreadPoolExecutor(0, concurrentThreads * parallelTask, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadFactoryBuilder()
                 .setNameFormat("SEGMENT-DOWNLOAD-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
     }
 

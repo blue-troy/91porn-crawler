@@ -5,7 +5,7 @@ import club.bluetroy.crawler.domain.Movie;
 import java.util.List;
 
 /**
- * author heyixin
+ * @author heyixin
  */
 public abstract class AbstractMovieFilter {
     /**

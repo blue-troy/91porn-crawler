@@ -15,7 +15,7 @@ import java.util.concurrent.*;
 import static club.bluetroy.crawler.util.HttpConnectionUtils.getConnection;
 
 /**
- * author heyixin
+ * @author heyixin
  */
 @Slf4j
 @UtilityClass
@@ -24,7 +24,7 @@ public class HttpClient {
     private static final Integer NOT_SUCCESS_RESPONSE_CODE = 300;
 
     static {
-        HTTP_GET_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder()
+        HTTP_GET_SERVICE = new ThreadPoolExecutor(0, 5, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadFactoryBuilder()
                 .setNameFormat("HTTP-GET-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
     }
 

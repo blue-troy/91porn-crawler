@@ -1,8 +1,8 @@
 package club.bluetroy.crawler;
 
 import club.bluetroy.crawler.dao.BaseDao;
-import club.bluetroy.crawler.domain.MovieStatus;
 import club.bluetroy.crawler.domain.Movie;
+import club.bluetroy.crawler.domain.MovieStatus;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 /**
- * Created with IntelliJ IDEA.
- * Description: 统计包括：扫描视频的数量，filterr 结果，download结果 的数据，并通知webSocket通知前端口
+ * 统计包括：扫描视频的数量，filter 结果，download结果 的数据，并通知webSocket通知前端口
  *
  * @author heyixin
  * Date: 2018-10-13
@@ -28,12 +27,20 @@ import java.util.concurrent.Future;
 @Aspect
 @Component
 public class DefaultStatistics implements Statistics {
-    @Autowired
     private BaseDao dao;
-    @Autowired
-    private Adviser adviser;
+    private final Adviser adviser;
 
     private HashMap<String, Movie> downloadingMovies = new HashMap<>();
+
+    public DefaultStatistics(Adviser adviser) {
+        this.adviser = adviser;
+    }
+
+    @Autowired
+    public DefaultStatistics(BaseDao dao, Adviser adviser) {
+        this.dao = dao;
+        this.adviser = adviser;
+    }
 
     @Pointcut("execution(java.util.concurrent.Future club.bluetroy.crawler.Downloader.downloadByKey(String)) && args(key)")
     public void downloadPerformance(String key) {

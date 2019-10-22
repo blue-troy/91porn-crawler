@@ -11,9 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * Description: 过滤出某个时间范围内的视频
- *
  * @author heyixin
  * Date: 2018-11-16
  * Time: 5:19 PM

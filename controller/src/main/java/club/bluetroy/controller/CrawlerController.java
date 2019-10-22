@@ -1,7 +1,6 @@
 package club.bluetroy.controller;
 
 import club.bluetroy.service.ProjectService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
 public class CrawlerController {
-    @Autowired
-    private ProjectService projectService;
+    private final ProjectService projectService;
+
+    public CrawlerController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @PatchMapping(value = "/start")
     void start() {

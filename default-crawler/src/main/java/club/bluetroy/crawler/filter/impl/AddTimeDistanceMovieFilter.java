@@ -11,9 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * Description:过滤出发布多久内的视频，如过滤出发布时间一周内的视频
- *
  * @author heyixin
  * Date: 2018-11-30
  * Time: 23:34

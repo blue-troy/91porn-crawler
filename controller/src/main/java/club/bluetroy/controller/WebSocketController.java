@@ -32,6 +32,7 @@ public class WebSocketController implements Adviser {
 
     @Override
     public <T> void message(String method, T t) throws IOException {
+        new JsonResponse(method, t);
         message(new JsonResponse(method, t).get());
     }
 

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * Date: 2018-11-16
  * Time: 2:10 AM
  */
-public class TimeUtilsTest {
+class TimeUtilsTest {
     private Long aLong;
     private long blong;
 

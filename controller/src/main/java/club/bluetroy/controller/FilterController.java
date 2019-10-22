@@ -2,7 +2,6 @@ package club.bluetroy.controller;
 
 import club.bluetroy.crawler.Filter;
 import club.bluetroy.crawler.domain.FilterConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -13,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/filter")
 public class FilterController {
-    @Autowired
-    private Filter filter;
+    private final Filter filter;
+
+    public FilterController(Filter filter) {
+        this.filter = filter;
+    }
 
     @GetMapping
     String getFilterInfo() {

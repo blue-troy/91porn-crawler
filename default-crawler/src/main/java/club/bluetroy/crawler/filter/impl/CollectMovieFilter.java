@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * author heyixin
+ * @author heyixin
  */
 @ToString
 @EqualsAndHashCode(callSuper = false)
